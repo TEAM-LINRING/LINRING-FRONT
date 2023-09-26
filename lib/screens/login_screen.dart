@@ -82,18 +82,36 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 10,
               ),
-              TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "비밀번호 찾기",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                      minimumSize: Size.zero,
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "이메일 찾기",
+                          style: TextStyle(
+                            color: Color(0xFF1B1B1B),
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
+                    Text(" | "),
+                    TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "비밀번호 찾기",
+                          style: TextStyle(
+                            color: Color(0xFF1B1B1B),
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
+                  ]),
+
               Spacer(
                 flex: 1,
               )
