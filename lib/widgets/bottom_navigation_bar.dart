@@ -51,7 +51,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               ),
               label: 'settings'),
         ],
-        backgroundColor: const Color(0xffffe485),
+        backgroundColor: const Color(0xfffec2b5),
         selectedItemColor: const Color(0xff46390c),
         unselectedItemColor: Colors.white,
       ),

@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xfffff6f4),
         automaticallyImplyLeading: true,
         leading: IconButton(
           color: Colors.black,

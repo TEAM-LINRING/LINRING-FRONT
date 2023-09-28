@@ -69,6 +69,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
         width: 180,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
+          color: const Color(0xfffff6f4),
           border: Border(
             bottom: BorderSide(
               color: _selected[index]
@@ -85,7 +86,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
               fontSize: 24,
               color: _selected[index]
                   ? const Color(0xff1c1c1c)
-                  : const Color(0xff6c5916),
+                  : const Color(0xffc8c8c8),
             ),
           ),
         ),
