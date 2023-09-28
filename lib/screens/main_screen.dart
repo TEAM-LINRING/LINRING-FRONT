@@ -19,7 +19,7 @@ class MainScreen extends StatelessWidget {
         leading: IconButton(
           color: Colors.black,
           onPressed: () => {
-            Navigator.of(context).pop(),
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : true,
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
