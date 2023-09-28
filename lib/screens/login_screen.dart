@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
@@ -17,21 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     return MaterialApp(
         home: Scaffold(
       backgroundColor: Color(0xFFFFF6F4),
-      appBar: AppBar(
-        title: Text(
-          '로그인',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context); //뒤로가기
-            },
-            color: const Color.fromARGB(255, 0, 0, 0),
-            icon: Icon(Icons.arrow_back)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: CustomAppBar(title: '로그인'),
       body: Container(
           //background blur img
           width: double.infinity,
