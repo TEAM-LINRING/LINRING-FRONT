@@ -8,6 +8,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         title: const Text(
           "LINRING",
           style: TextStyle(
@@ -19,9 +20,9 @@ class MainScreen extends StatelessWidget {
         leading: IconButton(
           color: Colors.black,
           onPressed: () => {
-            Navigator.of(context).canPop() ? Navigator.of(context).pop() : true,
+            Navigator.of(context).canPop() ? Navigator.of(context).pop() : true
           },
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back),
         ),
         actions: [
           IconButton(
