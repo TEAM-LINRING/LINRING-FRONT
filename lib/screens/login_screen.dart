@@ -85,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
+                  Spacer(flex: 2),
                   TextButton(
                       onPressed: () {},
                       child: Text(
@@ -97,7 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                           minimumSize: Size.zero,
                           padding: EdgeInsets.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
+                  Spacer(flex: 1),
                   Text(" | "),
+                  Spacer(flex: 1),
                   TextButton(
                       onPressed: () {},
                       child: Text(
@@ -110,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                           minimumSize: Size.zero,
                           padding: EdgeInsets.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
+                  Spacer(flex: 2)
                 ]),
 
             Spacer(
