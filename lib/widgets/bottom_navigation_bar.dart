@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({super.key});
+  final int selectedIndex;
+  final ValueChanged<int> onIndexChanged;
+
+  const CustomBottomNavigationBar({
+    Key? key,
+    required this.selectedIndex,
+    required this.onIndexChanged,
+  }) : super(key: key);
 
   @override
   State<CustomBottomNavigationBar> createState() =>
@@ -9,17 +16,15 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 112,
       child: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: widget.selectedIndex,
         onTap: (index) {
           setState(() {
-            _selectedIndex = index;
+            widget.onIndexChanged(index);
           });
         },
         showSelectedLabels: false,
