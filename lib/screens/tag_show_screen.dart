@@ -100,8 +100,27 @@ class TagActive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(
-      child: Text("활성화"),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xfffff6f4),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Card(
+            child: SizedBox(
+              width: 360,
+              height: 120,
+              child: Center(
+                child: Image.asset(
+                  "assets/icons/add_circle.png",
+                  width: 42,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
