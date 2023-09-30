@@ -107,18 +107,20 @@ class TagActive extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 20),
-          Card(
-            child: SizedBox(
-              width: 360,
-              height: 120,
-              child: Center(
-                child: Image.asset(
-                  "assets/icons/add_circle.png",
-                  width: 42,
+          GestureDetector(
+              onTap: () => Navigator.pushNamed(context, "/add"),
+              child: Card(
+                child: SizedBox(
+                  width: 360,
+                  height: 120,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/add_circle.png",
+                      width: 42,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
+              ))
         ],
       ),
     );
