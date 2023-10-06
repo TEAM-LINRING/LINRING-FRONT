@@ -24,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
           style: TextStyle(
               color: Colors.black,
               fontSize: 26,
-              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w500,
               height: 0),
         ),
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
           height: double.infinity,
           decoration: const BoxDecoration(
               image: DecorationImage(
-            image: AssetImage('lib/images/blur2.png'),
+            image: AssetImage('assets/images/blur2.png'),
             fit: BoxFit.cover,
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -58,7 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                 color: Colors.white.withOpacity(0.75),
                 fontSize: 55,
-                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w900,
                 height: 0,
                 letterSpacing: 1.80,
@@ -71,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
-                fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
                 height: 0,
               ),
@@ -88,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             CustomTextField(
               controller: passwordController,
-              hintText: '비밀번호를 입력하세요',
+              hintText: '비밀번호',
               obscureText: true,
             ),
             const Spacer(flex: 1),

@@ -58,7 +58,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -78,7 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -100,7 +98,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -122,7 +119,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -144,7 +140,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -188,7 +183,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -210,7 +204,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -252,7 +245,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
-                                fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w400,
                                 height: 0,
                               ),
@@ -300,7 +292,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               color: const Color(0xFF1B1B1B),
               fontSize: 20,
-              fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400),
         ),
         selected: remark[index]['isCheck'] == true,

@@ -16,7 +16,7 @@ class EntryScreen extends StatelessWidget {
             height: double.infinity,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('lib/images/blur.png'),
+              image: AssetImage('assets/images/blur1.png'),
               fit: BoxFit.cover,
             )),
             child:
@@ -31,7 +31,6 @@ class EntryScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.75),
                   fontSize: 55,
-                  fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w900,
                   height: 0,
                   letterSpacing: 1.80,
@@ -44,7 +43,6 @@ class EntryScreen extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
-                  fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   height: 0,
                 ),
