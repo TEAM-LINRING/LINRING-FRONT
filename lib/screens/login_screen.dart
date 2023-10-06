@@ -18,7 +18,28 @@ class _LoginPageState extends State<LoginPage> {
     return MaterialApp(
         home: Scaffold(
       backgroundColor: Color(0xFFFFF6F4),
-      appBar: CustomAppBar(title: '로그인'),
+      //appBar: CustomAppBar(title: '로그인'),
+      appBar: AppBar(
+        title: Text(
+          '로그인',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 26,
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w500,
+              height: 0),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () => {
+                  if (Navigator.of(context).canPop())
+                    {Navigator.of(context).pop()} //뒤로가기
+                },
+            color: const Color.fromARGB(255, 0, 0, 0),
+            icon: Icon(Icons.arrow_back)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Container(
           //background blur img
           width: double.infinity,
@@ -89,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                       onPressed: () {},
                       child: Text(
-                        "이메일 찾기",
+                        "아이디 찾기",
                         style: TextStyle(
                           color: Color(0xFF1B1B1B),
                         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
@@ -58,7 +59,9 @@ class EntryPage extends StatelessWidget {
               //로그인 버튼
               CustomOutlinedButton(
                   label: '로그인',
-                  onPressed: () {},
+                  onPressed: () => {
+                        Navigator.pushNamed(context, '/login'),
+                      },
                   backgroundColor: Colors.white),
 
               SizedBox(
@@ -68,7 +71,7 @@ class EntryPage extends StatelessWidget {
               //회원가입 버튼
               CustomOutlinedButton(
                   label: '회원가입',
-                  onPressed: () {},
+                  onPressed: () => {Navigator.pushNamed(context, '/signup')},
                   backgroundColor: Color(0xFFFEC2B5)),
               Spacer(
                 flex: 1,
