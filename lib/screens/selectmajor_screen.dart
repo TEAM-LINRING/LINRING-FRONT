@@ -16,12 +16,12 @@ class SelectMajor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFF6F4),
-      appBar: CustomAppBar(
+      backgroundColor: const Color(0xFFFFF6F4),
+      appBar: const CustomAppBar(
         title: '학과 선택',
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         itemCount: majorListItems.length,
         itemBuilder: (context, index) {
           final item = majorListItems[index];
@@ -62,7 +62,7 @@ class HeadingItem implements ListItem {
   Widget buildTitle(BuildContext context) {
     return Text(
       heading,
-      style: Theme.of(context).textTheme.headline5,
+      style: Theme.of(context).textTheme.headlineSmall,
     );
   }
 

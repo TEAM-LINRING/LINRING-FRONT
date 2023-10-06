@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -17,10 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-      backgroundColor: Color(0xFFFFF6F4),
+      backgroundColor: const Color(0xFFFFF6F4),
       //appBar: CustomAppBar(title: '로그인'),
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           '로그인',
           style: TextStyle(
               color: Colors.black,
@@ -36,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                     {Navigator.of(context).pop()} //뒤로가기
                 },
             color: const Color.fromARGB(255, 0, 0, 0),
-            icon: Icon(Icons.arrow_back)),
+            icon: const Icon(Icons.arrow_back)),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -44,13 +43,13 @@ class _LoginPageState extends State<LoginPage> {
           //background blur img
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
             image: AssetImage('lib/images/blur2.png'),
             fit: BoxFit.cover,
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Spacer(
+            const Spacer(
               flex: 1,
             ),
             // LINRING text
@@ -67,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
 
             //너와 나를 잇는 울림 text
-            Text(
+            const Text(
               '너와 나를 잇는 울림',
               style: TextStyle(
                 color: Colors.white,
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 0,
               ),
             ),
-            Spacer(
+            const Spacer(
               flex: 1,
             ),
 
@@ -85,59 +84,59 @@ class _LoginPageState extends State<LoginPage> {
               controller: emailController,
               obscureText: false,
               //hintText: '이메일을 입력하세요',
-              suffixText: Text('@kookmin.ac.kr'),
+              suffixText: const Text('@kookmin.ac.kr'),
             ),
             CustomTextField(
               controller: passwordController,
               hintText: '비밀번호를 입력하세요',
               obscureText: true,
             ),
-            Spacer(flex: 1),
+            const Spacer(flex: 1),
 
             //로그인 버튼
             CustomOutlinedButton(
                 label: '로그인',
                 onPressed: () {},
-                backgroundColor: Color(0xFFFEC2B5)),
+                backgroundColor: const Color(0xFFFEC2B5)),
 
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Spacer(flex: 2),
+                  const Spacer(flex: 2),
                   TextButton(
                       onPressed: () {},
-                      child: Text(
+                      style: TextButton.styleFrom(
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      child: const Text(
                         "아이디 찾기",
                         style: TextStyle(
                           color: Color(0xFF1B1B1B),
                         ),
-                      ),
+                      )),
+                  const Spacer(flex: 1),
+                  const Text(" | "),
+                  const Spacer(flex: 1),
+                  TextButton(
+                      onPressed: () {},
                       style: TextButton.styleFrom(
                           minimumSize: Size.zero,
                           padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
-                  Spacer(flex: 1),
-                  Text(" | "),
-                  Spacer(flex: 1),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      child: const Text(
                         "비밀번호 찾기",
                         style: TextStyle(
                           color: Color(0xFF1B1B1B),
                         ),
-                      ),
-                      style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap)),
-                  Spacer(flex: 2)
+                      )),
+                  const Spacer(flex: 2)
                 ]),
 
-            Spacer(
+            const Spacer(
               flex: 1,
             )
           ])),

@@ -17,13 +17,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: EntryPage(),
+      home: const EntryScreen(),
       theme: ThemeData(
         fontFamily: "Pretendard",
       ),
       routes: {
-        '/login': (context) => LoginPage(),
-        '/signup': (context) => SignUpPage(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignUpScreen(),
         '/selectmajor': (context) => SelectMajor(),
         '/main': (context) => const MainScreen(),
         '/add': (context) => const TagAddScreen(),

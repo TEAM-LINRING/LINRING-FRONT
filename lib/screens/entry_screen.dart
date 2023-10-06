@@ -1,28 +1,27 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
-class EntryPage extends StatelessWidget {
-  const EntryPage({super.key});
+class EntryScreen extends StatelessWidget {
+  const EntryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color(0xFFFFF6F4),
+        backgroundColor: const Color(0xFFFFF6F4),
         body: Container(
 
             //background blur img
             width: double.infinity,
             height: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 image: DecorationImage(
               image: AssetImage('lib/images/blur.png'),
               fit: BoxFit.cover,
             )),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Spacer(
+              const Spacer(
                 flex: 2,
               ),
 
@@ -40,7 +39,7 @@ class EntryPage extends StatelessWidget {
               ),
 
               //너와 나를 잇는 울림 text
-              Text(
+              const Text(
                 '너와 나를 잇는 울림',
                 style: TextStyle(
                   color: Colors.white,
@@ -52,7 +51,7 @@ class EntryPage extends StatelessWidget {
               ),
 
               //로그인 버튼
-              Spacer(
+              const Spacer(
                 flex: 1,
               ),
 
@@ -64,7 +63,7 @@ class EntryPage extends StatelessWidget {
                       },
                   backgroundColor: Colors.white),
 
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
 
@@ -72,8 +71,8 @@ class EntryPage extends StatelessWidget {
               CustomOutlinedButton(
                   label: '회원가입',
                   onPressed: () => {Navigator.pushNamed(context, '/signup')},
-                  backgroundColor: Color(0xFFFEC2B5)),
-              Spacer(
+                  backgroundColor: const Color(0xFFFEC2B5)),
+              const Spacer(
                 flex: 1,
               )
             ])),

@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  CustomAppBar({Key? key, required this.title, onPressed}) : super(key: key);
+  const CustomAppBar({Key? key, required this.title, onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
             color: Colors.black,
             fontSize: 26,
             fontFamily: 'Pretendard',
@@ -23,12 +24,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   {Navigator.of(context).pop()} //뒤로가기
               },
           color: const Color.fromARGB(255, 0, 0, 0),
-          icon: Icon(Icons.arrow_back)),
+          icon: const Icon(Icons.arrow_back)),
       backgroundColor: Colors.transparent,
       elevation: 0,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight); // AppBar의 기본 높이
+  Size get preferredSize =>
+      const Size.fromHeight(kToolbarHeight); // AppBar의 기본 높이
 }
