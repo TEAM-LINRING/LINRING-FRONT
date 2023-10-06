@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final controller;
-  final String hintText;
+  final String? hintText;
   final bool obscureText;
+  final Text? suffixText;
 
   const CustomTextField({
     super.key,
     this.controller,
-    required this.hintText,
+    this.hintText,
     required this.obscureText,
     decoration,
+    this.suffixText,
   });
 
   @override
@@ -32,6 +34,15 @@ class CustomTextField extends StatelessWidget {
             fillColor: Colors.white,
             filled: true,
             hintText: hintText,
+            suffixIcon: Padding(
+              padding: EdgeInsets.only(right: 15.0),
+              child: Align(
+                alignment: Alignment.center,
+                widthFactor: 1.0,
+                heightFactor: 1.0,
+                child: suffixText,
+              ),
+            ),
           )),
     );
   }

@@ -80,19 +80,19 @@ class _LoginPageState extends State<LoginPage> {
             Spacer(
               flex: 1,
             ),
+
             CustomTextField(
               controller: emailController,
-              hintText: 'abc123@kookmin.com',
               obscureText: false,
+              //hintText: '이메일을 입력하세요',
+              suffixText: Text('@kookmin.ac.kr'),
             ),
             CustomTextField(
               controller: passwordController,
-              hintText: '비밀번호',
-              obscureText: false,
+              hintText: '비밀번호를 입력하세요',
+              obscureText: true,
             ),
-            Spacer(
-              flex: 1,
-            ),
+            Spacer(flex: 1),
 
             //로그인 버튼
             CustomOutlinedButton(

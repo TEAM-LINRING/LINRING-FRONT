@@ -65,8 +65,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ))),
                       CustomTextField(
-                        hintText: 'abc123@kookmin.com',
                         obscureText: false,
+                        suffixText: Text('@kookmin.ac.kr'),
                       ),
                       SizedBox(height: 30),
                       //비밀번호
