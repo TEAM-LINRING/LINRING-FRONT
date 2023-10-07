@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
@@ -14,30 +15,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      //appBar: CustomAppBar(title: '로그인'),
-      appBar: AppBar(
-        title: const Text(
-          '로그인',
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: 26,
-              fontWeight: FontWeight.w500,
-              height: 0),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () => {
-                  if (Navigator.of(context).canPop())
-                    {Navigator.of(context).pop()} //뒤로가기
-                },
-            color: const Color.fromARGB(255, 0, 0, 0),
-            icon: const Icon(Icons.arrow_back)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      appBar: const CustomAppBar(title: '로그인'),
       body: Container(
           //background blur img
           width: double.infinity,
@@ -137,6 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 1,
             )
           ])),
-    ));
+    );
   }
 }
