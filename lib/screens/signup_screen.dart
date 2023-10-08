@@ -11,6 +11,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final IDController = TextEditingController();
+  final NickNameController = TextEditingController();
+
   //성별 선택용 변수들
   bool isMale = false;
   bool isFemale = false;
@@ -60,9 +63,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
+          CustomTextField(
+            controller: IDController,
             obscureText: false,
-            suffixText: Text('@kookmin.ac.kr'),
+            suffixText: const Text(
+              '@kookmin.ac.kr',
+            ),
           ),
           const SizedBox(height: 30),
           //비밀번호
@@ -80,8 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           const CustomTextField(
-            hintText: '',
-            obscureText: false,
+            obscureText: true,
           ),
 
           const SizedBox(height: 30),
@@ -101,8 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           const CustomTextField(
-            hintText: '',
-            obscureText: false,
+            obscureText: true,
           ),
 
           const SizedBox(height: 30),
@@ -121,7 +125,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
+          CustomTextField(
+            controller: NickNameController,
             hintText: '6글자 이내의 닉네임',
             obscureText: false,
           ),
