@@ -35,235 +35,231 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-            backgroundColor: const Color(0xFFFFF6F4),
-            appBar: const CustomAppBar(
-              title: '회원가입',
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFF6F4),
+      appBar: const CustomAppBar(
+        title: '회원가입',
+      ),
+      body: SingleChildScrollView(
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          const SizedBox(
+            height: 40,
+          ),
+          //아이디
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '아이디',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            obscureText: false,
+            suffixText: Text('@kookmin.ac.kr'),
+          ),
+          const SizedBox(height: 30),
+          //비밀번호
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '비밀번호',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            hintText: '',
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 30),
+
+          //비밀번호 확인
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '비밀번호 확인',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            hintText: '',
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 30),
+
+          //닉네임
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '닉네임',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            hintText: '6글자 이내의 닉네임',
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 30),
+
+          //학과(제1전공)
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '학과(제1전공)',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+            child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/selectmajor');
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                  elevation: 5,
+                  shadowColor: const Color(0x196C5916),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fixedSize: const Size(350, 60),
+                ),
+                child: const Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.search,
+                      size: 24.0,
+                      color: Colors.black,
+                    ))),
+          ),
+
+          const SizedBox(height: 30),
+
+          //학번 및 학년
+          const Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '학번 및 학년',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            hintText: '',
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 30),
+
+          //성별 및 나이
+          const Padding(
+              padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '성별 및 나이',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          Container(
+            padding: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
-            body: SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const SizedBox(
-                      height: 40,
+            child: ToggleButtons(
+              isSelected: isSelected,
+              onPressed: toggleSelect,
+              fillColor: const Color(0xFFFEC2B5),
+              selectedColor: Colors.black,
+              children: const [
+                Padding(
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                    child: Text('여')),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                    child: Text('남')),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          //특이사항
+          const Padding(
+              padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '특이사항',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
                     ),
-                    //아이디
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '아이디',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    const CustomTextField(
-                      obscureText: false,
-                      suffixText: Text('@kookmin.ac.kr'),
-                    ),
-                    const SizedBox(height: 30),
-                    //비밀번호
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '비밀번호',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    const CustomTextField(
-                      hintText: '',
-                      obscureText: false,
-                    ),
+                  ))),
+          Wrap(
+              alignment: WrapAlignment.start,
+              children: List.generate(remark.length, (index) {
+                return buildRemark(index);
+              })),
 
-                    const SizedBox(height: 30),
-
-                    //비밀번호 확인
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '비밀번호 확인',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    const CustomTextField(
-                      hintText: '',
-                      obscureText: false,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    //닉네임
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '닉네임',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    const CustomTextField(
-                      hintText: '6글자 이내의 닉네임',
-                      obscureText: false,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    //학과(제1전공)
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '학과(제1전공)',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
-                      child: OutlinedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/selectmajor');
-                          },
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: Colors.white,
-                            side: const BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)),
-                            elevation: 5,
-                            shadowColor: const Color(0x196C5916),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            fixedSize: const Size(350, 60),
-                          ),
-                          child: const Align(
-                              alignment: Alignment.centerRight,
-                              child: Icon(
-                                Icons.search,
-                                size: 24.0,
-                                color: Colors.black,
-                              ))),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    //학번 및 학년
-                    const Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '학번 및 학년',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    const CustomTextField(
-                      hintText: '',
-                      obscureText: false,
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    //성별 및 나이
-                    const Padding(
-                        padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '성별 및 나이',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    Container(
-                      padding: EdgeInsets.zero,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                            color: const Color(0xFFC8AAAA), width: 1.0),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: ToggleButtons(
-                        isSelected: isSelected,
-                        onPressed: toggleSelect,
-                        fillColor: const Color(0xFFFEC2B5),
-                        selectedColor: Colors.black,
-                        children: const [
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                              child: Text('여')),
-                          Padding(
-                              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                              child: Text('남')),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    //특이사항
-                    const Padding(
-                        padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '특이사항',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400,
-                                height: 0,
-                              ),
-                            ))),
-                    Wrap(
-                        alignment: WrapAlignment.start,
-                        children: List.generate(remark.length, (index) {
-                          return buildRemark(index);
-                        })),
-
-                    //동의
-                    const SizedBox(height: 40),
-                    //가입하기 버튼
-                    CustomOutlinedButton(
-                        label: '가입하기',
-                        onPressed: () {},
-                        backgroundColor: const Color(0xFFFEC2B5)),
-                  ]),
-            )));
+          //동의
+          const SizedBox(height: 40),
+          //가입하기 버튼
+          CustomOutlinedButton(
+              label: '가입하기',
+              onPressed: () {},
+              backgroundColor: const Color(0xFFFEC2B5)),
+        ]),
+      ),
+    );
   }
 
   void toggleSelect(value) {
