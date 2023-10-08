@@ -20,40 +20,96 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 112,
-      child: BottomNavigationBar(
-        currentIndex: widget.selectedIndex,
-        onTap: (index) {
-          setState(() {
-            widget.onIndexChanged(index);
-          });
-        },
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 28,
-            ),
-            label: 'home',
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Color(0xff6c5916),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            )
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.chat_bubble_rounded,
-              size: 28,
-            ),
-            label: 'chat',
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-                size: 28,
+          child: BottomNavigationBar(
+            currentIndex: widget.selectedIndex,
+            onTap: (index) {
+              setState(() {
+                widget.onIndexChanged(index);
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/home_empty.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                activeIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/home_filled.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                label: '메인',
               ),
-              label: 'settings'),
-        ],
-        backgroundColor: const Color(0xfffec2b5),
-        selectedItemColor: const Color(0xff46390c),
-        unselectedItemColor: Colors.white,
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/chat_empty.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                activeIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/chat_filled.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                label: '채팅',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/settings_empty.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                activeIcon: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Image.asset(
+                    "assets/icons/settings_filled.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                ),
+                label: '설정',
+              ),
+            ],
+            backgroundColor: Colors.white,
+            unselectedItemColor: const Color(0xff999999),
+            selectedItemColor: const Color(0xff999999),
+            selectedLabelStyle: const TextStyle(fontSize: 11),
+            unselectedLabelStyle: const TextStyle(fontSize: 11),
+          ),
+        ),
       ),
     );
   }
