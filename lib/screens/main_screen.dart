@@ -3,6 +3,7 @@ import 'package:linring_front_flutter/screens/chat_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/bottom_navigation_bar.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -23,31 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: const Text(
-          "LINRING",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: const Color(0xfffff6f4),
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          color: Colors.black,
-          onPressed: () => {
-            Navigator.of(context).canPop() ? Navigator.of(context).pop() : true
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        actions: [
-          IconButton(
-            color: Colors.black,
-            onPressed: () {},
-            icon: const Icon(Icons.notifications),
-          )
-        ],
-      ),
+      appBar: const CustomAppBar(title: "LINRING"),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onIndexChanged: (index) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class Tag {
   String id;
@@ -15,26 +16,9 @@ class TagAddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: const Text(
-          "태그 추가하기",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: const Color(0xfffff6f4),
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          color: Colors.black,
-          onPressed: () => {
-            Navigator.of(context).canPop() ? Navigator.of(context).pop() : true
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-      body: const Column(children: [
+    return const Scaffold(
+      appBar: CustomAppBar(title: "태그 추가하기"),
+      body: Column(children: [
         ChoiceLocation(),
       ]),
     );
