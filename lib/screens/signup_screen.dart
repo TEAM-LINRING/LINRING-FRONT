@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
@@ -231,28 +232,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
+
           Container(
-            padding: EdgeInsets.zero,
+            //padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+            margin: const EdgeInsets.fromLTRB(30, 0, 30, 8),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
-            child: ToggleButtons(
-              isSelected: isSelected,
-              onPressed: toggleSelect,
-              fillColor: const Color(0xFFFEC2B5),
-              selectedColor: Colors.black,
-              children: const [
-                Padding(
-                    padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                    child: Text(
-                      '남',
-                      style: TextStyle(fontSize: 16),
-                    )),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                    child: Text('여', style: TextStyle(fontSize: 16))),
+            child: Row(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          right:
+                              BorderSide(width: 1, color: Color(0xFFC8AAAA)))),
+                  child: Expanded(
+                    flex: 1,
+                    child: ToggleButtons(
+                      isSelected: isSelected,
+                      onPressed: toggleSelect,
+                      fillColor: const Color(0xFFFEC2B5),
+                      selectedColor: Colors.black,
+                      borderWidth: 0.0,
+                      children: const [
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                            child: Text(
+                              '남',
+                              style: TextStyle(fontSize: 16),
+                            )),
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                            child: Text('여', style: TextStyle(fontSize: 16))),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
+                          LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
+                        ],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintText: null,
+                          contentPadding: EdgeInsets.fromLTRB(55, 15, 0, 0),
+                          suffixIcon: Padding(
+                            padding: EdgeInsets.only(right: 55.0),
+                            child: Align(
+                              alignment: Alignment.center,
+                              widthFactor: 1.0,
+                              heightFactor: 1.0,
+                              child: Text(
+                                '년생',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ))
               ],
             ),
           ),
