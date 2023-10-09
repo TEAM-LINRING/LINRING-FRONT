@@ -546,11 +546,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget buildRemark(index) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 7, 7),
+      padding: const EdgeInsets.fromLTRB(0, 0, 6, 7),
       child: ChoiceChip(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(width: 1, color: Color(0xFFC8AAAA))),
+            side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
         labelPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
         label: Text(
           remark[index]['state'],
