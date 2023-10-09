@@ -32,6 +32,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     {'state': '휴학생', 'isCheck': false},
   ];
 
+  //동의 여부 확인용 변수들
+  bool _isCheckedAll = false;
+  bool _isChecked1 = false;
+  bool _isChecked2 = false;
+  bool _isChecked3 = false;
+  List<String> check = [];
+
   @override
   void initState() {
     isSelected = [isMale, isFemale];
@@ -332,13 +339,193 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 })),
           ),
 
+          const SizedBox(height: 30),
+
           //동의
-          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 18),
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 1.2,
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Checkbox(
+                      value: _isCheckedAll,
+                      onChanged: (value) {
+                        setState(() {
+                          _isCheckedAll = value!;
+                          _isChecked1 = value;
+                          _isChecked2 = value;
+                          _isChecked3 = value;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.white;
+                        }
+                        return null;
+                      }),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      splashRadius: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  '전체 동의',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 1.2,
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Checkbox(
+                      value: _isChecked1,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked1 = value!;
+                          _isCheckedAll =
+                              _isChecked1 && _isChecked2 && _isChecked3;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.white;
+                        }
+                        return null;
+                      }),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      splashRadius: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  '(필수) 허위사실 기재시 서비스 이용이 제한됨을 인지했어요.',
+                  style: TextStyle(fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 1.2,
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Checkbox(
+                      value: _isChecked2,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked2 = value!;
+                          _isCheckedAll =
+                              _isChecked1 && _isChecked2 && _isChecked3;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.white;
+                        }
+                        return null;
+                      }),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      splashRadius: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  '(필수) 이용약관 및 개인정보수집이용에 동의해요.',
+                  style: TextStyle(
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
+            child: Row(
+              children: [
+                Transform.scale(
+                  scale: 1.2,
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: Checkbox(
+                      value: _isChecked3,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked3 = value!;
+                          _isCheckedAll =
+                              _isChecked1 && _isChecked2 && _isChecked3;
+                        });
+                      },
+                      checkColor: Colors.black,
+                      activeColor: Colors.white,
+                      fillColor: MaterialStateProperty.resolveWith((states) {
+                        if (states.contains(MaterialState.selected)) {
+                          return Colors.white;
+                        }
+                        return null;
+                      }),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      splashRadius: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                const Text(
+                  '(선택) 마케팅 정보 수신에 동의해요.',
+                  style: TextStyle(fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
           //가입하기 버튼
           CustomOutlinedButton(
               label: '가입하기',
               onPressed: () {},
               backgroundColor: const Color(0xFFFEC2B5)),
+          const SizedBox(height: 40),
         ]),
       ),
     );
