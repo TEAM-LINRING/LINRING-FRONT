@@ -11,8 +11,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final IDController = TextEditingController();
-  final NickNameController = TextEditingController();
+  final idController = TextEditingController();
+  final nickNameController = TextEditingController();
 
   //성별 선택용 변수들
   bool isMale = false;
@@ -28,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     {'state': '교환학생', 'isCheck': false},
     {'state': '복수전공생', 'isCheck': false},
     {'state': '부전공생', 'isCheck': false},
+    {'state': '휴학생', 'isCheck': false},
   ];
 
   @override
@@ -51,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           //아이디
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -64,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           CustomTextField(
-            controller: IDController,
+            controller: idController,
             obscureText: false,
             suffixText: const Text(
               '@kookmin.ac.kr',
@@ -73,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
           //비밀번호
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -93,7 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //비밀번호 확인
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -111,9 +112,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           const SizedBox(height: 30),
 
+          //이름
+          const Padding(
+              padding: EdgeInsets.only(left: 30, bottom: 8),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '이름',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ))),
+          const CustomTextField(
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 30),
+
           //닉네임
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -126,7 +147,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           CustomTextField(
-            controller: NickNameController,
+            controller: nickNameController,
             hintText: '6글자 이내의 닉네임',
             obscureText: false,
           ),
@@ -135,11 +156,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //학과(제1전공)
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    '학과(제1전공)',
+                    '학과 (제1전공)',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -177,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //학번 및 학년
           const Padding(
-              padding: EdgeInsets.only(left: 30.0),
+              padding: EdgeInsets.only(left: 30.0, bottom: 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -198,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //성별 및 나이
           const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
+              padding: EdgeInsets.fromLTRB(30, 0, 0, 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -225,10 +246,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: const [
                 Padding(
                     padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                    child: Text('여')),
+                    child: Text(
+                      '남',
+                      style: TextStyle(fontSize: 16),
+                    )),
                 Padding(
                     padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-                    child: Text('남')),
+                    child: Text('여', style: TextStyle(fontSize: 16))),
               ],
             ),
           ),
@@ -237,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //특이사항
           const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 0, 5),
+              padding: EdgeInsets.fromLTRB(30, 0, 0, 8),
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -249,11 +273,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          Wrap(
-              alignment: WrapAlignment.start,
-              children: List.generate(remark.length, (index) {
-                return buildRemark(index);
-              })),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 0, 23, 5),
+            child: Wrap(
+                alignment: WrapAlignment.start,
+                children: List.generate(remark.length, (index) {
+                  return buildRemark(index);
+                })),
+          ),
 
           //동의
           const SizedBox(height: 40),
@@ -282,17 +309,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget buildRemark(index) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 0, 7, 7),
       child: ChoiceChip(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: const BorderSide(width: 1, color: Color(0xFFC8AAAA))),
-        labelPadding: const EdgeInsets.all(7.0),
+        labelPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
         label: Text(
           remark[index]['state'],
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               color: const Color(0xFF1B1B1B),
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.w400),
         ),
         selected: remark[index]['isCheck'] == true,
