@@ -15,6 +15,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final idController = TextEditingController();
   final nickNameController = TextEditingController();
 
+  //학번 및 학년 선택용
+  List<String> GradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
+  String selectedGrade = '';
+
   //성별 선택용 변수들
   bool isMale = false;
   bool isFemale = false;
@@ -41,8 +45,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    isSelected = [isMale, isFemale];
     super.initState();
+    isSelected = [isMale, isFemale];
+    selectedGrade = GradeList[0];
   }
 
   @override
@@ -218,9 +223,73 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
-            hintText: '',
-            obscureText: false,
+          Container(
+            margin: const EdgeInsets.fromLTRB(30, 0, 30, 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
+                                width: 1, color: Color(0xFFC8AAAA)))),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
+                        LengthLimitingTextInputFormatter(2) // 최대 4자리 제한
+                      ],
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintText: null,
+                        contentPadding: EdgeInsets.fromLTRB(65, 14, 0, 0),
+                        suffixIcon: Padding(
+                          padding: EdgeInsets.only(right: 45.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            widthFactor: 1.0,
+                            heightFactor: 1.0,
+                            child: Text(
+                              '학번',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: DropdownButton(
+                        value: selectedGrade,
+                        items: GradeList.map((String item) {
+                          return DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          );
+                        }).toList(),
+                        onChanged: (dynamic value) {
+                          setState(() {
+                            selectedGrade = value!;
+                          });
+                        }),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           const SizedBox(height: 30),
@@ -294,7 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           hintText: null,
-                          contentPadding: EdgeInsets.fromLTRB(55, 15, 0, 0),
+                          contentPadding: EdgeInsets.fromLTRB(52, 14, 0, 0),
                           suffixIcon: Padding(
                             padding: EdgeInsets.only(right: 55.0),
                             child: Align(
