@@ -3,7 +3,6 @@ import 'package:linring_front_flutter/screens/chat_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
-import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -24,7 +23,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "LINRING"),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onIndexChanged: (index) {
