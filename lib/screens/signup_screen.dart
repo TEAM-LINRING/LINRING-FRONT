@@ -22,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Color helperTextColor = Colors.blue;
 
   //학번 및 학년 선택용
-  List<String> GradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
+  List<String> gradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
   String selectedGrade = '';
 
   //성별 선택용 변수들
@@ -53,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
     isSelected = [isMale, isFemale];
-    selectedGrade = GradeList[0];
+    selectedGrade = gradeList[0];
   }
 
   @override
@@ -296,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     alignment: Alignment.center,
                     child: DropdownButton(
                         value: selectedGrade,
-                        items: GradeList.map((String item) {
+                        items: gradeList.map((String item) {
                           return DropdownMenuItem<String>(
                             value: item,
                             child: Text(item),

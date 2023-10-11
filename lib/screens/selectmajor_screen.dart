@@ -62,10 +62,7 @@ class HeadingItem implements ListItem {
   Widget buildTitle(BuildContext context) {
     return Text(heading,
         style: const TextStyle(
-            fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold)
-        //Theme.of(context).textTheme.headlineSmall,
-
-        );
+            fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold));
   }
 }
 
@@ -78,8 +75,8 @@ class MessageItem implements ListItem {
   Widget buildTitle(BuildContext context) => Text(
         body,
         style: const TextStyle(
-          fontSize: 20, // 글씨 크기를 16으로 설정
-          color: Colors.black, // 글씨색을 검은색으로 설정
+          fontSize: 20,
+          color: Colors.black,
         ),
       );
 }
