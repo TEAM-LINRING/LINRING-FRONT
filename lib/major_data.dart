@@ -1,5 +1,3 @@
-// major_data.dart
-
 class College {
   final String name;
   final List<Major> majors;
