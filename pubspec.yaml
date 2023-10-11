@@ -39,6 +39,7 @@ dependencies:
   carousel_slider: ^4.2.1
   firebase_messaging: ^14.6.9
   http: ^0.13.5
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/
+    - assets/config/.env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
