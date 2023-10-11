@@ -30,6 +30,8 @@ String logginedUser = 'CJW';
 class _ChatScreenState extends State<ChatScreen> {
   var _enteredMessage = '';
   final _controller = TextEditingController();
+  final _scrollController = ScrollController();
+
   void _sendMessage() {
     FocusScope.of(context).unfocus();
     // 서버에 채팅 메세지 전송하는 것으로 변경 예정
@@ -47,6 +49,11 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
     _controller.clear();
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -93,27 +100,35 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _chatContainer() {
+    List<Message> messages = List.from(allMessage.reversed);
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: ListView.builder(
-          itemCount: allMessage.length,
-          itemBuilder: (context, int index) {
-            final message = allMessage[index];
-            // email로 해야하는데 임시로 이름으로 해두었습니다.
-            bool isMine = message.sender.name == logginedUser;
-            return Container(
-              margin: const EdgeInsets.only(top: 8),
-              child: Row(
-                mainAxisAlignment:
-                    isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _chatBubble(message, isMine),
-                ],
-              ),
-            );
-          },
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ListView.builder(
+            shrinkWrap: true,
+            reverse: true,
+            controller: _scrollController,
+            itemCount: messages.length,
+            itemBuilder: (context, int index) {
+              final message = messages[index];
+              // email로 해야하는데 임시로 이름으로 해두었습니다.
+              bool isMine = message.sender.name == logginedUser;
+              return Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: Row(
+                  mainAxisAlignment:
+                      isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _chatBubble(message, isMine),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
