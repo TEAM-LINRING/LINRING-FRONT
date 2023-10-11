@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -27,9 +28,31 @@ String logginedUser = 'CJW';
 // Dummy Data End
 
 class _ChatScreenState extends State<ChatScreen> {
+  var _enteredMessage = '';
+  final _controller = TextEditingController();
+  void _sendMessage() {
+    FocusScope.of(context).unfocus();
+    // 서버에 채팅 메세지 전송하는 것으로 변경 예정
+    allMessage.add(
+      Message(
+        room: Room(
+          relation: User(name: 'CJW'),
+          relation2: User(name: 'Hanata'),
+        ),
+        sender: User(name: 'CJW'),
+        receiver: User(name: 'Hanata'),
+        message: _enteredMessage,
+        isRead: true,
+        type: 1,
+      ),
+    );
+    _controller.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(title: username),
       backgroundColor: const Color(0xfffff6f4),
       body: Column(
@@ -173,17 +196,23 @@ class _ChatScreenState extends State<ChatScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(children: [
-              const Expanded(
+              Expanded(
                 child: TextField(
-                  decoration: InputDecoration(
+                  controller: _controller,
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _enteredMessage = value;
+                    });
+                  },
                 ),
               ),
               IconButton(
                 highlightColor: Colors.transparent, // 물결 효과 제거
                 splashColor: Colors.transparent, // 물결 효과 제거
-                onPressed: () {},
+                onPressed: _enteredMessage.trim().isEmpty ? null : _sendMessage,
                 icon: Image.asset(
                   "assets/icons/send_button.png",
                   width: 20,
