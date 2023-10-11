@@ -39,7 +39,15 @@ final List<Room> allRoom = [
     relation2: User(
       name: "Hanata",
     ),
-  )
+  ),
+  Room(
+    relation: User(
+      name: "CJW",
+    ),
+    relation2: User(
+      name: "WJC",
+    ),
+  ),
 ];
 
 final List<Message> allMessage = [
