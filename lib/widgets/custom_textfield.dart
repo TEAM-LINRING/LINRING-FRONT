@@ -5,6 +5,9 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final bool obscureText;
   final Text? suffixText;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onPressed;
+  final String? errorText;
 
   const CustomTextField({
     super.key,
@@ -13,6 +16,9 @@ class CustomTextField extends StatelessWidget {
     required this.obscureText,
     decoration,
     this.suffixText,
+    this.onChanged,
+    this.errorText,
+    this.onPressed,
   });
 
   @override
@@ -25,7 +31,22 @@ class CustomTextField extends StatelessWidget {
             TextField(
                 controller: controller,
                 obscureText: obscureText,
+                onChanged: onChanged,
                 decoration: InputDecoration(
+                  errorText: errorText,
+                  errorBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  errorStyle: const TextStyle(
+                    height: 0,
+                  ),
                   contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
@@ -50,9 +71,19 @@ class CustomTextField extends StatelessWidget {
                     ),
                   ),
                 )),
+            if (errorText != null)
+              Positioned(
+                bottom: -30,
+                left: 20,
+                child: Text(
+                  errorText!,
+                  style: const TextStyle(color: Colors.red, height: 0),
+                ),
+              ),
             if (controller != null)
               Positioned(
-                  right: 0, // Adjust to position the button properly
+                  right: 0,
+                  bottom: 0,
                   child: Container(
                     decoration: const BoxDecoration(
                         border: Border(
@@ -74,7 +105,7 @@ class CustomTextField extends StatelessWidget {
                               fontWeight: FontWeight.w400,
                               height: 0),
                         )),
-                  ))
+                  )),
           ],
         ));
   }

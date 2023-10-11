@@ -14,6 +14,12 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final idController = TextEditingController();
   final nickNameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
+  bool isPasswordValid = true;
+  bool isPasswordConfirmValid = true;
+  String? helperText;
+  Color helperTextColor = Colors.blue;
 
   //학번 및 학년 선택용
   List<String> GradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
@@ -99,8 +105,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
+          CustomTextField(
+            controller: passwordController,
+            onChanged: (value) {
+              final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$');
+              setState(() {
+                isPasswordValid = regex.hasMatch(value);
+              });
+            },
             obscureText: true,
+            errorText:
+                isPasswordValid ? null : '비밀번호는 영문자와 숫자를 조합해 8자리 이상이어야 합니다.',
           ),
 
           const SizedBox(height: 30),
@@ -119,8 +134,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
+          CustomTextField(
             obscureText: true,
+            onChanged: (value) {
+              setState(() {
+                isPasswordConfirmValid = passwordController.text == value;
+              });
+            },
+            errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
           ),
 
           const SizedBox(height: 30),
