@@ -21,7 +21,7 @@ class SelectMajor extends StatelessWidget {
         title: '학과 선택',
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(40, 10, 40, 0),
+        padding: const EdgeInsets.fromLTRB(40, 10, 40, 70),
         itemCount: majorListItems.length,
         itemBuilder: (context, index) {
           final item = majorListItems[index];
