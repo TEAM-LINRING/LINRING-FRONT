@@ -105,29 +105,35 @@ class _ChatScreenState extends State<ChatScreen> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ListView.builder(
-            shrinkWrap: true,
-            reverse: true,
-            controller: _scrollController,
-            itemCount: messages.length,
-            itemBuilder: (context, int index) {
-              final message = messages[index];
-              // email로 해야하는데 임시로 이름으로 해두었습니다.
-              bool isMine = message.sender.name == logginedUser;
-              return Container(
-                margin: const EdgeInsets.only(top: 8),
-                child: Row(
-                  mainAxisAlignment:
-                      isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    _chatBubble(message, isMine),
-                  ],
-                ),
-              );
-            },
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus(); // 가상 키보드 unfocusing
+          },
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              controller: _scrollController,
+              itemCount: messages.length,
+              itemBuilder: (context, int index) {
+                final message = messages[index];
+                // email로 해야하는데 임시로 이름으로 해두었습니다.
+                bool isMine = message.sender.name == logginedUser;
+                return Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: isMine
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _chatBubble(message, isMine),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
