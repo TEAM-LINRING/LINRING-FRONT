@@ -5,7 +5,9 @@ import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+  SignUpScreen({super.key});
+  String? selectedCollege;
+  String? selectedMajor;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -20,6 +22,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool isPasswordConfirmValid = true;
   String? helperText;
   Color helperTextColor = Colors.blue;
+
+  //학과 선택용
+  Map<String, String>? selectedData;
 
   //학번 및 학년 선택용
   List<String> gradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
@@ -205,27 +210,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
             child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/selectmajor');
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                  elevation: 5,
-                  shadowColor: const Color(0x196C5916),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  fixedSize: const Size(350, 60),
+              onPressed: () async {
+                final result =
+                    await Navigator.pushNamed(context, '/selectmajor');
+                if (result is Map<String, String>) {
+                  setState(() {
+                    selectedData = result;
+                  });
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                elevation: 5,
+                shadowColor: const Color(0x196C5916),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.search,
-                      size: 24.0,
-                      color: Colors.black,
-                    ))),
+                fixedSize: const Size(350, 60),
+              ),
+              child: selectedData == null
+                  ? const Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.search,
+                        size: 24.0,
+                        color: Colors.black,
+                      ))
+                  : Text(
+                      "${selectedData!['college']}  -  ${selectedData!['major']}",
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w400),
+                    ),
+            ),
           ),
 
           const SizedBox(height: 30),
