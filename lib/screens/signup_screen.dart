@@ -20,8 +20,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final passwordConfirmController = TextEditingController();
   bool isPasswordValid = true;
   bool isPasswordConfirmValid = true;
+  bool isNickNameValid = true;
   String? helperID;
   String? helperNickName;
+  String? errorNickName;
 
   //학과 선택용
   Map<String, String>? selectedData;
@@ -229,6 +231,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Stack(alignment: Alignment.centerRight, children: [
               CustomTextField(
                 controller: nickNameController,
+                onChanged: (value) {
+                  setState(() {
+                    if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
+                      errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
+                    } else if (value.length > 6) {
+                      errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
+                    } else {
+                      errorNickName = null;
+                    }
+                  });
+                },
+                errorText: errorNickName,
                 hintText: '6글자 이내의 닉네임',
                 obscureText: false,
                 helperText: helperNickName,
