@@ -4,10 +4,11 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? hintText;
   final bool obscureText;
-  final Text? suffixText;
+  final Widget? suffixIcon;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onPressed;
   final String? errorText;
+  final String? helperText;
 
   const CustomTextField({
     super.key,
@@ -15,10 +16,11 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     required this.obscureText,
     decoration,
-    this.suffixText,
+    this.suffixIcon,
     this.onChanged,
     this.errorText,
     this.onPressed,
+    this.helperText,
   });
 
   @override
@@ -45,8 +47,12 @@ class CustomTextField extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   errorStyle: const TextStyle(
-                    height: 0,
+                    height: 0.7,
                   ),
+                  helperStyle: const TextStyle(
+                      height: 0.7,
+                      color: Color.fromARGB(255, 0, 64, 255),
+                      fontWeight: FontWeight.w400),
                   contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
                   enabledBorder: OutlineInputBorder(
                     borderSide:
@@ -61,15 +67,8 @@ class CustomTextField extends StatelessWidget {
                   fillColor: Colors.white,
                   filled: true,
                   hintText: hintText,
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 70.0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      widthFactor: 1.0,
-                      heightFactor: 1.0,
-                      child: suffixText,
-                    ),
-                  ),
+                  suffixIcon: suffixIcon,
+                  helperText: helperText ?? ' ',
                 )),
             if (errorText != null)
               Positioned(
