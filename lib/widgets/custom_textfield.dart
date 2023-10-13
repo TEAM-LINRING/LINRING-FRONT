@@ -80,32 +80,6 @@ class CustomTextField extends StatelessWidget {
                   style: const TextStyle(color: Colors.red, height: 0),
                 ),
               ),
-            if (controller != null)
-              Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)))),
-                    child: OutlinedButton(
-                        onPressed: () {
-                          //중복확인 로직으로 변경 필요
-                          controller!.clear();
-                        },
-                        style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: const EdgeInsets.symmetric(vertical: 20)),
-                        child: const Text(
-                          '중복 확인',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              height: 0),
-                        )),
-                  )),
           ],
         ));
   }

@@ -88,13 +88,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          CustomTextField(
-            controller: idController,
-            obscureText: false,
-            suffixText: const Text(
-              '@kookmin.ac.kr',
+          Stack(alignment: Alignment.centerRight, children: [
+            CustomTextField(
+              controller: idController,
+              obscureText: false,
+              suffixText: const Text(
+                '@kookmin.ac.kr',
+              ),
             ),
-          ),
+            Positioned(
+                right: 30,
+                bottom: 6,
+                child: Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          left:
+                              BorderSide(width: 1, color: Color(0xFFC8AAAA)))),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        //중복확인 로직으로 변경 필요
+                        debugPrint('중복 확인 onPressed!');
+                      },
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide.none,
+                          padding: const EdgeInsets.symmetric(vertical: 20)),
+                      child: const Text(
+                        '중복 확인',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            height: 0),
+                      )),
+                )),
+          ]),
           const SizedBox(height: 30),
           //비밀번호
           const Padding(
@@ -185,11 +212,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          CustomTextField(
-            controller: nickNameController,
-            hintText: '6글자 이내의 닉네임',
-            obscureText: false,
-          ),
+          Stack(alignment: Alignment.centerRight, children: [
+            CustomTextField(
+              controller: nickNameController,
+              hintText: '6글자 이내의 닉네임',
+              obscureText: false,
+            ),
+            Positioned(
+                right: 30,
+                bottom: 6,
+                child: Container(
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          left:
+                              BorderSide(width: 1, color: Color(0xFFC8AAAA)))),
+                  child: OutlinedButton(
+                      onPressed: () {
+                        //중복확인 로직으로 변경 필요
+                        debugPrint('중복 확인 onPressed!');
+                      },
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide.none,
+                          padding: const EdgeInsets.symmetric(vertical: 20)),
+                      child: const Text(
+                        '중복 확인',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            height: 0),
+                      )),
+                )),
+          ]),
 
           const SizedBox(height: 30),
 
