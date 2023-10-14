@@ -17,19 +17,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const EntryScreen(),
-      theme: ThemeData(
-        fontFamily: "Pretendard",
-      ),
-      routes: {
-        '/login': (context) => const LoginScreen(),
-        '/signup': (context) => SignUpScreen(),
-        '/selectmajor': (context) => SelectMajor(),
-        '/accoutactive': (context) => const AccoutActiveScreen(),
-        '/main': (context) => const MainScreen(),
-        '/add': (context) => const TagAddScreen(),
-      },
-    );
+        debugShowCheckedModeBanner: false,
+        home: const EntryScreen(),
+        theme: ThemeData(
+          fontFamily: "Pretendard",
+        ),
+        routes: {
+          '/login': (context) => const LoginScreen(),
+          '/signup': (context) => SignUpScreen(),
+          '/selectmajor': (context) => SelectMajor(),
+          '/main': (context) => const MainScreen(),
+          '/add': (context) => const TagAddScreen(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          if (settings.name == '/accoutactive') {
+            final String email = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (context) => AccoutActiveScreen(email: email),
+            );
+          }
+          return null;
+        });
   }
 }

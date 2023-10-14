@@ -4,15 +4,15 @@ import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AccoutActiveScreen extends StatefulWidget {
-  const AccoutActiveScreen({super.key});
+  final String email;
+
+  const AccoutActiveScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   State<AccoutActiveScreen> createState() => _AccoutActiveScreenState();
 }
 
 class _AccoutActiveScreenState extends State<AccoutActiveScreen> {
-  String email = 'example@kookmin.ac.kr';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +49,10 @@ class _AccoutActiveScreenState extends State<AccoutActiveScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text(
-                'example@kookmin.ac.kr',
-                style: TextStyle(
+              child: Text(
+                widget.email,
+                //'@kookmin.ac.kr',
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

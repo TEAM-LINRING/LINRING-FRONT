@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
@@ -790,7 +791,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: isSignUpButtonEnabled
                   ? () {
                       // 회원가입 로직
-                      Navigator.pushNamed(context, '/accoutactive');
+                      // Navigator.pushNamed(context, '/accoutactive');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AccoutActiveScreen(
+                              email: '${idController.text}@kookmin.ac.kr'),
+                        ),
+                      );
                     }
                   : () {},
               backgroundColor: const Color(0xFFFEC2B5)),
