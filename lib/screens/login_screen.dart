@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
@@ -17,8 +16,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(title: '로그인'),
       body: Container(
+
           //background blur img
           width: double.infinity,
           height: double.infinity,
@@ -28,10 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
             fit: BoxFit.cover,
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Spacer(
-              flex: 1,
-            ),
-            // LINRING text
+            const SizedBox(height: 250), // LINRING text
             Text(
               'LINRING',
               style: TextStyle(
@@ -53,14 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 0,
               ),
             ),
-            const Spacer(
-              flex: 1,
-            ),
+            const SizedBox(height: 70),
 
             CustomTextField(
               controller: loginIDController,
               obscureText: false,
-              //hintText: '이메일을 입력하세요',
               suffixIcon: const Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: Align(
@@ -76,7 +69,9 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: '비밀번호',
               obscureText: true,
             ),
-            const Spacer(flex: 1),
+            const SizedBox(
+              height: 15,
+            ),
 
             //로그인 버튼
             CustomOutlinedButton(
@@ -92,13 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   const Spacer(flex: 2),
                   TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
                       child: const Text(
-                        "아이디 찾기",
+                        "회원가입",
                         style: TextStyle(
                           color: Color(0xFF1B1B1B),
                         ),
@@ -107,11 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Text(" | "),
                   const Spacer(flex: 1),
                   TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                          minimumSize: Size.zero,
-                          padding: EdgeInsets.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      onPressed: () {
+                        //비밀번호 찾기 페이지로 이동
+                      },
                       child: const Text(
                         "비밀번호 찾기",
                         style: TextStyle(
@@ -120,9 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                   const Spacer(flex: 2)
                 ]),
-
-            const Spacer(
-              flex: 1,
+            const SizedBox(
+              height: 100,
             )
           ])),
     );
