@@ -11,4 +11,10 @@
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   UrlLauncherWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+
+#include <firebase_core/firebase_core_plugin_c_api.h>
+
+void RegisterPlugins(flutter::PluginRegistry* registry) {
+  FirebaseCorePluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FirebaseCorePluginCApi"));
 }
