@@ -18,27 +18,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const MainScreen(),
-        theme: ThemeData(
-          fontFamily: "Pretendard",
-        ),
-        routes: {
-          '/login': (context) => const LoginScreen(),
-          '/signup': (context) => SignUpScreen(),
-          '/selectmajor': (context) => SelectMajor(),
-          '/main': (context) => const MainScreen(),
-          '/add': (context) => const TagAddScreen(),
-          '/chat': (context) => const ChatRoomScreen(),
-        },
-        onGenerateRoute: (RouteSettings settings) {
-          if (settings.name == '/accoutactive') {
-            final String email = settings.arguments as String;
-            return MaterialPageRoute(
-              builder: (context) => AccoutActiveScreen(email: email),
-            );
-          }
-          return null;
-        });
+      debugShowCheckedModeBanner: false,
+      home: const EntryScreen(),
+      theme: ThemeData(
+        fontFamily: "Pretendard",
+      ),
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/selectmajor': (context) => SelectMajor(),
+        '/main': (context) => const MainScreen(),
+        '/add': (context) => const TagAddScreen(),
+        '/chat': (context) => const ChatRoomScreen(),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == '/accoutactive') {
+          final String email = settings.arguments as String;
+          return MaterialPageRoute(
+            builder: (context) => AccoutActiveScreen(email: email),
+          );
+        }
+        return null;
+      },
+    );
   }
 }
