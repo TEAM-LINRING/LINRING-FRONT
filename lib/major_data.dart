@@ -1,5 +1,3 @@
-// major_data.dart
-
 class College {
   final String name;
   final List<Major> majors;
@@ -13,7 +11,7 @@ class Major {
   Major(this.name);
 }
 
-class MajorDataProvider {
+class MajorData {
   static final List<College> colleges = [
     College('글로벌인문지역대학', [
       Major('한국어문학부'),

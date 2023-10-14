@@ -19,13 +19,13 @@ class CustomOutlinedButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.black,
         backgroundColor: backgroundColor,
-        side: BorderSide.none,
+        side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
         elevation: 5,
         shadowColor: const Color(0x196C5916),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        fixedSize: const Size(350, 75),
+        fixedSize: const Size(350, 70),
       ),
       child: Text(
         label,

@@ -3,12 +3,12 @@ import 'package:linring_front_flutter/major_data.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class SelectMajor extends StatelessWidget {
-  final List<ListItem> majorListItems =
-      MajorDataProvider.getColleges().expand((college) {
-    return [
-      HeadingItem(college.name),
-      ...college.majors.map((major) => MessageItem('', major.name))
-    ];
+  final List<ListItem?> majorListItems =
+      MajorData.getColleges().expand((college) {
+    var items = <ListItem?>[CollegeItem(college.name)];
+    items.addAll(college.majors.map((major) => MajorItem(major.name)));
+    items.add(null);
+    return items;
   }).toList();
 
   SelectMajor({Key? key}) : super(key: key);
@@ -21,25 +21,46 @@ class SelectMajor extends StatelessWidget {
         title: '학과 선택',
       ),
       body: ListView.builder(
-        padding: const EdgeInsets.all(0),
+        padding: const EdgeInsets.fromLTRB(40, 10, 40, 70),
         itemCount: majorListItems.length,
         itemBuilder: (context, index) {
           final item = majorListItems[index];
-          return SafeArea(
-            child: ListTile(
-              title: item.buildTitle(context),
-              subtitle: item.buildSubtitle(context),
-              onTap: item is MessageItem
-                  ? () {
-                      Navigator.pushNamed(context, '/signup');
-                      // 예: 학과 이름을 표시하는 토스트 메시지를 표시
-                      // final title = item.buildTitle(context).toString();
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(content: Text('$title was tapped!')),
-                      // );
+          if (item == null) {
+            return const Divider(color: Color.fromARGB(255, 118, 99, 99));
+          }
+          return ListTile(
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            title: item.buildTitle(context),
+            onTap: item is MajorItem
+                ? () {
+                    // 현재 MajorItem의 값
+                    String currentMajor = item.major;
+
+                    // 이전 CollegeItem을 찾는 과정
+                    int collegeIndex = index - 1;
+                    while (collegeIndex >= 0 &&
+                        majorListItems[collegeIndex] is! CollegeItem) {
+                      collegeIndex--;
                     }
-                  : null, // HeadingItem에는 onTap 콜백을 추가하지 않습니다.
-            ),
+
+                    String currentCollege = "";
+                    if (collegeIndex >= 0 &&
+                        majorListItems[collegeIndex] is CollegeItem) {
+                      currentCollege =
+                          (majorListItems[collegeIndex] as CollegeItem).heading;
+                    }
+
+                    // 값을 딕셔너리에 저장
+                    Map<String, String> result = {
+                      'college': currentCollege,
+                      'major': currentMajor
+                    };
+
+                    // 이전 페이지로 값을 반환
+                    Navigator.pop(context, result);
+                  }
+                : null,
           );
         },
       ),
@@ -47,38 +68,35 @@ class SelectMajor extends StatelessWidget {
   }
 }
 
-// The rest of the ListItem, HeadingItem, and MessageItem classes remains unchanged.
 abstract class ListItem {
   Widget buildTitle(BuildContext context);
-  Widget buildSubtitle(BuildContext context);
 }
 
-class HeadingItem implements ListItem {
+class CollegeItem implements ListItem {
   final String heading;
 
-  HeadingItem(this.heading);
+  CollegeItem(this.heading);
 
   @override
   Widget buildTitle(BuildContext context) {
-    return Text(
-      heading,
-      style: Theme.of(context).textTheme.headlineSmall,
-    );
+    return Text(heading,
+        style: const TextStyle(
+            fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold));
   }
-
-  @override
-  Widget buildSubtitle(BuildContext context) => const SizedBox.shrink();
 }
 
-class MessageItem implements ListItem {
-  final String sender;
-  final String body;
+class MajorItem implements ListItem {
+  final String major;
 
-  MessageItem(this.sender, this.body);
-
+  MajorItem(this.major);
   @override
-  Widget buildTitle(BuildContext context) => Text(sender);
-
-  @override
-  Widget buildSubtitle(BuildContext context) => Text(body);
+  Widget buildTitle(BuildContext context) {
+    return Text(
+      major,
+      style: const TextStyle(
+        fontSize: 20,
+        color: Colors.black,
+      ),
+    );
+  }
 }
