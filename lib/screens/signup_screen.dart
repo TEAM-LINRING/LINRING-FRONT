@@ -15,14 +15,26 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final idController = TextEditingController();
-  final nickNameController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
+  final nameController = TextEditingController();
+  final nickNameController = TextEditingController();
+  final gradeController = TextEditingController();
+  final ageController = TextEditingController();
+
+  //중복 확인용 변수
+  bool isIDUnique = false;
+  bool isNickNameUnique = false;
+
+  //정규식 유효성 검사용 변수
   bool isPasswordValid = true;
   bool isPasswordConfirmValid = true;
-  bool isNickNameValid = true;
+  bool isNickNameValid = false;
+  bool isSignUpButtonEnabled = false;
+
   String? helperID;
   String? helperNickName;
+  String? errorID;
   String? errorNickName;
 
   //학과 선택용
@@ -106,6 +118,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 helperText: helperID,
+                errorText: errorID,
               ),
               Positioned(
                   right: 30,
@@ -119,7 +132,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () {
                           //중복확인 로직으로 변경 필요
                           setState(() {
-                            helperID = '사용 가능한 메일주소입니다.';
+                            isIDUnique = true;
+                            if (isIDUnique == true) {
+                              helperID = '사용 가능한 메일주소입니다.';
+                            } else {
+                              errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                            }
+                            isSignUpButtonEnabled = checkFormValidity();
                           });
                         },
                         style: OutlinedButton.styleFrom(
@@ -157,6 +176,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$');
               setState(() {
                 isPasswordValid = regex.hasMatch(value);
+                isSignUpButtonEnabled = checkFormValidity();
               });
             },
             obscureText: true,
@@ -185,6 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onChanged: (value) {
               setState(() {
                 isPasswordConfirmValid = passwordController.text == value;
+                isSignUpButtonEnabled = checkFormValidity();
               });
             },
             errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
@@ -206,8 +227,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 0,
                     ),
                   ))),
-          const CustomTextField(
+          CustomTextField(
+            controller: nameController,
             obscureText: false,
+            onChanged: (value) {
+              setState(() {
+                isSignUpButtonEnabled = checkFormValidity();
+              });
+            },
           ),
 
           const SizedBox(height: 30),
@@ -234,11 +261,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onChanged: (value) {
                   setState(() {
                     if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
+                      isNickNameValid = false;
                       errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
                     } else if (value.length > 6) {
+                      isNickNameValid = false;
                       errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
                     } else {
                       errorNickName = null;
+                      isNickNameValid = true;
                     }
                   });
                 },
@@ -257,10 +287,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
                         onPressed: () {
-                          //중복확인 로직으로 변경 필요
-                          setState(() {
-                            helperNickName = '사용 가능한 닉네임입니다.';
-                          });
+                          if (isNickNameValid == true) {
+                            setState(() {
+                              // 중복확인 로직으로 변경 필요
+                              isNickNameUnique = true;
+                              if (isNickNameUnique) {
+                                helperNickName = '사용 가능한 닉네임입니다.';
+                                isSignUpButtonEnabled = checkFormValidity();
+                              } else {
+                                errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                              }
+                            });
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                             side: BorderSide.none,
@@ -302,6 +340,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 if (result is Map<String, String>) {
                   setState(() {
                     selectedData = result;
+                    isSignUpButtonEnabled = checkFormValidity();
                   });
                 }
               },
@@ -365,6 +404,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
+                      controller: gradeController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -391,6 +431,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          isSignUpButtonEnabled = checkFormValidity();
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -477,6 +522,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextField(
+                        controller: ageController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -503,6 +549,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            isSignUpButtonEnabled = checkFormValidity();
+                          });
+                        },
                       ),
                     ))
               ],
@@ -568,6 +619,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isChecked1 = value;
                           _isChecked2 = value;
                           _isChecked3 = value;
+                          isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
                       checkColor: Colors.black,
@@ -611,6 +663,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isChecked1 = value!;
                           _isCheckedAll =
                               _isChecked1 && _isChecked2 && _isChecked3;
+                          isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
                       checkColor: Colors.black,
@@ -654,6 +707,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isChecked2 = value!;
                           _isCheckedAll =
                               _isChecked1 && _isChecked2 && _isChecked3;
+                          isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
                       checkColor: Colors.black,
@@ -699,6 +753,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isChecked3 = value!;
                           _isCheckedAll =
                               _isChecked1 && _isChecked2 && _isChecked3;
+                          isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
                       checkColor: Colors.black,
@@ -732,7 +787,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           //가입하기 버튼
           CustomOutlinedButton(
               label: '가입하기',
-              onPressed: () {},
+              onPressed: isSignUpButtonEnabled
+                  ? () {
+                      // 회원가입 로직
+                      Navigator.pushNamed(context, '/main');
+                    }
+                  : () {},
               backgroundColor: const Color(0xFFFEC2B5)),
           const SizedBox(height: 40),
         ]),
@@ -750,6 +810,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     setState(() {
       isSelected = [isMale, isFemale];
+      isSignUpButtonEnabled = checkFormValidity();
     });
   }
 
@@ -779,5 +840,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         elevation: 0,
       ),
     );
+  }
+
+  bool checkFormValidity() {
+    return isIDUnique &&
+        isPasswordValid &&
+        isPasswordConfirmValid &&
+        nameController.text.isNotEmpty &&
+        isNickNameUnique &&
+        selectedData != null &&
+        gradeController.text.isNotEmpty &&
+        (isMale || isFemale) &&
+        ageController.text.isNotEmpty &&
+        ((_isChecked1 && _isChecked2) ||
+            (_isChecked1 && _isChecked2 && _isChecked3));
   }
 }
