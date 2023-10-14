@@ -10,8 +10,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final loginIDController = TextEditingController();
+  final loginPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +58,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             CustomTextField(
-              controller: emailController,
+              controller: loginIDController,
               obscureText: false,
               //hintText: '이메일을 입력하세요',
-              suffixText: const Text('@kookmin.ac.kr'),
+              suffixIcon: const Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  widthFactor: 1.0,
+                  heightFactor: 1.0,
+                  child: Text('@kookmin.ac.kr'),
+                ),
+              ),
             ),
             CustomTextField(
-              controller: passwordController,
+              controller: loginPasswordController,
               hintText: '비밀번호',
               obscureText: true,
             ),

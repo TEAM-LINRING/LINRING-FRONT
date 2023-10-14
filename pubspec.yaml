@@ -35,11 +35,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  
   carousel_slider: ^4.2.1
-  firebase_messaging: ^14.6.9
   http: ^1.1.0
   flutter_dotenv: ^5.0.2
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +68,6 @@ flutter:
     # - lib/images/blur2.png
     - assets/fonts/
     - assets/icons/
-    - assets/images/
     - assets/images/
     - assets/config/.env
   # An image asset can refer to one or more resolution-specific "variants", see
