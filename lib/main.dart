@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
+import 'package:linring_front_flutter/screens/chat_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           '/selectmajor': (context) => SelectMajor(),
           '/main': (context) => const MainScreen(),
           '/add': (context) => const TagAddScreen(),
+          '/chat': (context) => const ChatScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (settings.name == '/accoutactive') {
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
             );
           }
           return null;
-        });
+        },
+    );
   }
 }
