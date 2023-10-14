@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
@@ -8,7 +9,8 @@ import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:linring_front_flutter/screens/main_screen.dart';
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
