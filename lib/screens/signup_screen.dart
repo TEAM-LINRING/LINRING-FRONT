@@ -444,28 +444,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             child: Row(
               children: [
-                Container(
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          right:
-                              BorderSide(width: 1, color: Color(0xFFC8AAAA)))),
-                  child: Expanded(
-                    flex: 1,
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                        border: Border(
+                            right: BorderSide(
+                                width: 1, color: Color(0xFFC8AAAA)))),
                     child: ToggleButtons(
                       isSelected: isSelected,
                       onPressed: toggleSelect,
                       fillColor: const Color(0xFFFEC2B5),
                       selectedColor: Colors.black,
-                      borderWidth: 0.0,
+                      borderWidth: 0,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       children: const [
                         Padding(
-                            padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                            padding: EdgeInsets.fromLTRB(33, 5, 35, 5),
                             child: Text(
                               '남',
                               style: TextStyle(fontSize: 16),
                             )),
                         Padding(
-                            padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+                            padding: EdgeInsets.fromLTRB(33, 5, 34, 5),
                             child: Text('여', style: TextStyle(fontSize: 16))),
                       ],
                     ),
@@ -488,9 +489,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           hintText: null,
-                          contentPadding: EdgeInsets.fromLTRB(52, 14, 0, 0),
+                          contentPadding: EdgeInsets.fromLTRB(48, 15, 0, 0),
                           suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 55.0),
+                            padding: EdgeInsets.only(right: 45.0),
                             child: Align(
                               alignment: Alignment.center,
                               widthFactor: 1.0,

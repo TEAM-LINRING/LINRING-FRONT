@@ -24,8 +24,6 @@ class SelectMajor extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(40, 10, 40, 70),
         itemCount: majorListItems.length,
         itemBuilder: (context, index) {
-          // debugPrint("BuildContext~~: $context");
-          // debugPrint("Index: $index");
           final item = majorListItems[index];
           if (item == null) {
             return const Divider(color: Color.fromARGB(255, 118, 99, 99));
@@ -36,7 +34,6 @@ class SelectMajor extends StatelessWidget {
             title: item.buildTitle(context),
             onTap: item is MajorItem
                 ? () {
-                    debugPrint(item.major);
                     // 현재 MajorItem의 값
                     String currentMajor = item.major;
 
