@@ -516,14 +516,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: EdgeInsets.fromLTRB(30, 0, 0, 8),
               child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    '특이사항',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
+                  child: Row(
+                    children: [
+                      Text(
+                        '특이사항',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        '*선택사항',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                        ),
+                      ),
+                    ],
                   ))),
           Padding(
             padding: const EdgeInsets.fromLTRB(30, 0, 23, 5),
