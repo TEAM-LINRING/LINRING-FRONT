@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/selectmajor': (context) => SelectMajor(),
+        '/accoutactive': (context) => const AccoutActiveScreen(),
         '/main': (context) => const MainScreen(),
         '/add': (context) => const TagAddScreen(),
       },

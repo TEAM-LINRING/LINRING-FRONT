@@ -790,7 +790,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: isSignUpButtonEnabled
                   ? () {
                       // 회원가입 로직
-                      Navigator.pushNamed(context, '/main');
+                      Navigator.pushNamed(context, '/accoutactive');
                     }
                   : () {},
               backgroundColor: const Color(0xFFFEC2B5)),
