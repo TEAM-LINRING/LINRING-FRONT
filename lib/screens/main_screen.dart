@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:linring_front_flutter/screens/chat_screen.dart';
+import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
-import 'package:linring_front_flutter/widgets/bottom_navigation_bar.dart';
+import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -17,14 +17,13 @@ class _MainScreenState extends State<MainScreen> {
 
   static const List<Widget> _screens = <Widget>[
     TagShowScreen(),
-    ChatScreen(),
+    ChatRoomScreen(),
     SettingScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "LINRING"),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onIndexChanged: (index) {

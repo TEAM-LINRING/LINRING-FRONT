@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
+import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const EntryScreen(),
+        home: const MainScreen(),
         theme: ThemeData(
           fontFamily: "Pretendard",
         ),
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
           '/selectmajor': (context) => SelectMajor(),
           '/main': (context) => const MainScreen(),
           '/add': (context) => const TagAddScreen(),
+          '/chat': (context) => const ChatRoomScreen(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (settings.name == '/accoutactive') {
