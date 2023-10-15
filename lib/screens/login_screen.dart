@@ -162,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Spacer(flex: 1),
                   TextButton(
                       onPressed: () {
-                        //비밀번호 찾기 페이지로 이동
+                        Navigator.pushNamed(context, '/forgotPassword');
                       },
                       child: const Text(
                         "비밀번호 찾기",
