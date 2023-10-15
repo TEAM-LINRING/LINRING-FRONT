@@ -80,40 +80,46 @@ class _SignUpScreenState extends State<SignUpScreen> {
     selectedGrade = gradeList[0];
   }
 
-  // void _createAccount(BuildContext context) async {
-  //   String apiAddress = dotenv.get("API_ADDRESS");
+  void _createAccount(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/register/');
 
-  //   final url = Uri.parse('$apiAddress/accounts/register/');
-  //   String body = jsonEncode({
-  //     "email": idController.text,
-  //     "password1": passwordController.text,
-  //     "password2": passwordConfirmController.text,
-  //     "nickname": nickNameController.text,
-  //     "department": selectedData!['major'],
-  //     "gender": selectedGender,
-  //     "student_number": studentNumberController.text,
-  //     "grade": selectedGrade,
-  //     "significant": "string"
-  //   });
+    String body = jsonEncode({
+      "email": idController.text,
+      "password1": passwordController.text,
+      "password2": passwordConfirmController.text,
+      "nickname": nickNameController.text,
+      "department": selectedData!['major'],
+      "gender": selectedGender,
+      "student_number": studentNumberController.text,
+      "grade": selectedGrade,
+      "significant": "유학생"
+    });
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    );
+    debugPrint((response.statusCode).toString());
+    if (response.statusCode == 201) {
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              AccoutActiveScreen(email: '${idController.text}@kookmin.ac.kr'),
+        ),
+      );
+    }
+  }
 
-  //   String body = jsonEncode({
-  //     "email": idController.text,
-  //     "password1": passwordController.text,
-  //     "password2": passwordConfirmController.text,
-  //     "nickname": nickNameController.text,
-  //     "department": selectedData!['major'],
-  //     "gender": selectedGender,
-  //     "student_number": studentNumberController.text,
-  //     "grade": selectedGrade,
-  //     "significant": "string"
-  //   });
-
-  Future<bool?> _ValidationEmail(BuildContext context) async {
+  Future<bool?> _validationEmail(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/v2/user/validation/email/');
 
-    String body = jsonEncode({
-      // "email": idController.text,
+    String emailBody = jsonEncode({
       "email": '${idController.text}@kookmin.ac.kr',
     });
 
@@ -122,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: body,
+      body: emailBody,
     );
 
     final data = json.decode(response.body);
@@ -203,7 +209,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
                         onPressed: () async {
-                          bool? result = await _ValidationEmail(context);
+                          bool? result = await _validationEmail(context);
                           setState(() {
                             if (result != null) {
                               if (result) {
@@ -867,15 +873,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: isSignUpButtonEnabled
                   ? () {
                       // 회원가입 로직
-                      // Navigator.pushNamed(context, '/accoutactive');
-                      //_createAccount(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AccoutActiveScreen(
-                              email: '${idController.text}@kookmin.ac.kr'),
-                        ),
-                      );
+                      _createAccount(context);
                     }
                   : () {},
               backgroundColor: const Color(0xFFFEC2B5)),
@@ -930,6 +928,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool checkFormValidity() {
+    debugPrint(isIDUnique.toString());
+    debugPrint(isPasswordValid.toString());
+    debugPrint(isPasswordConfirmValid.toString());
+    debugPrint(isNickNameUnique.toString());
+    debugPrint((selectedData != null).toString());
+    debugPrint((studentNumberController.text.isNotEmpty).toString());
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&

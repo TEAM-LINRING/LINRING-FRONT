@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
-import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,6 +10,12 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final loginIDController = TextEditingController();
   final loginPasswordController = TextEditingController();
+  bool _showError = false;
+  void _toggleError() {
+    setState(() {
+      _showError = !_showError;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,32 +56,88 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 70),
 
-            CustomTextField(
-              controller: loginIDController,
-              obscureText: false,
-              suffixIcon: const Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  widthFactor: 1.0,
-                  heightFactor: 1.0,
-                  child: Text('@kookmin.ac.kr'),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+              child: TextField(
+                controller: loginIDController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  suffixIcon: const Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      widthFactor: 1.0,
+                      heightFactor: 1.0,
+                      child: Text('@kookmin.ac.kr'),
+                    ),
+                  ),
                 ),
               ),
             ),
-            CustomTextField(
-              controller: loginPasswordController,
-              hintText: '비밀번호',
-              obscureText: true,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+              child: TextField(
+                controller: loginPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: '비밀번호',
+                ),
+              ),
             ),
             const SizedBox(
-              height: 15,
+              height: 5,
             ),
+            if (_showError == false)
+              const Text(
+                '',
+                style: TextStyle(fontSize: 15),
+              ),
+            if (_showError)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 38),
+                  child: Text(
+                    '비밀번호가 일치하지 않습니다.',
+                    style: TextStyle(color: Colors.red, fontSize: 15),
+                  ),
+                  //'입력된 아이디가 존재하지 않습니다.'
+                ),
+              ),
 
+            const SizedBox(
+              height: 30,
+            ),
             //로그인 버튼
             CustomOutlinedButton(
                 label: '로그인',
-                onPressed: () {},
+                onPressed: _toggleError,
                 backgroundColor: const Color(0xFFFEC2B5)),
 
             const SizedBox(
