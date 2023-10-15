@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
+import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/add': (context) => const TagAddScreen(),
         '/chat': (context) => const ChatRoomScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
+        '/changePassword': (context) => const ChangePasswordScreen(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/accoutactive') {

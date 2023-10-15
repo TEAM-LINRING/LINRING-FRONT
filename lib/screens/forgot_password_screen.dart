@@ -68,7 +68,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             const SizedBox(height: 40),
             CustomOutlinedButton(
                 label: '인증 메일 받기',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/changePassword');
+                },
                 backgroundColor: const Color(0xFFFEC2B5)),
           ],
         ),
