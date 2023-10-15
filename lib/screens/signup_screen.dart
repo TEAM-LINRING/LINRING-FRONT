@@ -585,7 +585,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       fillColor: const Color(0xFFFEC2B5),
                       selectedColor: Colors.black,
                       borderWidth: 0,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      //borderRadius: const BorderRadius.all(Radius.circular(10)),
                       children: const [
                         Padding(
                             padding: EdgeInsets.fromLTRB(33, 5, 35, 5),
