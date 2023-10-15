@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -18,9 +22,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final idController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
-  final nameController = TextEditingController();
   final nickNameController = TextEditingController();
-  final gradeController = TextEditingController();
+  final studentNumberController = TextEditingController();
   final ageController = TextEditingController();
 
   //중복 확인용 변수
@@ -43,12 +46,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   //학번 및 학년 선택용
   List<String> gradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
-  String selectedGrade = '';
+  String selectedGrade = '1학년';
 
   //성별 선택용 변수들
   bool isMale = false;
   bool isFemale = false;
   late List<bool> isSelected;
+  String selectedGender = '';
 
   //특이사항 선택용 변수들
   final List<Map<String, dynamic>> remark = [
@@ -74,6 +78,74 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
     isSelected = [isMale, isFemale];
     selectedGrade = gradeList[0];
+  }
+
+  // void _createAccount(BuildContext context) async {
+  //   String apiAddress = dotenv.get("API_ADDRESS");
+
+  //   final url = Uri.parse('$apiAddress/accounts/register/');
+  //   String body = jsonEncode({
+  //     "email": idController.text,
+  //     "password1": passwordController.text,
+  //     "password2": passwordConfirmController.text,
+  //     "nickname": nickNameController.text,
+  //     "department": selectedData!['major'],
+  //     "gender": selectedGender,
+  //     "student_number": studentNumberController.text,
+  //     "grade": selectedGrade,
+  //     "significant": "string"
+  //   });
+
+  //   String body = jsonEncode({
+  //     "email": idController.text,
+  //     "password1": passwordController.text,
+  //     "password2": passwordConfirmController.text,
+  //     "nickname": nickNameController.text,
+  //     "department": selectedData!['major'],
+  //     "gender": selectedGender,
+  //     "student_number": studentNumberController.text,
+  //     "grade": selectedGrade,
+  //     "significant": "string"
+  //   });
+
+  Future<bool?> _ValidationEmail(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/v2/user/validation/email/');
+
+    String body = jsonEncode({
+      // "email": idController.text,
+      "email": '${idController.text}@kookmin.ac.kr',
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    );
+
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      //중복되지 않은 이메일
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'email is available') {
+        return true;
+      }
+    }
+
+    if (response.statusCode == 400) {
+      //이미 사용중인 이메일
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'email is already in use') {
+        return false;
+      }
+    }
+    return null;
   }
 
   @override
@@ -130,16 +202,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             left: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
-                        onPressed: () {
-                          //중복확인 로직으로 변경 필요
+                        onPressed: () async {
+                          bool? result = await _ValidationEmail(context);
                           setState(() {
-                            isIDUnique = true;
-                            if (isIDUnique == true) {
-                              helperID = '사용 가능한 메일주소입니다.';
-                            } else {
-                              errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                            if (result != null) {
+                              if (result) {
+                                isIDUnique = true;
+                                errorID = null;
+                                helperID = '사용 가능한 메일주소입니다.';
+                              } else {
+                                isIDUnique = false;
+                                errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                              }
+
+                              isSignUpButtonEnabled = checkFormValidity();
                             }
-                            isSignUpButtonEnabled = checkFormValidity();
                           });
                         },
                         style: OutlinedButton.styleFrom(
@@ -229,7 +306,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           CustomTextField(
-            controller: nameController,
             obscureText: false,
             onChanged: (value) {
               setState(() {
@@ -405,7 +481,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
-                      controller: gradeController,
+                      controller: studentNumberController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -792,6 +868,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ? () {
                       // 회원가입 로직
                       // Navigator.pushNamed(context, '/accoutactive');
+                      //_createAccount(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -812,9 +889,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (value == 0) {
       isMale = true;
       isFemale = false;
+      selectedGender = '남';
     } else {
       isMale = false;
       isFemale = true;
+      selectedGender = '여';
     }
     setState(() {
       isSelected = [isMale, isFemale];
@@ -854,10 +933,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&
-        nameController.text.isNotEmpty &&
         isNickNameUnique &&
         selectedData != null &&
-        gradeController.text.isNotEmpty &&
+        studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
         ((_isChecked1 && _isChecked2) ||
