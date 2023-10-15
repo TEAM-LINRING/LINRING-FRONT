@@ -93,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "gender": selectedGender,
       "student_number": studentNumberController.text,
       "grade": selectedGrade,
-      "significant": "유학생"
+      "significant": ["유학생", "전과생"]
     });
     final response = await http.post(
       url,
@@ -148,6 +148,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       }
       if (data['message'] == 'email is already in use') {
+        return false;
+      }
+    }
+    return null;
+  }
+
+  Future<bool?> _validationNickName(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/v2/user/validation/nickname/');
+
+    String emailBody = jsonEncode({
+      "nickname": nickNameController.text,
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: emailBody,
+    );
+
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      //중복되지 않은 닉네임
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'Nickname is available') {
+        return true;
+      }
+    }
+
+    if (response.statusCode == 400) {
+      //이미 사용중인 닉네임
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'Nickname is already in use') {
         return false;
       }
     }
@@ -343,6 +382,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: nickNameController,
                 onChanged: (value) {
                   setState(() {
+                    errorNickName = null;
+                    helperNickName = null;
                     if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
                       isNickNameValid = false;
                       errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
@@ -369,17 +410,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             left: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (isNickNameValid == true) {
+                            bool? result = await _validationNickName(context);
                             setState(() {
-                              // 중복확인 로직으로 변경 필요
-                              isNickNameUnique = true;
-                              if (isNickNameUnique) {
-                                helperNickName = '사용 가능한 닉네임입니다.';
-                                isSignUpButtonEnabled = checkFormValidity();
-                              } else {
-                                errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                              if (result != null) {
+                                if (result) {
+                                  isNickNameUnique = true;
+                                  errorNickName = null;
+                                  helperNickName = '사용 가능한 닉네임입니다.';
+                                } else {
+                                  isNickNameUnique = false;
+                                  helperNickName = null;
+                                  errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                }
                               }
+                              isSignUpButtonEnabled = checkFormValidity();
                             });
                           }
                         },
@@ -928,12 +974,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool checkFormValidity() {
-    debugPrint(isIDUnique.toString());
-    debugPrint(isPasswordValid.toString());
-    debugPrint(isPasswordConfirmValid.toString());
-    debugPrint(isNickNameUnique.toString());
-    debugPrint((selectedData != null).toString());
-    debugPrint((studentNumberController.text.isNotEmpty).toString());
+    // debugPrint(isIDUnique.toString());
+    // debugPrint(isPasswordValid.toString());
+    // debugPrint(isPasswordConfirmValid.toString());
+    // debugPrint(isNickNameUnique.toString());
+    // debugPrint((selectedData != null).toString());
+    // debugPrint((studentNumberController.text.isNotEmpty).toString());
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&
