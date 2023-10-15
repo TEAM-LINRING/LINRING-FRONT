@@ -257,6 +257,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 helperID = '사용 가능한 메일주소입니다.';
                               } else {
                                 isIDUnique = false;
+                                helperID = null;
                                 errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
                               }
 
