@@ -32,29 +32,29 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  void _sendMessage() {
-    FocusScope.of(context).unfocus();
-    // 서버에 채팅 메세지 전송하는 것으로 변경 예정
-    allMessage.add(
-      Message(
-        room: Room(
-          relation: User(name: 'CJW'),
-          relation2: User(name: 'Hanata'),
-        ),
-        sender: User(name: 'CJW'),
-        receiver: User(name: 'Hanata'),
-        message: _enteredMessage,
-        isRead: true,
-        type: 1,
-      ),
-    );
-    _controller.clear();
-    _scrollController.animateTo(
-      0,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
+  // void _sendMessage() {
+  //   FocusScope.of(context).unfocus();
+  //   // 서버에 채팅 메세지 전송하는 것으로 변경 예정
+  //   allMessage.add(
+  //     Message(
+  //       room: Room(
+  //         relation: User(name: 'CJW'),
+  //         relation2: User(name: 'Hanata'),
+  //       ),
+  //       sender: User(name: 'CJW'),
+  //       receiver: User(name: 'Hanata'),
+  //       message: _enteredMessage,
+  //       isRead: true,
+  //       type: 1,
+  //     ),
+  //   );
+  //   _controller.clear();
+  //   _scrollController.animateTo(
+  //     0,
+  //     duration: const Duration(milliseconds: 300),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
