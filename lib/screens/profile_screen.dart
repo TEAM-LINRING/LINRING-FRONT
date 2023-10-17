@@ -141,8 +141,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '프로필 관리',
+        suffix: TextButton(
+          onPressed: () {},
+          child: const Text(
+            '완료',
+            style: TextStyle(fontSize: 19, color: Colors.black),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child:
