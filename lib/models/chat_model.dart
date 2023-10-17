@@ -16,10 +16,10 @@ class ChatRoom {
 
   factory ChatRoom.fromJson(Map<String, dynamic> json) {
     return ChatRoom(
-      relation: json["relation"],
-      relation2: json["relation2"],
-      tag: json["tagset"],
-      tag2: json["tagset2"],
+      relation: User.fromJson(json["relation"]),
+      relation2: User.fromJson(json["relation2"]),
+      tag: tagset.fromJson(json["tagset"]),
+      tag2: tagset.fromJson(json["tagset2"]),
     );
   }
 }
