@@ -120,8 +120,13 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           spacing: 8,
           children: _tagPlace.map((tag) {
             return ChoiceChip(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               label: Text(tag.title),
               selected: place == tag.title,
+              selectedColor: const Color(0xfffec2b5),
               onSelected: (selected) {
                 setState(() {
                   if (selected) {
@@ -131,6 +136,8 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
                   }
                 });
               },
+              backgroundColor: Colors.white,
+              elevation: 0,
             );
           }).toList(),
         ),
@@ -139,21 +146,39 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
         ),
         Wrap(
           spacing: 8,
-          children: _tagDepartment.map((tag) {
-            return ChoiceChip(
-              label: Text(tag.title),
-              selected: department == tag.title,
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    department = tag.title;
-                  } else {
-                    department = null;
-                  }
-                });
-              },
-            );
-          }).toList(),
+          children: _tagDepartment.map(
+            (tag) {
+              return ChoiceChip(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+                labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                label: Text(
+                  tag.title,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: const Color(0xff1b1b1b),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                ),
+                selected: department == tag.title,
+                selectedColor: const Color(0xfffec2b5),
+                onSelected: (selected) {
+                  setState(
+                    () {
+                      if (selected) {
+                        department = tag.title;
+                      } else {
+                        department = null;
+                      }
+                    },
+                  );
+                },
+                backgroundColor: Colors.white,
+                elevation: 0,
+              );
+            },
+          ).toList(),
         ),
         const SizedBox(
           height: 10,
@@ -162,8 +187,13 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           spacing: 8,
           children: _tagPerson.map((tag) {
             return ChoiceChip(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               label: Text(tag.title),
               selected: person == tag.title,
+              selectedColor: const Color(0xFFFEC2B5),
               onSelected: (selected) {
                 setState(() {
                   if (selected) {
@@ -173,6 +203,8 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
                   }
                 });
               },
+              backgroundColor: Colors.white,
+              elevation: 0,
             );
           }).toList(),
         ),
@@ -183,8 +215,13 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           spacing: 8,
           children: _tagMethod.map((tag) {
             return ChoiceChip(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               label: Text(tag.title),
               selected: method == tag.title,
+              selectedColor: const Color(0xFFFEC2B5),
               onSelected: (selected) {
                 setState(() {
                   if (selected) {
@@ -194,6 +231,8 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
                   }
                 });
               },
+              backgroundColor: Colors.white,
+              elevation: 0,
             );
           }).toList(),
         ),
