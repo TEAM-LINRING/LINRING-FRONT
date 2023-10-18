@@ -22,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final idController = TextEditingController();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
+  final nameController = TextEditingController();
   final nickNameController = TextEditingController();
   final studentNumberController = TextEditingController();
   final ageController = TextEditingController();
@@ -84,17 +85,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/register/');
 
+    // 특이사항에서 isCheck가 true인 항목들만의 state 값을 추출
+    List<String> significantRemarks = remark
+        .where((item) => item['isCheck'] == true)
+        .map((item) => item['state'] as String)
+        .toList();
+
     String body = jsonEncode({
-      "email": idController.text,
+      "name": nameController.text,
+      "email": '${idController.text}@kookmin.ac.kr',
       "password1": passwordController.text,
       "password2": passwordConfirmController.text,
       "nickname": nickNameController.text,
       "department": selectedData!['major'],
       "gender": selectedGender,
       "student_number": studentNumberController.text,
+      "birth": ageController.text,
       "grade": selectedGrade,
-      "significant": ["유학생", "전과생"]
+      "significant": significantRemarks,
     });
+    print(body);
     final response = await http.post(
       url,
       headers: {
@@ -326,6 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ))),
           CustomTextField(
             obscureText: true,
+            controller: passwordConfirmController,
             onChanged: (value) {
               setState(() {
                 isPasswordConfirmValid = passwordController.text == value;
@@ -352,6 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ))),
           CustomTextField(
+            controller: nameController,
             obscureText: false,
             onChanged: (value) {
               setState(() {
