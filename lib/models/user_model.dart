@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class User {
   final int id;
   final DateTime? lastLogin;
@@ -12,11 +10,11 @@ class User {
   final String department;
   final int? studentNumber;
   final String gender;
-  final String? significant;
   final String? rating;
   final bool isActive;
-  final Array groups;
-  final Array userPermissions;
+  final List<dynamic>? groups;
+  final List<String>? userPermissions;
+  final List<int>? significant;
 
   User({
     required this.id,
@@ -30,11 +28,11 @@ class User {
     required this.department,
     required this.studentNumber,
     required this.gender,
-    required this.significant,
     required this.rating,
     required this.isActive,
     required this.groups,
     required this.userPermissions,
+    required this.significant,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -46,15 +44,15 @@ class User {
       username: json["username"],
       email: json["email"],
       nickname: json["nickname"],
-      profile: json["profile"],
+      profile: json["profile"] ?? "",
       department: json["department"],
-      studentNumber: json["student_number"],
+      studentNumber: json["student_number"] ?? 00000000,
       gender: json["gender"],
-      significant: json["significant"],
-      rating: json["rating"],
+      rating: json["rating"] ?? "",
       isActive: json["is_active"],
-      groups: json["groups"],
-      userPermissions: json["user_permissions"],
+      groups: json["groups"] ?? [],
+      userPermissions: json["user_permissions"] ?? [],
+      significant: json["significant"] ?? [],
     );
   }
 }

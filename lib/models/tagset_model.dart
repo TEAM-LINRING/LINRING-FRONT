@@ -33,7 +33,7 @@ class tagset {
       person: json["person"],
       method: json["method"],
       isActive: json["is_active"],
-      introduction: json["introduction"],
+      introduction: json["introduction"] ?? "",
       owner: json["owner"],
     );
   }
