@@ -22,12 +22,18 @@ class _TagShowScreenState extends State<TagShowScreen> {
     _futureTagsets = _callAPI();
   }
 
+  String token = "TOKEN";
+
   Future<List<tagset>> _callAPI() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-    });
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
