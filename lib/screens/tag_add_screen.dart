@@ -376,10 +376,14 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
               fontWeight: FontWeight.w300,
             ),
           ),
+          const SizedBox(
+            height: 8,
+          ),
           CustomTextField(
             onChanged: (value) => {introduction = value},
             obscureText: false,
             hintText: "ex. 같이 카페에서 각자 공부할 사람 구해요!",
+            padding: const EdgeInsets.all(0.0),
           ),
           const SizedBox(
             height: 40,
