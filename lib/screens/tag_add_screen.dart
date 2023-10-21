@@ -113,135 +113,278 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Wrap(
-          spacing: 8,
-          children: _tagPlace.map((tag) {
-            return ChoiceChip(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
-              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              label: Text(tag.title),
-              selected: place == tag.title,
-              selectedColor: const Color(0xfffec2b5),
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    place = tag.title;
-                  } else {
-                    place = null;
-                  }
-                });
-              },
-              backgroundColor: Colors.white,
-              elevation: 0,
-            );
-          }).toList(),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Wrap(
-          spacing: 8,
-          children: _tagDepartment.map(
-            (tag) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 16,
+          ),
+          Row(
+            children: [
+              Container(
+                width: 156,
+                decoration: const BoxDecoration(
+                  border: BorderDirectional(
+                    bottom: BorderSide(
+                      color: Color(0xffc8aaaa),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    place ?? "",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "에서",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Wrap(
+            spacing: 8,
+            children: _tagPlace.map((tag) {
               return ChoiceChip(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                     side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
                 labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                label: Text(
-                  tag.title,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: const Color(0xff1b1b1b),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                ),
-                selected: department == tag.title,
+                label: Text(tag.title),
+                selected: place == tag.title,
                 selectedColor: const Color(0xfffec2b5),
                 onSelected: (selected) {
-                  setState(
-                    () {
-                      if (selected) {
-                        department = tag.title;
-                      } else {
-                        department = null;
-                      }
-                    },
-                  );
+                  setState(() {
+                    if (selected) {
+                      place = tag.title;
+                    } else {
+                      place = null;
+                    }
+                  });
                 },
                 backgroundColor: Colors.white,
                 elevation: 0,
               );
-            },
-          ).toList(),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Wrap(
-          spacing: 8,
-          children: _tagPerson.map((tag) {
-            return ChoiceChip(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
-              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              label: Text(tag.title),
-              selected: person == tag.title,
-              selectedColor: const Color(0xFFFEC2B5),
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    person = tag.title;
-                  } else {
-                    person = null;
-                  }
-                });
+            }).toList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                width: 156,
+                decoration: const BoxDecoration(
+                  border: BorderDirectional(
+                    bottom: BorderSide(
+                      color: Color(0xffc8aaaa),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    "${department ?? ""} ${person ?? ""}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "(이)랑",
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Wrap(
+            spacing: 8,
+            children: _tagDepartment.map(
+              (tag) {
+                return ChoiceChip(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+                  labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  label: SizedBox(
+                    width: 50,
+                    child: Text(
+                      tag.title,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: const Color(0xff1b1b1b),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  selected: department == tag.title,
+                  selectedColor: const Color(0xfffec2b5),
+                  onSelected: (selected) {
+                    setState(
+                      () {
+                        if (selected) {
+                          department = tag.title;
+                        } else {
+                          department = null;
+                        }
+                      },
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                );
               },
-              backgroundColor: Colors.white,
-              elevation: 0,
-            );
-          }).toList(),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Wrap(
-          spacing: 8,
-          children: _tagMethod.map((tag) {
-            return ChoiceChip(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
-              labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              label: Text(tag.title),
-              selected: method == tag.title,
-              selectedColor: const Color(0xFFFEC2B5),
-              onSelected: (selected) {
-                setState(() {
-                  if (selected) {
-                    method = tag.title;
-                  } else {
-                    method = null;
-                  }
-                });
+            ).toList(),
+          ),
+          Wrap(
+            spacing: 8,
+            children: _tagPerson.map((tag) {
+              return ChoiceChip(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+                labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                label: SizedBox(
+                  width: 50,
+                  child: Text(
+                    tag.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                selected: person == tag.title,
+                selectedColor: const Color(0xFFFEC2B5),
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      person = tag.title;
+                    } else {
+                      person = null;
+                    }
+                  });
+                },
+                backgroundColor: Colors.white,
+                elevation: 0,
+              );
+            }).toList(),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Container(
+                width: 156,
+                decoration: const BoxDecoration(
+                  border: BorderDirectional(
+                    bottom: BorderSide(
+                      color: Color(0xffc8aaaa),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    method ?? "",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  method == "카페" ? "가기" : "하기",
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Wrap(
+            spacing: 8,
+            children: _tagMethod.map(
+              (tag) {
+                return ChoiceChip(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side:
+                          const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
+                  labelPadding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  label: Text(tag.title),
+                  selected: method == tag.title,
+                  selectedColor: const Color(0xFFFEC2B5),
+                  onSelected: (selected) {
+                    setState(() {
+                      if (selected) {
+                        method = tag.title;
+                      } else {
+                        method = null;
+                      }
+                    });
+                  },
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                );
               },
-              backgroundColor: Colors.white,
-              elevation: 0,
-            );
-          }).toList(),
-        ),
-        CustomTextField(
-          onChanged: (value) => {introduction = value},
-          obscureText: false,
-          hintText: "ex. 같이 카페에서 각자 공부할 사람 구해요!",
-        ),
-        CustomOutlinedButton(
+            ).toList(),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const Text(
+            "한줄 소개 (30자 이내)",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          CustomTextField(
+            onChanged: (value) => {introduction = value},
+            obscureText: false,
+            hintText: "ex. 같이 카페에서 각자 공부할 사람 구해요!",
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          CustomOutlinedButton(
             label: '저장',
             onPressed: () {
               if (place != null &&
@@ -251,8 +394,10 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
                 _createTagset(context);
               }
             },
-            backgroundColor: const Color(0xfffec2b5))
-      ],
+            backgroundColor: const Color(0xfffec2b5),
+          )
+        ],
+      ),
     );
   }
 }
