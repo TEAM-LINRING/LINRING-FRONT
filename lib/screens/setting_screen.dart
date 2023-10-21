@@ -3,6 +3,24 @@ import 'package:flutter/material.dart';
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
 
+  Future _displayProfileSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      barrierColor: Colors.black87.withOpacity(0.7),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      builder: (context) => const Column(
+        children: [
+          Text("프로필 이미지"),
+        ],
+      ),
+    );
+  }
+
   Widget _settingItems(String title, Function function, bool isLast) {
     return InkWell(
       onTap: function(),
@@ -94,21 +112,26 @@ class SettingScreen extends StatelessWidget {
                           Positioned(
                             bottom: 0,
                             right: 0,
-                            child: Container(
-                              height: 24,
-                              width: 24,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color(0xff999999),
-                                  width: 1,
+                            child: InkWell(
+                              onTap: () {
+                                _displayProfileSheet(context);
+                              },
+                              child: Container(
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xff999999),
+                                    width: 1,
+                                  ),
                                 ),
-                              ),
-                              child: const Icon(
-                                Icons.edit_outlined,
-                                color: Color(0xff999999),
-                                size: 18,
+                                child: const Icon(
+                                  Icons.edit_outlined,
+                                  color: Color(0xff999999),
+                                  size: 18,
+                                ),
                               ),
                             ),
                           )
