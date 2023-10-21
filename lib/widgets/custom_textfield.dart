@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final String? errorText;
   final String? helperText;
   final EdgeInsets? padding;
+  final int? textLimit;
 
   const CustomTextField({
     super.key,
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     this.onPressed,
     this.helperText,
     this.padding,
+    this.textLimit,
   });
 
   @override
@@ -33,6 +35,7 @@ class CustomTextField extends StatelessWidget {
           alignment: Alignment.centerRight,
           children: [
             TextField(
+                maxLength: textLimit,
                 controller: controller,
                 obscureText: obscureText,
                 onChanged: onChanged,
