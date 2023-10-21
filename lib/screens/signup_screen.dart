@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -20,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final passwordConfirmController = TextEditingController();
   final nameController = TextEditingController();
   final nickNameController = TextEditingController();
-  final gradeController = TextEditingController();
+  final studentNumberController = TextEditingController();
   final ageController = TextEditingController();
 
   //중복 확인용 변수
@@ -43,12 +47,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   //학번 및 학년 선택용
   List<String> gradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
-  String selectedGrade = '';
+  String selectedGrade = '1학년';
 
   //성별 선택용 변수들
   bool isMale = false;
   bool isFemale = false;
   late List<bool> isSelected;
+  String selectedGender = '';
 
   //특이사항 선택용 변수들
   final List<Map<String, dynamic>> remark = [
@@ -74,6 +79,128 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
     isSelected = [isMale, isFemale];
     selectedGrade = gradeList[0];
+  }
+
+  void _createAccount(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/register/');
+
+    // 특이사항에서 isCheck가 true인 항목들만의 state 값을 추출
+    List<String> significantRemarks = remark
+        .where((item) => item['isCheck'] == true)
+        .map((item) => item['state'] as String)
+        .toList();
+
+    String body = jsonEncode({
+      "name": nameController.text,
+      "email": '${idController.text}@kookmin.ac.kr',
+      "password1": passwordController.text,
+      "password2": passwordConfirmController.text,
+      "nickname": nickNameController.text,
+      "department": selectedData!['major'],
+      "gender": selectedGender,
+      "student_number": studentNumberController.text,
+      "birth": ageController.text,
+      "grade": selectedGrade,
+      "significant": significantRemarks,
+    });
+    print(body);
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    );
+    debugPrint((response.statusCode).toString());
+    if (response.statusCode == 201) {
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              AccoutActiveScreen(email: '${idController.text}@kookmin.ac.kr'),
+        ),
+      );
+    }
+  }
+
+  Future<bool?> _validationEmail(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/v2/user/validation/email/');
+
+    String emailBody = jsonEncode({
+      "email": '${idController.text}@kookmin.ac.kr',
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: emailBody,
+    );
+
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      //중복되지 않은 이메일
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'email is available') {
+        return true;
+      }
+    }
+
+    if (response.statusCode == 400) {
+      //이미 사용중인 이메일
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'email is already in use') {
+        return false;
+      }
+    }
+    return null;
+  }
+
+  Future<bool?> _validationNickName(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/v2/user/validation/nickname/');
+
+    String emailBody = jsonEncode({
+      "nickname": nickNameController.text,
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: emailBody,
+    );
+
+    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      //중복되지 않은 닉네임
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'Nickname is available') {
+        return true;
+      }
+    }
+
+    if (response.statusCode == 400) {
+      //이미 사용중인 닉네임
+      if (!mounted) {
+        return null;
+      }
+      if (data['message'] == 'Nickname is already in use') {
+        return false;
+      }
+    }
+    return null;
   }
 
   @override
@@ -130,16 +257,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             left: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
-                        onPressed: () {
-                          //중복확인 로직으로 변경 필요
+                        onPressed: () async {
+                          bool? result = await _validationEmail(context);
                           setState(() {
-                            isIDUnique = true;
-                            if (isIDUnique == true) {
-                              helperID = '사용 가능한 메일주소입니다.';
-                            } else {
-                              errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                            if (result != null) {
+                              if (result) {
+                                isIDUnique = true;
+                                errorID = null;
+                                helperID = '사용 가능한 메일주소입니다.';
+                              } else {
+                                isIDUnique = false;
+                                helperID = null;
+                                errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                              }
+
+                              isSignUpButtonEnabled = checkFormValidity();
                             }
-                            isSignUpButtonEnabled = checkFormValidity();
                           });
                         },
                         style: OutlinedButton.styleFrom(
@@ -203,6 +336,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ))),
           CustomTextField(
             obscureText: true,
+            controller: passwordConfirmController,
             onChanged: (value) {
               setState(() {
                 isPasswordConfirmValid = passwordController.text == value;
@@ -261,6 +395,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: nickNameController,
                 onChanged: (value) {
                   setState(() {
+                    errorNickName = null;
+                    helperNickName = null;
                     if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
                       isNickNameValid = false;
                       errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
@@ -287,17 +423,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             left: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (isNickNameValid == true) {
+                            bool? result = await _validationNickName(context);
                             setState(() {
-                              // 중복확인 로직으로 변경 필요
-                              isNickNameUnique = true;
-                              if (isNickNameUnique) {
-                                helperNickName = '사용 가능한 닉네임입니다.';
-                                isSignUpButtonEnabled = checkFormValidity();
-                              } else {
-                                errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                              if (result != null) {
+                                if (result) {
+                                  isNickNameUnique = true;
+                                  errorNickName = null;
+                                  helperNickName = '사용 가능한 닉네임입니다.';
+                                } else {
+                                  isNickNameUnique = false;
+                                  helperNickName = null;
+                                  errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                }
                               }
+                              isSignUpButtonEnabled = checkFormValidity();
                             });
                           }
                         },
@@ -405,7 +546,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
-                      controller: gradeController,
+                      controller: studentNumberController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -503,7 +644,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       fillColor: const Color(0xFFFEC2B5),
                       selectedColor: Colors.black,
                       borderWidth: 0,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      //borderRadius: const BorderRadius.all(Radius.circular(10)),
                       children: const [
                         Padding(
                             padding: EdgeInsets.fromLTRB(33, 5, 35, 5),
@@ -791,14 +932,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               onPressed: isSignUpButtonEnabled
                   ? () {
                       // 회원가입 로직
-                      // Navigator.pushNamed(context, '/accoutactive');
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AccoutActiveScreen(
-                              email: '${idController.text}@kookmin.ac.kr'),
-                        ),
-                      );
+                      _createAccount(context);
                     }
                   : () {},
               backgroundColor: const Color(0xFFFEC2B5)),
@@ -812,9 +946,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (value == 0) {
       isMale = true;
       isFemale = false;
+      selectedGender = '남';
     } else {
       isMale = false;
       isFemale = true;
+      selectedGender = '여';
     }
     setState(() {
       isSelected = [isMale, isFemale];
@@ -851,13 +987,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool checkFormValidity() {
+    // debugPrint(isIDUnique.toString());
+    // debugPrint(isPasswordValid.toString());
+    // debugPrint(isPasswordConfirmValid.toString());
+    // debugPrint(isNickNameUnique.toString());
+    // debugPrint((selectedData != null).toString());
+    // debugPrint((studentNumberController.text.isNotEmpty).toString());
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&
-        nameController.text.isNotEmpty &&
         isNickNameUnique &&
         selectedData != null &&
-        gradeController.text.isNotEmpty &&
+        studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
         ((_isChecked1 && _isChecked2) ||

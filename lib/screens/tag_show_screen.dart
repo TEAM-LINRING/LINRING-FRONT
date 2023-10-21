@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,14 +18,13 @@ class _TagShowScreenState extends State<TagShowScreen> {
   late Future<List<tagset>> _futureTagsets;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _futureTagsets = _callAPI();
   }
 
   Future<List<tagset>> _callAPI() async {
-    // final url = Uri.parse(dotenv.get('API_URL'));
-    final url = Uri.parse('http://127.0.0.1:8000/api/accounts/v2/tagset/');
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
     final response = await http.get(url, headers: {
       'Content-Type': 'application/json',
     });
