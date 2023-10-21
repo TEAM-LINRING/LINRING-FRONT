@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
@@ -15,6 +19,40 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _showError = !_showError;
     });
+  }
+
+  _loginAPI(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/login/');
+
+    String body = jsonEncode({
+      "username": "string",
+      "email": '${loginIDController.text}@kookmin.ac.kr',
+      "password": loginPasswordController.text,
+    });
+    print(body);
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+      debugPrint(response.statusCode.toString());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pushNamed(context, '/main');
+      } else {
+        setState(() {
+          _toggleError();
+        });
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+      setState(() {
+        _toggleError();
+      });
+    }
   }
 
   @override
@@ -137,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //로그인 버튼
             CustomOutlinedButton(
                 label: '로그인',
-                onPressed: _toggleError,
+                onPressed: () => _loginAPI(context),
                 backgroundColor: const Color(0xFFFEC2B5)),
 
             const SizedBox(
