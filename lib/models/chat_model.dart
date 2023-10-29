@@ -29,7 +29,7 @@ class ChatRoom {
       relation2: User.fromJson(json["relation2"]),
       tag: Tagset.fromJson(json["tagset"]),
       tag2: Tagset.fromJson(json["tagset2"]),
-      notice: json["notice"] ?? 0,
+      notice: json["notice"],
       created: DateTime.parse(json["created"]),
       modified: DateTime.parse(json["modified"]),
     );
