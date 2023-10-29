@@ -4,11 +4,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 
 class TagShowScreen extends StatefulWidget {
-  const TagShowScreen({Key? key}) : super(key: key);
+  final LoginInfo loginInfo;
+  const TagShowScreen({required this.loginInfo, Key? key}) : super(key: key);
 
   @override
   State createState() => _TagShowScreenState();

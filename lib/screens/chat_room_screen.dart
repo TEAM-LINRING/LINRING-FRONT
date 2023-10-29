@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/chat_model.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  const ChatRoomScreen({Key? key}) : super(key: key);
+  final LoginInfo loginInfo;
+  const ChatRoomScreen({required this.loginInfo, Key? key}) : super(key: key);
 
   @override
   State createState() => _ChatRoomScreenState();
@@ -101,7 +103,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(room.relation2.nickname),
+                Text(room.relation2.nickname ?? ""),
                 Text(
                     "#${room.tag2.place} #${room.tag2.owner} #${room.tag2.method}"),
                 const Text("최근 대화 내용"),

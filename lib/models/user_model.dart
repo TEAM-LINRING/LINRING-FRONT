@@ -1,58 +1,83 @@
 class User {
-  final int id;
-  final DateTime? lastLogin;
-  final DateTime created;
-  final DateTime modified;
-  final String username;
-  final String email;
-  final String nickname;
+  final int? id;
+  final String? lastLogin;
+  final String? created;
+  final String? modified;
+  final String? name;
+  final String? email;
+  final String? nickname;
   final String? profile;
-  final String department;
+  final String? department;
   final int? studentNumber;
-  final String gender;
+  final String? gender;
+  final int? birth;
   final String? rating;
-  final bool isActive;
-  final List<dynamic>? groups;
-  final List<String>? userPermissions;
+  final bool? isActive;
+  final List<int>? groups;
+  final List<int>? userPermissions;
   final List<int>? significant;
 
   User({
-    required this.id,
-    required this.lastLogin,
-    required this.created,
-    required this.modified,
-    required this.username,
-    required this.email,
-    required this.nickname,
-    required this.profile,
-    required this.department,
-    required this.studentNumber,
-    required this.gender,
-    required this.rating,
-    required this.isActive,
-    required this.groups,
-    required this.userPermissions,
-    required this.significant,
+    this.id,
+    this.lastLogin,
+    this.created,
+    this.modified,
+    this.name,
+    this.email,
+    this.nickname,
+    this.profile,
+    this.department,
+    this.studentNumber,
+    this.gender,
+    this.birth,
+    this.rating,
+    this.isActive,
+    this.groups,
+    this.userPermissions,
+    this.significant,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<dynamic, dynamic> json) {
     return User(
-      id: json["id"],
-      lastLogin: DateTime.parse(json["last_login"]),
-      created: DateTime.parse(json["created"]),
-      modified: DateTime.parse(json["modified"]),
-      username: json["username"],
-      email: json["email"],
-      nickname: json["nickname"],
-      profile: json["profile"] ?? "",
-      department: json["department"],
-      studentNumber: json["student_number"] ?? 00000000,
-      gender: json["gender"],
-      rating: json["rating"] ?? "",
-      isActive: json["is_active"],
-      groups: json["groups"] ?? [],
-      userPermissions: json["user_permissions"] ?? [],
-      significant: json["significant"] ?? [],
+      id: json['id'],
+      lastLogin: json['last_login'],
+      created: json['created'],
+      modified: json['modified'],
+      name: json['name'],
+      email: json['email'],
+      nickname: json['nickname'],
+      profile: json['profile'],
+      department: json['department'],
+      studentNumber: json['student_number'],
+      gender: json['gender'],
+      birth: json['birth'],
+      rating: json['rating'],
+      isActive: json['is_active'],
+      groups: List<int>.from(json['groups']),
+      userPermissions: List<int>.from(json['user_permissions']),
+      significant: List<int>.from(json['significant']),
     );
+  }
+
+  Map<dynamic, dynamic> toJson() {
+    return {
+      "id": id,
+      "last_login": lastLogin,
+      "created": created,
+      "modified": modified,
+      "name": name,
+      "email": email,
+      "nickname": nickname,
+      "profile": profile,
+      "department": department,
+      "student_number": studentNumber,
+      "gender": gender,
+      "birth": birth,
+      "rating": rating,
+      "is_active": isActive,
+      "groups": groups,
+      "user_permissions": userPermissions,
+      "significant": significant,
+    };
   }
 }

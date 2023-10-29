@@ -9,6 +9,8 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onPressed;
   final String? errorText;
   final String? helperText;
+  final EdgeInsets? padding;
+  final int? textLimit;
 
   const CustomTextField({
     super.key,
@@ -21,16 +23,19 @@ class CustomTextField extends StatelessWidget {
     this.errorText,
     this.onPressed,
     this.helperText,
+    this.padding,
+    this.textLimit,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(30, 5, 30, 0),
+        padding: padding ?? const EdgeInsets.fromLTRB(30, 5, 30, 0),
         child: Stack(
           alignment: Alignment.centerRight,
           children: [
             TextField(
+                maxLength: textLimit,
                 controller: controller,
                 obscureText: obscureText,
                 onChanged: onChanged,
