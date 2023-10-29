@@ -17,24 +17,29 @@ class TagShowScreen extends StatefulWidget {
 }
 
 class _TagShowScreenState extends State<TagShowScreen> {
-  late Future<List<tagset>> _futureTagsets;
+  late Future<List<Tagset>> _futureTagsets;
   @override
   void initState() {
     super.initState();
     _futureTagsets = _callAPI();
   }
 
-  Future<List<tagset>> _callAPI() async {
+  Future<List<Tagset>> _callAPI() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-    });
+    final token = widget.loginInfo.access;
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
-      List<tagset> tagsets =
-          body.map((dynamic e) => tagset.fromJson(e)).toList();
+      List<Tagset> tagsets =
+          body.map((dynamic e) => Tagset.fromJson(e)).toList();
       return tagsets;
     } else {
       throw Exception('Failed to load tagset.');
