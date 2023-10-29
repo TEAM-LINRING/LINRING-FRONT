@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/main_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -27,7 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
         final Map parsed = json.decode(utf8.decode(res.codeUnits));
         final loginInfo = LoginInfo.fromJson(parsed);
 
-        Navigator.pushNamed(context, '/main');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(loginInfo),
+          ),
+        );
       }
     });
   }
