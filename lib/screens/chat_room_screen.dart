@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 
 class ChatRoomScreen extends StatelessWidget {
-  const ChatRoomScreen({super.key});
+  final LoginInfo loginInfo;
+  const ChatRoomScreen({required this.loginInfo, super.key});
 
   @override
   Widget build(BuildContext context) {
