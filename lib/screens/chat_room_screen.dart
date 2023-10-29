@@ -23,11 +23,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     _futureRooms = _loadChatRooms();
   }
 
-  String token = "TOKEN";
-
   Future<List<ChatRoom>> _loadChatRooms() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/chat/room/');
+    final token = widget.loginInfo.access;
     final response = await http.get(
       url,
       headers: {
