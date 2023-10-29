@@ -24,11 +24,10 @@ class _TagShowScreenState extends State<TagShowScreen> {
     _futureTagsets = _callAPI();
   }
 
-  String token = "TOKEN";
-
   Future<List<tagset>> _callAPI() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
+    final token = widget.loginInfo.access;
     final response = await http.get(
       url,
       headers: {
