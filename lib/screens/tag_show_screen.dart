@@ -4,35 +4,42 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 
 class TagShowScreen extends StatefulWidget {
-  const TagShowScreen({Key? key}) : super(key: key);
+  final LoginInfo loginInfo;
+  const TagShowScreen({required this.loginInfo, Key? key}) : super(key: key);
 
   @override
   State createState() => _TagShowScreenState();
 }
 
 class _TagShowScreenState extends State<TagShowScreen> {
-  late Future<List<tagset>> _futureTagsets;
+  late Future<List<Tagset>> _futureTagsets;
   @override
   void initState() {
     super.initState();
     _futureTagsets = _callAPI();
   }
 
-  Future<List<tagset>> _callAPI() async {
+  Future<List<Tagset>> _callAPI() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
-    final response = await http.get(url, headers: {
-      'Content-Type': 'application/json',
-    });
+    final token = widget.loginInfo.access;
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
-      List<tagset> tagsets =
-          body.map((dynamic e) => tagset.fromJson(e)).toList();
+      List<Tagset> tagsets =
+          body.map((dynamic e) => Tagset.fromJson(e)).toList();
       return tagsets;
     } else {
       throw Exception('Failed to load tagset.');
