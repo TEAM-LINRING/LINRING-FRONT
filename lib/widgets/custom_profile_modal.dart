@@ -8,9 +8,7 @@ class CustomProfileModal extends StatelessWidget {
     required this.tag,
   });
 
-  final tagset tag;
-
-  
+  final Tagset tag;
 
   @override
   Widget build(BuildContext context) {

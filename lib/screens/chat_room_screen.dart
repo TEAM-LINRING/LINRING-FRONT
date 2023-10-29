@@ -36,10 +36,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
-      List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+      final List parsedList = json.decode(utf8.decode(response.bodyBytes));
       List<ChatRoom> rooms =
-          body.map((dynamic e) => ChatRoom.fromJson(e)).toList();
+          parsedList.map((val) => ChatRoom.fromJson(val)).toList();
       return rooms;
     } else {
       throw Exception('Failed to load chat rooms.');

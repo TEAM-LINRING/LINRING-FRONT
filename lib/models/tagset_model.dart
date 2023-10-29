@@ -1,4 +1,4 @@
-class tagset {
+class Tagset {
   final int id;
   final DateTime created;
   final DateTime modified;
@@ -10,7 +10,7 @@ class tagset {
   final String? introduction;
   final int owner;
 
-  tagset({
+  Tagset({
     required this.id,
     required this.created,
     required this.modified,
@@ -23,8 +23,8 @@ class tagset {
     required this.owner,
   });
 
-  factory tagset.fromJson(Map<String, dynamic> json) {
-    return tagset(
+  factory Tagset.fromJson(Map<String, dynamic> json) {
+    return Tagset(
       id: json["id"],
       created: DateTime.parse(json["created"]),
       modified: DateTime.parse(json["modified"]),
