@@ -24,8 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
       String? res = await storage.read(key: 'user');
 
       if (res != null) {
-        final Map parsed = json.decode(res);
+        final Map parsed = json.decode(utf8.decode(res.codeUnits));
         final loginInfo = LoginInfo.fromJson(parsed);
+
         Navigator.pushNamed(context, '/main');
       }
     });
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final String res = response.body;
+        final String res = utf8.decode(response.bodyBytes);
         await storage.write(key: 'login', value: res);
         return true;
       } else {
