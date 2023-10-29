@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,17 +15,17 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // FlutterSecureStroage 객체를 storage 변수에 할당
   static const storage = FlutterSecureStorage();
-  // storage에 존재하는 User Info를 받아올 변수, 공백으로 초기화
-  dynamic userInfo = '';
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      userInfo = await storage.read(key: 'user');
+      String? res = await storage.read(key: 'user');
 
-      if (userInfo != null) {
+      if (res != null) {
+        final Map parsed = json.decode(res);
+        final loginInfo = LoginInfo.fromJson(parsed);
         Navigator.pushNamed(context, '/main');
       }
     });
@@ -56,10 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         body: body,
       );
-      debugPrint(response.body.toString());
-      debugPrint(response.statusCode.toString());
       if (response.statusCode == 200 || response.statusCode == 201) {
-        await storage.write(key: 'user', value: response.body.toString());
+        final String res = response.body;
+        await storage.write(key: 'login', value: res);
         return true;
       } else {
         setState(() {
@@ -68,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return false;
       }
     } catch (error) {
-      debugPrint(error.toString());
       setState(() {
         _toggleError();
       });
