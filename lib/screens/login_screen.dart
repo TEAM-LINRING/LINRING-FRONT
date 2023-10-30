@@ -65,8 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
         body: body,
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final String res = utf8.decode(response.bodyBytes);
-        await storage.write(key: 'login', value: res);
+        final String res = response.body;
+        await storage.write(key: 'user', value: res);
         return true;
       } else {
         setState(() {
@@ -201,14 +201,29 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             //로그인 버튼
             CustomOutlinedButton(
-                label: '로그인',
-                onPressed: () async {
-                  if (_loginAPI(context) == true) {
-                    Navigator.pushNamed(context, '/main');
-                  }
-                },
-                backgroundColor: const Color(0xFFFEC2B5)),
+              label: '로그인',
+              onPressed: () async {
+                bool loginSuccessful = await _loginAPI(context);
 
+                if (loginSuccessful) {
+                  String? res = await storage.read(key: 'user');
+
+                  if (res != null) {
+                    final String decodedString = utf8.decode(res.codeUnits);
+                    final Map parsed = json.decode(decodedString);
+                    final loginInfo = LoginInfo.fromJson(parsed);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(loginInfo),
+                      ),
+                    );
+                  }
+                }
+              },
+              backgroundColor: const Color(0xFFFEC2B5),
+            ),
             const SizedBox(
               height: 10,
             ),
