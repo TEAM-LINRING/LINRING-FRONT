@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 
 class SettingScreen extends StatelessWidget {
+  static const storage = FlutterSecureStorage();
   final LoginInfo loginInfo;
-  const SettingScreen({required this.loginInfo,super.key});
+  const SettingScreen({required this.loginInfo, super.key});
+
+  _logout(BuildContext context) async {
+    await storage.delete(key: 'user');
+  }
 
   Future _displayProfileSheet(BuildContext context) {
     return showModalBottomSheet(
@@ -23,9 +29,11 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget _settingItems(String title, Function function, bool isLast) {
+  Widget _settingItems(String title, bool isLast, Function onTapAction) {
     return InkWell(
-      onTap: function(),
+      onTap: () {
+        onTapAction();
+      },
       child: Container(
         width: double.maxFinite,
         padding: const EdgeInsets.symmetric(
@@ -144,12 +152,15 @@ class SettingScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _settingItems("공지사항 및 이벤트", () {}, false),
-            _settingItems("프로필 관리", () {}, false),
-            _settingItems("친구 초대", () {}, false),
-            _settingItems("비밀번호 변경", () {}, false),
-            _settingItems("서비스 탈퇴하기", () {}, false),
-            _settingItems("로그아웃", () {}, true),
+            _settingItems("공지사항 및 이벤트", false, () {}),
+            _settingItems("프로필 관리", false, () {}),
+            _settingItems("친구 초대", false, () {}),
+            _settingItems("비밀번호 변경", false, () {}),
+            _settingItems("서비스 탈퇴하기", false, () {}),
+            _settingItems("로그아웃", true, () {
+              _logout(context);
+              Navigator.pushNamed(context, '/login');
+            }),
           ],
         ),
       ),
