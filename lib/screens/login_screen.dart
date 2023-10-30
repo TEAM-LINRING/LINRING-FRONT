@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final String res = utf8.decode(response.bodyBytes);
-        await storage.write(key: 'login', value: res);
+        await storage.write(key: 'user', value: res);
         return true;
       } else {
         setState(() {
