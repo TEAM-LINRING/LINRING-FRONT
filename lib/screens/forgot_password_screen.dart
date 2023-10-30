@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
@@ -10,6 +13,30 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  _sendEmail(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/password/reset/');
+
+    String body = jsonEncode({
+      "email": '${emailController.text}@kookmin.ac.kr',
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      final String res = utf8.decode(response.bodyBytes);
+      return true;
+    }
+  }
+
+  final emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             Padding(
               padding: const EdgeInsets.all(0),
               child: TextField(
+                controller: emailController,
                 obscureText: false,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
@@ -69,7 +97,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             CustomOutlinedButton(
                 label: '인증 메일 받기',
                 onPressed: () {
-                  Navigator.pushNamed(context, '/changePassword');
+                  _sendEmail(context);
+                  // Navigator.pushNamed(context, '/changePassword');
                 },
                 backgroundColor: const Color(0xFFFEC2B5)),
           ],
