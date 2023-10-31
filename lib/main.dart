@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ReportScreen(),
+      home: const EntryScreen(),
       theme: ThemeData(
         fontFamily: "Pretendard",
       ),

@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ReportScreen extends StatefulWidget {
   ReportScreen({super.key});
@@ -12,6 +15,9 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
+  dynamic reasonNumber;
+  dynamic reasonTextController;
+
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _isChecked3 = false;
@@ -21,6 +27,32 @@ class _ReportScreenState extends State<ReportScreen> {
   final report2Controller = TextEditingController();
   final report3Controller = TextEditingController();
   final report4Controller = TextEditingController();
+
+  void _createReport(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/report/report/');
+
+    String body = jsonEncode({
+      "Reason": '$reasonNumber',
+      "ReasonText": reasonTextController.text,
+      "user": 0,
+      "target": 0
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: body,
+    );
+    debugPrint((response.statusCode).toString());
+    debugPrint(body);
+    if (response.statusCode == 201) {
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +137,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                   _isChecked2 = false;
                                   _isChecked3 = false;
                                   _isChecked4 = false;
+                                  reasonNumber = 1;
+                                  reasonTextController = report1Controller;
                                 });
                               },
                               checkColor: Colors.black,
@@ -187,6 +221,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                   _isChecked1 = false;
                                   _isChecked3 = false;
                                   _isChecked4 = false;
+                                  reasonNumber = 2;
+                                  reasonTextController = report2Controller;
                                 });
                               },
                               checkColor: Colors.black,
@@ -269,6 +305,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                   _isChecked1 = false;
                                   _isChecked2 = false;
                                   _isChecked4 = false;
+                                  reasonNumber = 3;
+                                  reasonTextController = report3Controller;
                                 });
                               },
                               checkColor: Colors.black,
@@ -351,6 +389,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                   _isChecked1 = false;
                                   _isChecked2 = false;
                                   _isChecked3 = false;
+                                  reasonNumber = 4;
+                                  reasonTextController = report4Controller;
                                 });
                               },
                               checkColor: Colors.black,
@@ -440,7 +480,9 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               CustomOutlinedButton(
                   label: '제출하기',
-                  onPressed: () {},
+                  onPressed: () {
+                    _createReport(context);
+                  },
                   backgroundColor: const Color(0xFFFEC2B5))
             ])));
   }
