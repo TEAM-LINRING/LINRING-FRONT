@@ -17,6 +17,12 @@ class _ReportScreenState extends State<ReportScreen> {
   bool _isChecked2 = false;
   bool _isChecked3 = false;
   bool _isChecked4 = false;
+
+  final report1Controller = TextEditingController();
+  final report2Controller = TextEditingController();
+  final report3Controller = TextEditingController();
+  final report4Controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,7 +126,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
-                          obscureText: false,
+                          controller: report1Controller,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -202,7 +208,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
-                          obscureText: false,
+                          controller: report2Controller,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -284,7 +290,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
-                          obscureText: false,
+                          controller: report3Controller,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -366,7 +372,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
-                          obscureText: false,
+                          controller: report4Controller,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
