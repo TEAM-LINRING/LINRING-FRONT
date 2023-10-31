@@ -1,4 +1,10 @@
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/main_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,6 +14,30 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // FlutterSecureStroage 객체를 storage 변수에 할당
+  static const storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      String? res = await storage.read(key: 'user');
+
+      if (res != null) {
+        final Map parsed = json.decode(utf8.decode(res.codeUnits));
+        final loginInfo = LoginInfo.fromJson(parsed);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(loginInfo),
+          ),
+        );
+      }
+    });
+  }
+
   final loginIDController = TextEditingController();
   final loginPasswordController = TextEditingController();
   bool _showError = false;
@@ -15,6 +45,41 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _showError = !_showError;
     });
+  }
+
+  _loginAPI(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/login/');
+
+    String body = jsonEncode({
+      "username": "string",
+      "email": '${loginIDController.text}@kookmin.ac.kr',
+      "password": loginPasswordController.text,
+    });
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final String res = response.body;
+        await storage.write(key: 'user', value: res);
+        return true;
+      } else {
+        setState(() {
+          _toggleError();
+        });
+        return false;
+      }
+    } catch (error) {
+      setState(() {
+        _toggleError();
+      });
+      return false;
+    }
   }
 
   @override
@@ -136,10 +201,29 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             //로그인 버튼
             CustomOutlinedButton(
-                label: '로그인',
-                onPressed: _toggleError,
-                backgroundColor: const Color(0xFFFEC2B5)),
+              label: '로그인',
+              onPressed: () async {
+                bool loginSuccessful = await _loginAPI(context);
 
+                if (loginSuccessful) {
+                  String? res = await storage.read(key: 'user');
+
+                  if (res != null) {
+                    final String decodedString = utf8.decode(res.codeUnits);
+                    final Map parsed = json.decode(decodedString);
+                    final loginInfo = LoginInfo.fromJson(parsed);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(loginInfo),
+                      ),
+                    );
+                  }
+                }
+              },
+              backgroundColor: const Color(0xFFFEC2B5),
+            ),
             const SizedBox(
               height: 10,
             ),
