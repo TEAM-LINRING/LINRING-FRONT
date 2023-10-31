@@ -76,26 +76,31 @@ class _ReportScreenState extends State<ReportScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                                value: _isChecked1,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isChecked1 = value!;
-                                  });
-                                },
-                                checkColor: Colors.black,
-                                activeColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.white;
-                                  }
-                                  return null;
-                                }),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                splashRadius: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
+                              value: _isChecked1,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isChecked1 = value!;
+                                  _isChecked2 = false;
+                                  _isChecked3 = false;
+                                  _isChecked4 = false;
+                                });
+                              },
+                              checkColor: Colors.black,
+                              activeColor: Colors.white,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.white;
+                              }),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              splashRadius: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                              side: MaterialStateBorderSide.resolveWith(
+                                (states) => const BorderSide(
+                                    width: 1.0, color: Colors.black),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -153,26 +158,31 @@ class _ReportScreenState extends State<ReportScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                                value: _isChecked2,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isChecked2 = value!;
-                                  });
-                                },
-                                checkColor: Colors.black,
-                                activeColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.white;
-                                  }
-                                  return null;
-                                }),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                splashRadius: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
+                              value: _isChecked2,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isChecked2 = value!;
+                                  _isChecked1 = false;
+                                  _isChecked3 = false;
+                                  _isChecked4 = false;
+                                });
+                              },
+                              checkColor: Colors.black,
+                              activeColor: Colors.white,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.white;
+                              }),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              splashRadius: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                              side: MaterialStateBorderSide.resolveWith(
+                                (states) => const BorderSide(
+                                    width: 1.0, color: Colors.black),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -230,26 +240,31 @@ class _ReportScreenState extends State<ReportScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                                value: _isChecked3,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isChecked3 = value!;
-                                  });
-                                },
-                                checkColor: Colors.black,
-                                activeColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.white;
-                                  }
-                                  return null;
-                                }),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                splashRadius: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
+                              value: _isChecked3,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isChecked3 = value!;
+                                  _isChecked1 = false;
+                                  _isChecked2 = false;
+                                  _isChecked4 = false;
+                                });
+                              },
+                              checkColor: Colors.black,
+                              activeColor: Colors.white,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.white;
+                              }),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              splashRadius: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                              side: MaterialStateBorderSide.resolveWith(
+                                (states) => const BorderSide(
+                                    width: 1.0, color: Colors.black),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -307,26 +322,31 @@ class _ReportScreenState extends State<ReportScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                                value: _isChecked4,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _isChecked4 = value!;
-                                  });
-                                },
-                                checkColor: Colors.black,
-                                activeColor: Colors.white,
-                                fillColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.white;
-                                  }
-                                  return null;
-                                }),
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                splashRadius: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
+                              value: _isChecked4,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isChecked4 = value!;
+                                  _isChecked1 = false;
+                                  _isChecked2 = false;
+                                  _isChecked3 = false;
+                                });
+                              },
+                              checkColor: Colors.black,
+                              activeColor: Colors.white,
+                              fillColor:
+                                  MaterialStateProperty.resolveWith((states) {
+                                return Colors.white;
+                              }),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              splashRadius: 0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3)),
+                              side: MaterialStateBorderSide.resolveWith(
+                                (states) => const BorderSide(
+                                    width: 1.0, color: Colors.black),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(
