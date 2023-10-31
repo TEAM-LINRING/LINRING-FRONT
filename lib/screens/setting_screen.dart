@@ -153,7 +153,9 @@ class SettingScreen extends StatelessWidget {
               ),
             ),
             _settingItems("공지사항 및 이벤트", false, () {}),
-            _settingItems("프로필 관리", false, () {}),
+            _settingItems("프로필 관리", false, () {
+              Navigator.pushNamed(context, '/profile');
+            }),
             _settingItems("친구 초대", false, () {}),
             _settingItems("비밀번호 변경", false, () {}),
             _settingItems("서비스 탈퇴하기", false, () {}),
