@@ -7,6 +7,7 @@ import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
+import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:linring_front_flutter/screens/main_screen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ProfileScreen(),
+      home: ReportScreen(),
       theme: ThemeData(
         fontFamily: "Pretendard",
       ),
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/chat': (context) => const ChatRoomScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/changePassword': (context) => const ChangePasswordScreen(),
+        '/report': (context) => ReportScreen(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/accoutactive') {
