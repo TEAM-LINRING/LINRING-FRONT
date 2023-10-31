@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
-import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
 class ReportScreen extends StatefulWidget {
   ReportScreen({super.key});
