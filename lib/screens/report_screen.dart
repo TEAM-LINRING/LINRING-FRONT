@@ -52,7 +52,24 @@ class _ReportScreenState extends State<ReportScreen> {
                     ),
                   )),
               const SizedBox(
-                height: 70,
+                height: 20,
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 30.0, bottom: 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '여섯글자이름 님',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    ),
+                  )),
+              const SizedBox(
+                height: 40,
               ),
               const Padding(
                   padding: EdgeInsets.only(left: 30.0, bottom: 0),
@@ -68,7 +85,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                       ))),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 0, 5),
@@ -114,7 +131,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         const Text(
                           '욕설을 사용했어요',
-                          style: TextStyle(fontSize: 19),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -196,7 +213,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         const Text(
                           '약속 장소에 나오지 않았어요',
-                          style: TextStyle(fontSize: 19),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -278,7 +295,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         const Text(
                           '비매너 사용자예요',
-                          style: TextStyle(fontSize: 19),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -360,7 +377,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         ),
                         const Text(
                           '기타 사유',
-                          style: TextStyle(fontSize: 19),
+                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
