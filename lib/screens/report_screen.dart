@@ -177,6 +177,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
                           controller: report1Controller,
+                          maxLength: 100,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -261,6 +262,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
                           controller: report2Controller,
+                          maxLength: 100,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -345,6 +347,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
                           controller: report3Controller,
+                          maxLength: 100,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -429,6 +432,7 @@ class _ReportScreenState extends State<ReportScreen> {
                         padding: const EdgeInsets.fromLTRB(0, 5, 30, 0),
                         child: TextField(
                           controller: report4Controller,
+                          maxLength: 100,
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
