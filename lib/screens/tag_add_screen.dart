@@ -18,14 +18,15 @@ class Tag {
 }
 
 class TagAddScreen extends StatelessWidget {
-  const TagAddScreen({super.key});
+  final int userId;
+  const TagAddScreen({required this.userId, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(title: "태그 추가하기"),
+    return Scaffold(
+      appBar: const CustomAppBar(title: "태그 추가하기"),
       body: Column(children: [
-        ChoiceLocation(),
+        ChoiceLocation(id: userId),
       ]),
     );
   }
@@ -33,7 +34,8 @@ class TagAddScreen extends StatelessWidget {
 
 // 장소 선택
 class ChoiceLocation extends StatefulWidget {
-  const ChoiceLocation({super.key});
+  final int id;
+  const ChoiceLocation({required this.id, super.key});
 
   @override
   State<ChoiceLocation> createState() => _ChoiceLocationState();
@@ -94,7 +96,7 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
       "method": method,
       "is_active": true,
       "introduction": introduction,
-      "owner": 1, // owner는 추후 변경 예정
+      "owner": widget.id,
     });
 
     final response = await http.post(
