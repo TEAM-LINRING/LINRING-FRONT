@@ -33,7 +33,7 @@ class RatingModal extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const SizedBox(
-                                  width: 10,
+                                  width: 48,
                                   height: 20,
                                 ),
                                 IconButton(
@@ -47,7 +47,7 @@ class RatingModal extends StatelessWidget {
                             const Padding(
                               padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
                               child: Text(
-                                'OO님과 잘 만나고 오셨나요?',
+                                '여섯글자이름님과 잘 만나고 오셨나요?',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -78,8 +78,83 @@ class RatingModal extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
                               child: CustomOutlinedButton(
                                 label: '상대방 매너평가 남기기',
-                                onPressed: () {},
                                 backgroundColor: const Color(0xFFFEC2B5),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  showModalBottomSheet(
+                                      context: context,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                      ),
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 10, 10, 10),
+                                            height: 300,
+                                            child: Container(
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.white, // 모달 배경색
+                                                ),
+                                                child: Column(children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      const SizedBox(
+                                                        width: 48,
+                                                        height: 20,
+                                                      ),
+                                                      const Text(
+                                                        '여섯글자이름님과의 만남은 ...',
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                          Icons.close_rounded,
+                                                        ),
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const Text(
+                                                    '최고의 만남이었어요!',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                    '안심하세요! 상대방은 평가 결과를 알 수 없어요.',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Color(0x99999999),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          10, 0, 20, 0),
+                                                      child: CustomOutlinedButton(
+                                                          backgroundColor:
+                                                              const Color(
+                                                                  0xFFFEC2B5),
+                                                          label: '상대방 매너평가 남기기',
+                                                          onPressed: () {}))
+                                                ])));
+                                      });
+                                },
                               ),
                             )
                           ],
