@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:linring_front_flutter/screens/tag_add_screen.dart';
 
 class TagShowScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -94,25 +95,40 @@ class _TagShowScreenState extends State<TagShowScreen> {
                       items: () {
                         List<Widget> carouselItems = [];
                         if (snapshot.data!.length <= 2) {
-                          carouselItems.add(Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            color: Colors.white,
-                            child: const Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "태그 추가하기",
-                                    style: TextStyle(fontSize: 24),
+                          carouselItems.add(
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TagAddScreen(
+                                      userId: widget.loginInfo.user.id!,
+                                    ),
                                   ),
-                                ],
+                                );
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                color: Colors.white,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "태그 추가하기",
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ));
+                          );
                         }
 
                         for (var tag in snapshot.data!) {
