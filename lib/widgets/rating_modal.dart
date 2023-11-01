@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
-class RatingModal extends StatelessWidget {
-  const RatingModal({
-    super.key,
-  });
+class RatingModal extends StatefulWidget {
+  const RatingModal({super.key});
 
+  @override
+  State<RatingModal> createState() => _RatingModalState();
+}
+
+class _RatingModalState extends State<RatingModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +28,7 @@ class RatingModal extends StatelessWidget {
                     height: 280,
                     child: Container(
                         decoration: const BoxDecoration(
-                          color: Colors.white, // 모달 배경색
+                          color: Colors.white,
                         ),
                         child: Column(
                           children: [
@@ -94,7 +97,7 @@ class RatingModal extends StatelessWidget {
                                             height: 300,
                                             child: Container(
                                                 decoration: const BoxDecoration(
-                                                  color: Colors.white, // 모달 배경색
+                                                  color: Colors.white,
                                                 ),
                                                 child: Column(children: [
                                                   Row(
