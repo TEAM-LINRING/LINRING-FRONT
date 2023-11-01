@@ -40,6 +40,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
       List<Tagset> tagsets =
           body.map((dynamic e) => Tagset.fromJson(e)).toList();
+
       return tagsets;
     } else {
       throw Exception('Failed to load tagset.');
@@ -90,80 +91,112 @@ class _TagShowScreenState extends State<TagShowScreen> {
                         height: 320.0,
                         enableInfiniteScroll: false,
                       ),
-                      items: snapshot.data!.map((tag) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                      items: () {
+                        List<Widget> carouselItems = [];
+                        if (snapshot.data!.length <= 2) {
+                          carouselItems.add(Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            color: Colors.white,
+                            child: const Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "태그 추가하기",
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ],
                               ),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${tag.place}에서\n${(tag.isSameDepartment) ? "같은 과" : "다른 과"} ${tag.person}랑\n${tag.method}하기",
-                                      style: const TextStyle(fontSize: 24),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      tag.introduction != null
-                                          ? "\"${tag.introduction}\""
-                                          : "",
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Color(0xff999999),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 64,
-                                    ),
-                                    Row(
+                            ),
+                          ));
+                        }
+
+                        for (var tag in snapshot.data!) {
+                          carouselItems.add(
+                            Builder(
+                              builder: (BuildContext context) {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Column(
+                                        Text(
+                                          "${tag.place}에서\n${(tag.isSameDepartment) ? "같은 과" : "다른 과"} ${tag.person}랑\n${tag.method}하기",
+                                          style: const TextStyle(fontSize: 24),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          tag.introduction != null
+                                              ? "\"${tag.introduction}\""
+                                              : "",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xff999999),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 64,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Text(
-                                              "상대방이 나를\n검색할 수 있어요.",
-                                              style: TextStyle(
-                                                fontSize: 11,
-                                                color: Color(0xff999999),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 80,
-                                              child: FittedBox(
-                                                fit: BoxFit.fill,
-                                                child: CupertinoSwitch(
-                                                  activeColor:
-                                                      const Color(0xff57e554),
-                                                  value: tag.isActive,
-                                                  onChanged: (value) {},
+                                            Column(
+                                              children: [
+                                                const Text(
+                                                  "상대방이 나를\n검색할 수 있어요.",
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: Color(0xff999999),
+                                                  ),
                                                 ),
-                                              ),
-                                            )
+                                                SizedBox(
+                                                  width: 80,
+                                                  child: FittedBox(
+                                                    fit: BoxFit.fill,
+                                                    child: CupertinoSwitch(
+                                                      activeColor: const Color(
+                                                          0xff57e554),
+                                                      value: tag.isActive,
+                                                      onChanged: (value) {},
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            const Icon(
+                                              Icons.search_rounded,
+                                              color: Color(0xfffec2b5),
+                                              size: 37,
+                                            ),
                                           ],
-                                        ),
-                                        const Icon(
-                                          Icons.search_rounded,
-                                          color: Color(0xfffec2b5),
-                                          size: 37,
-                                        ),
+                                        )
                                       ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+
+                        print(carouselItems);
+                        return carouselItems;
+                      }(),
                     );
                   }
                 },
