@@ -102,7 +102,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => TagAddScreen(
-                                      userId: widget.loginInfo.user.id!,
+                                      loginInfo: widget.loginInfo,
                                     ),
                                   ),
                                 );

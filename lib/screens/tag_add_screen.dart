@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
@@ -18,15 +19,15 @@ class Tag {
 }
 
 class TagAddScreen extends StatelessWidget {
-  final int userId;
-  const TagAddScreen({required this.userId, super.key});
+  final LoginInfo loginInfo;
+  const TagAddScreen({required this.loginInfo, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "태그 추가하기"),
       body: Column(children: [
-        ChoiceLocation(id: userId),
+        ChoiceLocation(info: loginInfo),
       ]),
     );
   }
@@ -34,8 +35,8 @@ class TagAddScreen extends StatelessWidget {
 
 // 장소 선택
 class ChoiceLocation extends StatefulWidget {
-  final int id;
-  const ChoiceLocation({required this.id, super.key});
+  final LoginInfo info;
+  const ChoiceLocation({required this.info, super.key});
 
   @override
   State<ChoiceLocation> createState() => _ChoiceLocationState();
@@ -89,6 +90,9 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
     bool isSameDepartment = (department == '같은 과') ? true : false;
 
+    final owner = widget.info.user.id;
+    final token = widget.info.access;
+
     String body = jsonEncode({
       "place": place,
       "isSameDepartment": isSameDepartment,
@@ -96,20 +100,21 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
       "method": method,
       "is_active": true,
       "introduction": introduction,
-      "owner": widget.id,
+      "owner": owner,
     });
 
     final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       },
       body: body,
     );
 
     if (response.statusCode == 201) {
       if (!mounted) return;
-      Navigator.pushNamed(context, '/main');
+      Navigator.pop(context);
     }
   }
 
