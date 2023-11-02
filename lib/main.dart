@@ -7,7 +7,6 @@ import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
-import 'package:linring_front_flutter/screens/tag_add_screen.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
-import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class ChatScreen extends StatefulWidget {

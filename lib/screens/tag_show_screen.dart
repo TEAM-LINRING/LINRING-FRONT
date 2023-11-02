@@ -209,8 +209,6 @@ class _TagShowScreenState extends State<TagShowScreen> {
                             ),
                           );
                         }
-
-                        print(carouselItems);
                         return carouselItems;
                       }(),
                     );
