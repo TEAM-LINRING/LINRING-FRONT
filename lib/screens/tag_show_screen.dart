@@ -94,48 +94,6 @@ class _TagShowScreenState extends State<TagShowScreen> {
                       ),
                       items: () {
                         List<Widget> carouselItems = [];
-                        if (snapshot.data!.length <= 2) {
-                          carouselItems.add(
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TagAddScreen(
-                                      loginInfo: widget.loginInfo,
-                                    ),
-                                  ),
-                                ).then(
-                                  (value) => setState(
-                                    () {
-                                      _futureTagsets = _callAPI();
-                                    },
-                                  ),
-                                );
-                              },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                color: Colors.white,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(20.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "태그 추가하기",
-                                        style: TextStyle(fontSize: 24),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }
 
                         for (var tag in snapshot.data!) {
                           carouselItems.add(
@@ -215,6 +173,49 @@ class _TagShowScreenState extends State<TagShowScreen> {
                             ),
                           );
                         }
+                        if (snapshot.data!.length <= 2) {
+                          carouselItems.add(
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TagAddScreen(
+                                      loginInfo: widget.loginInfo,
+                                    ),
+                                  ),
+                                ).then(
+                                  (value) => setState(
+                                    () {
+                                      _futureTagsets = _callAPI();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                color: Colors.white,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "태그 추가하기",
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+
                         return carouselItems;
                       }(),
                     );
