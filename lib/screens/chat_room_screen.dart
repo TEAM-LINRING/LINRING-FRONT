@@ -5,6 +5,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -85,6 +87,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   Widget _chatRoom(ChatRoom room, BuildContext context) {
+    User opponentUser;
+    Tagset opponentTagset;
+
+    (widget.loginInfo.user.id == room.relation2.id)
+        ? {opponentUser = room.relation, opponentTagset = room.tag}
+        : {opponentUser = room.relation2, opponentTagset = room.tag2};
+
     return InkWell(
       onTap: () => {Navigator.pushNamed(context, '/chat')},
       child: Container(
@@ -101,9 +110,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(room.relation2.nickname ?? ""),
+                Text(opponentUser.nickname ?? ""),
                 Text(
-                    "#${room.tag2.place} #${room.tag2.owner} #${room.tag2.method}"),
+                    "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}"),
                 const Text("최근 대화 내용"),
               ],
             )
