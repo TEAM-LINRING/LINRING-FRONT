@@ -114,7 +114,7 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
 
     if (response.statusCode == 201) {
       if (!mounted) return;
-      Navigator.pop(context);
+      Navigator.of(context).pop(true);
     }
   }
 

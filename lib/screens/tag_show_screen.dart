@@ -105,6 +105,12 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                       loginInfo: widget.loginInfo,
                                     ),
                                   ),
+                                ).then(
+                                  (value) => setState(
+                                    () {
+                                      _futureTagsets = _callAPI();
+                                    },
+                                  ),
                                 );
                               },
                               child: Card(
