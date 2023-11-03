@@ -7,6 +7,7 @@ import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/chat_screen.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -95,7 +96,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         : {opponentUser = room.relation2, opponentTagset = room.tag2};
 
     return InkWell(
-      onTap: () => {Navigator.pushNamed(context, '/chat')},
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              loginInfo: widget.loginInfo,
+              room: room,
+            ),
+          ),
+        ),
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Row(
