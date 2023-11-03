@@ -55,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           _matchInfo(),
-          // _chatContainer(),
+          _chatContainer(),
           _chatInput(),
         ],
       ),
