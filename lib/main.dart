@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
         '/add': (context) => const TagAddScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/changePassword': (context) => const ChangePasswordScreen(),
-        '/profile': (context) => ProfileScreen(),
         '/report': (context) => ReportScreen(),
       },
       onGenerateRoute: (RouteSettings settings) {

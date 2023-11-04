@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({super.key});
+  LoginInfo loginInfo;
+  ProfileScreen({required this.loginInfo, super.key});
   String? selectedCollege;
   String? selectedMajor;
 
@@ -17,9 +19,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final nickNameController = TextEditingController(text: "기존 닉네임");
-  final studentNumberController = TextEditingController(text: "23");
-  final ageController = TextEditingController(text: "2002");
+  late TextEditingController nickNameController;
+  late TextEditingController studentNumberController;
+  late TextEditingController birthController;
+
+  late String nickname;
+  late int studnetNumber;
+  late int birth;
+
   bool isNickNameUnique = false;
   //정규식 유효성 검사용 변수
   bool isPasswordValid = true;
@@ -33,15 +40,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? errorNickName;
 
   //학과 선택용
-  Map<String, String>? selectedData = {'college': '기존 대학', 'major': '기존 학과'};
+  Map<String, String>? selectedData;
 
   //학번 및 학년 선택용
   List<String> gradeList = ['1학년', '2학년', '3학년', '4학년', '5학년', '졸업생', '기타'];
-  String selectedGrade = '1학년';
+  String selectedGrade = '';
 
   //성별 선택용 변수들
   bool isMale = false;
-  bool isFemale = true; //초기값 필요한 버튼을 true로 설정
+  bool isFemale = false;
+
   late List<bool> isSelected;
   String selectedGender = '';
 
@@ -61,9 +69,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    selectedGender = widget.loginInfo.user.gender ?? "남";
+    selectedGrade = widget.loginInfo.user.grade ?? "1학년";
+
+    nickname = widget.loginInfo.user.nickname!;
+    studnetNumber = widget.loginInfo.user.studentNumber!;
+    birth = widget.loginInfo.user.birth!;
+
+    nickNameController = TextEditingController(text: nickname);
+    studentNumberController =
+        TextEditingController(text: studnetNumber.toString());
+    birthController = TextEditingController(text: birth.toString());
+
+    selectedData = {
+      'college': '기존 대학',
+      'major': widget.loginInfo.user.department!
+    };
+
+    (widget.loginInfo.user.gender! == "남") ? isMale = true : isFemale = true;
+
     isSelected = [isMale, isFemale];
-    selectedGrade = gradeList[0];
-    //여기서 학년 초기값 설정 가능
   }
 
   void _createAccount(BuildContext context) async {
@@ -437,7 +462,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextField(
-                        controller: ageController,
+                        controller: birthController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -569,6 +594,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         selectedData != null &&
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
-        ageController.text.isNotEmpty;
+        birthController.text.isNotEmpty;
   }
 }
