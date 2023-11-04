@@ -37,21 +37,39 @@ class ChatRoom {
 }
 
 class Message {
-  final ChatRoom room;
   final User sender;
   final User receiver;
+  final String created;
+  final String modified;
   final String message;
   final bool isRead;
   final int type;
   final String? args;
+  final int room;
 
   Message({
-    required this.room,
     required this.sender,
     required this.receiver,
+    required this.created,
+    required this.modified,
     required this.message,
     required this.isRead,
     required this.type,
-    this.args,
+    required this.args,
+    required this.room,
   });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      sender: User.fromJson(json["relation"]),
+      receiver: User.fromJson(json["relation2"]),
+      created: json["created"],
+      modified: json["modified"],
+      message: json["message"],
+      isRead: json["is_read"],
+      type: json["type"],
+      args: json["args"],
+      room: json["room"],
+    );
+  }
 }
