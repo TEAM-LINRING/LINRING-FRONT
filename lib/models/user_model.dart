@@ -11,6 +11,7 @@ class User {
   final int? studentNumber;
   final String? gender;
   final int? birth;
+  final String? grade;
   final String? rating;
   final bool? isActive;
   final List<int>? groups;
@@ -30,6 +31,7 @@ class User {
     this.studentNumber,
     this.gender,
     this.birth,
+    this.grade,
     this.rating,
     this.isActive,
     this.groups,
@@ -51,6 +53,7 @@ class User {
       studentNumber: json['student_number'],
       gender: json['gender'],
       birth: json['birth'],
+      grade: json['grade'],
       rating: json['rating'],
       isActive: json['is_active'],
       groups: List<int>.from(json['groups']),
@@ -73,6 +76,7 @@ class User {
       "student_number": studentNumber,
       "gender": gender,
       "birth": birth,
+      "grade": grade,
       "rating": rating,
       "is_active": isActive,
       "groups": groups,
