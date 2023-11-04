@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const CustomAppBar({Key? key, required this.title}) : super(key: key);
-
+  final Widget? suffix;
+  const CustomAppBar({
+    Key? key,
+    required this.title,
+    this.suffix,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -25,6 +29,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.arrow_back)),
       backgroundColor: Colors.transparent,
       elevation: 0,
+      actions: [
+        if (suffix != null) suffix!,
+        const SizedBox(width: 16),
+      ],
     );
   }
 
