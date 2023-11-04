@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
+import 'package:http/http.dart' as http;
 
 class ChatScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -17,9 +21,32 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
+  late Future<List<Message>> _futureMessages;
 
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
+
+  Future<List<Message>> _loadMessages() async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/chat/room/');
+    final token = widget.loginInfo.access;
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
+      Pagination pagination = Pagination.fromJson(body);
+
+      return pagination.results!;
+    } else {
+      throw Exception('Failed to load messages.');
+    }
+  }
 
   @override
   void initState() {
@@ -33,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2
           };
+    _futureMessages = _loadMessages();
   }
 
   void _sendMessage() {
@@ -90,8 +118,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _chatContainer() {
-    // List<Message> messages = List.from(allMessage.reversed);
-
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -101,27 +127,41 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: ListView.builder(
-              shrinkWrap: true,
-              reverse: true,
-              controller: _scrollController,
-              // itemCount: messages.length,
-              itemBuilder: (context, int index) {
-                // final message = messages[index];
-                // email로 해야하는데 임시로 이름으로 해두었습니다.
-                // bool isMine = message.sender.name == widget.loginInfo.user.id;
-                return Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  child: const Row(
-                    // mainAxisAlignment: isMine
-                    // ? MainAxisAlignment.end
-                    // : MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // _chatBubble(message, isMine),
-                    ],
-                  ),
-                );
+            child: FutureBuilder<List<Message>>(
+              future: _futureMessages,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else if (snapshot.hasData) {
+                  List<Message> messages = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    reverse: true,
+                    controller: _scrollController,
+                    // itemCount: messages.length,
+                    itemBuilder: (context, int index) {
+                      // final message = messages[index];
+                      // email로 해야하는데 임시로 이름으로 해두었습니다.
+                      // bool isMine = message.sender.name == widget.loginInfo.user.id;
+                      return Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: const Row(
+                          // mainAxisAlignment: isMine
+                          // ? MainAxisAlignment.end
+                          // : MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // _chatBubble(message, isMine),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return const Text('채팅 데이터가 없습니다.');
+                }
               },
             ),
           ),
