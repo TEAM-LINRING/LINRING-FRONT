@@ -5,6 +5,8 @@ import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
+import 'package:linring_front_flutter/screens/profile_screen.dart';
+import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/add': (context) => const TagAddScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/changePassword': (context) => const ChangePasswordScreen(),
+        '/report': (context) => ReportScreen(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/accoutactive') {
