@@ -61,6 +61,7 @@ class Pagination {
 }
 
 class Message {
+  final int id;
   final User sender;
   final User receiver;
   final String created;
@@ -72,6 +73,7 @@ class Message {
   final int room;
 
   Message({
+    required this.id,
     required this.sender,
     required this.receiver,
     required this.created,
@@ -85,8 +87,9 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      sender: User.fromJson(json["relation"]),
-      receiver: User.fromJson(json["relation2"]),
+      id: json["id"],
+      sender: User.fromJson(json["sender"]),
+      receiver: User.fromJson(json["receiver"]),
       created: json["created"],
       modified: json["modified"],
       message: json["message"],
