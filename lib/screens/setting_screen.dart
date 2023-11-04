@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/profile_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   static const storage = FlutterSecureStorage();
@@ -93,24 +94,25 @@ class SettingScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "여섯글자이름 님",
-                            style: TextStyle(
+                            "${loginInfo.user.nickname} 님",
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),
                           ), // 이름
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text("소프트웨어융합대학"), // 단과대학
-                          SizedBox(
+                          const Text(""), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
+                          const SizedBox(
                             height: 4,
                           ),
-                          Text("소프트웨어학부 21"), // 학부 or 학과 + 학번
+                          Text(
+                              "${loginInfo.user.department} ${loginInfo.user.studentNumber}"), // 학부 or 학과 + 학번
                         ],
                       ),
                       Stack(
