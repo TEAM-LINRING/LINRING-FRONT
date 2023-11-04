@@ -107,7 +107,8 @@ class SettingScreen extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(""), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
+                          const Text(
+                              ""), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
                           const SizedBox(
                             height: 4,
                           ),
@@ -170,7 +171,9 @@ class SettingScreen extends StatelessWidget {
               },
             ),
             _settingItems("친구 초대", false, () {}),
-            _settingItems("비밀번호 변경", false, () {}),
+            _settingItems("비밀번호 변경", false, () {
+              Navigator.pushNamed(context, '/forgotPassword');
+            }),
             _settingItems("서비스 탈퇴하기", false, () {}),
             _settingItems("로그아웃", true, () {
               _logout(context);
