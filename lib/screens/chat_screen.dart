@@ -54,11 +54,11 @@ class _ChatScreenState extends State<ChatScreen> {
     (widget.loginInfo.user.id == widget.room.relation2.id)
         ? {
             opponentUser = widget.room.relation,
-            opponentTagset = widget.room.tag
+            opponentTagset = widget.room.tag,
           }
         : {
             opponentUser = widget.room.relation2,
-            opponentTagset = widget.room.tag2
+            opponentTagset = widget.room.tag2,
           };
     _loadMessages().then((value) => setState(() {}));
   }
@@ -127,25 +127,54 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: ListView.builder(
-              shrinkWrap: true,
-              reverse: true,
-              controller: _scrollController,
-              itemCount: _messages.length,
-              itemBuilder: (context, int index) {
-                final message = _messages[index];
-                bool isMine = message.sender.id == widget.loginInfo.user.id;
-                return Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    mainAxisAlignment: isMine
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [_chatBubble(message, isMine)],
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: const Color(0xffc8aaaa)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
-                );
-              },
+                  child: Text.rich(
+                    TextSpan(
+                      children: <TextSpan>[
+                        const TextSpan(
+                          text: '알림',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  reverse: true,
+                  controller: _scrollController,
+                  itemCount: _messages.length,
+                  itemBuilder: (context, int index) {
+                    final message = _messages[index];
+                    bool isMine = message.sender.id == widget.loginInfo.user.id;
+                    return Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        mainAxisAlignment: isMine
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [_chatBubble(message, isMine)],
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -160,13 +189,9 @@ class _ChatScreenState extends State<ChatScreen> {
         Expanded(
           child: Container(
             height: 60,
-            margin: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
               border: Border.all(
                 color: const Color(0xffc8aaaa),
               ),
@@ -175,7 +200,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}",
+                    "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}",
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -188,6 +213,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 SizedBox(
                   width: 90,
                   child: TextButton(
+                    style: ButtonStyle(
+                      textStyle: MaterialStateProperty.all<TextStyle?>(
+                        const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                     onPressed: () {},
                     child: const Text(
                       "약속 시간\n 정하기",
