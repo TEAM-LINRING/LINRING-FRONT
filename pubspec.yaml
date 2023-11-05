@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.1.14
   flutter_secure_storage: ^9.0.0
   flutter_rating_bar: ^4.0.1
+  icon_decoration: ^2.0.2
 
 dev_dependencies:
   flutter_test:
