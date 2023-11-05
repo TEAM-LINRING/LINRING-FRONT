@@ -56,23 +56,25 @@ class _TagShowScreenState extends State<TagShowScreen> {
         children: [
           CarouselSlider(
             options: CarouselOptions(
-                height: 306.0,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 5)),
-            items: [1, 2, 3, 4, 5].map((i) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(color: Color(0xff3a3a3a)),
-                    child: Text(
-                      'text $i',
-                      style: const TextStyle(fontSize: 16.0),
-                    ),
-                  );
-                },
-              );
-            }).toList(),
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 5),
+              viewportFraction: 1.0,
+            ),
+            items: [1, 2, 3, 4, 5].map(
+              (i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return const SizedBox(
+                      width: double.infinity,
+                      child: Image(
+                        fit: BoxFit.fitWidth,
+                        image: AssetImage('assets/images/info_1.png'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ).toList(),
           ),
           Column(
             children: [
