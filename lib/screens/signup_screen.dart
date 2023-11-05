@@ -73,7 +73,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isCheckedAll = false;
   bool _isChecked1 = false;
   bool _isChecked2 = false;
-  bool _isChecked3 = false;
   List<String> check = [];
 
   @override
@@ -106,7 +105,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "grade": selectedGrade,
       "significant": significantRemarks,
     });
-    print(body);
     final response = await http.post(
       url,
       headers: {
@@ -762,7 +760,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isCheckedAll = value!;
                           _isChecked1 = value;
                           _isChecked2 = value;
-                          _isChecked3 = value;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -805,8 +802,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (value) {
                         setState(() {
                           _isChecked1 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
+                          _isCheckedAll = _isChecked1 && _isChecked2;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -849,8 +845,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (value) {
                         setState(() {
                           _isChecked2 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
+                          _isCheckedAll = _isChecked1 && _isChecked2;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -908,50 +903,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: '에 동의해요.',
                       style: TextStyle(fontSize: 13, color: Colors.black)),
                 ]))
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: 1.2,
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Checkbox(
-                      value: _isChecked3,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChecked3 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.white;
-                        }
-                        return null;
-                      }),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      splashRadius: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  '(선택) 마케팅 정보 수신에 동의해요.',
-                  style: TextStyle(fontSize: 13),
-                ),
               ],
             ),
           ),
@@ -1033,7 +984,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
-        ((_isChecked1 && _isChecked2) ||
-            (_isChecked1 && _isChecked2 && _isChecked3));
+        ((_isChecked1 && _isChecked2) || (_isChecked1 && _isChecked2));
   }
 }
