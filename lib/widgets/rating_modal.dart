@@ -143,22 +143,26 @@ class _RatingModalState extends State<RatingModal> {
                                                     },
                                                   ),
                                                   const Text(
-                                                    '최고의 만남이었어요!',
-                                                    style:
-                                                        TextStyle(fontSize: 20),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  const Text(
-                                                    '안심하세요! 상대방은 평가 결과를 알 수 없어요.',
+                                                    '별점을 남겨주세요.',
                                                     style: TextStyle(
                                                       fontSize: 15,
-                                                      color: Color(0x99999999),
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                   const SizedBox(
-                                                    height: 10,
+                                                    height: 5,
+                                                  ),
+                                                  const Text(
+                                                    '상대방은 평가 결과를 알 수 없으니 안심하세요!',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
                                                   ),
                                                   Padding(
                                                       padding: const EdgeInsets
