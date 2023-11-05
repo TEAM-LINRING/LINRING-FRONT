@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -71,7 +73,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isCheckedAll = false;
   bool _isChecked1 = false;
   bool _isChecked2 = false;
-  bool _isChecked3 = false;
   List<String> check = [];
 
   @override
@@ -104,7 +105,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "grade": selectedGrade,
       "significant": significantRemarks,
     });
-    print(body);
     final response = await http.post(
       url,
       headers: {
@@ -760,7 +760,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _isCheckedAll = value!;
                           _isChecked1 = value;
                           _isChecked2 = value;
-                          _isChecked3 = value;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -775,7 +774,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
@@ -803,8 +806,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (value) {
                         setState(() {
                           _isChecked1 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
+                          _isCheckedAll = _isChecked1 && _isChecked2;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -819,7 +821,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
@@ -847,8 +853,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onChanged: (value) {
                         setState(() {
                           _isChecked2 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
+                          _isCheckedAll = _isChecked1 && _isChecked2;
                           isSignUpButtonEnabled = checkFormValidity();
                         });
                       },
@@ -863,63 +868,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  '(필수) 이용약관 및 개인정보수집이용에 동의해요.',
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: 1.2,
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Checkbox(
-                      value: _isChecked3,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChecked3 = value!;
-                          _isCheckedAll =
-                              _isChecked1 && _isChecked2 && _isChecked3;
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.white;
-                        }
-                        return null;
-                      }),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      splashRadius: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  '(선택) 마케팅 정보 수신에 동의해요.',
-                  style: TextStyle(fontSize: 13),
-                ),
+                RichText(
+                    text: TextSpan(children: [
+                  const TextSpan(
+                      text: '(필수) ',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                  TextSpan(
+                      text: '이용약관',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse(
+                              'https://www.notion.so/kkamantokki/21a25cf722a84c98b576da0149b04eae?pvs=4'));
+                        }),
+                  const TextSpan(
+                      text: ' 및 ',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                  TextSpan(
+                      text: '개인정보수집이용',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse(
+                              'https://www.notion.so/kkamantokki/10be477f20dd4039b3c84af83d7d570e?pvs=4'));
+                        }),
+                  const TextSpan(
+                      text: '에 동의해요.',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                ]))
               ],
             ),
           ),
@@ -1001,7 +996,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
-        ((_isChecked1 && _isChecked2) ||
-            (_isChecked1 && _isChecked2 && _isChecked3));
+        ((_isChecked1 && _isChecked2) || (_isChecked1 && _isChecked2));
   }
 }
