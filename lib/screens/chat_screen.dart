@@ -21,14 +21,14 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
-  late Future<List<Message>> _futureMessages;
+  List<Message> _messages = [];
 
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  Future<List<Message>> _loadMessages() async {
+  Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/chat/room/');
+    final url = Uri.parse('$apiAddress/chat/message/');
     final token = widget.loginInfo.access;
     final response = await http.get(
       url,
@@ -39,10 +39,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
-      Pagination pagination = Pagination.fromJson(body);
-
-      return pagination.results!;
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      _messages = (body['results'] as List<dynamic>)
+          .map<Message>((e) => Message.fromJson(e))
+          .toList();
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -60,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2
           };
-    _futureMessages = _loadMessages();
+    _loadMessages().then((value) => setState(() {}));
   }
 
   void _sendMessage() {
@@ -127,41 +127,24 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: FutureBuilder<List<Message>>(
-              future: _futureMessages,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                } else if (snapshot.hasData) {
-                  List<Message> messages = snapshot.data!;
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    reverse: true,
-                    controller: _scrollController,
-                    // itemCount: messages.length,
-                    itemBuilder: (context, int index) {
-                      // final message = messages[index];
-                      // email로 해야하는데 임시로 이름으로 해두었습니다.
-                      // bool isMine = message.sender.name == widget.loginInfo.user.id;
-                      return Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        child: const Row(
-                          // mainAxisAlignment: isMine
-                          // ? MainAxisAlignment.end
-                          // : MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            // _chatBubble(message, isMine),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                } else {
-                  return const Text('채팅 데이터가 없습니다.');
-                }
+            child: ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              controller: _scrollController,
+              itemCount: _messages.length,
+              itemBuilder: (context, int index) {
+                final message = _messages[index];
+                bool isMine = message.sender.id == widget.loginInfo.user.id;
+                return Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: isMine
+                        ? MainAxisAlignment.end
+                        : MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [_chatBubble(message, isMine)],
+                  ),
+                );
               },
             ),
           ),
@@ -188,30 +171,32 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: const Color(0xffc8aaaa),
               ),
             ),
-            child: Row(children: [
-              Expanded(
-                child: Text(
-                  "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}",
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const VerticalDivider(
-                indent: 10,
-                endIndent: 10,
-                thickness: 1,
-                color: Color(0xffc8aaaa),
-              ),
-              SizedBox(
-                width: 90,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "약속 시간\n 정하기",
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}",
                     textAlign: TextAlign.center,
                   ),
                 ),
-              )
-            ]),
+                const VerticalDivider(
+                  indent: 10,
+                  endIndent: 10,
+                  thickness: 1,
+                  color: Color(0xffc8aaaa),
+                ),
+                SizedBox(
+                  width: 90,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "약속 시간\n 정하기",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         )
       ],
@@ -235,31 +220,33 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        // _enteredMessage = value;
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      // _enteredMessage = value;
-                    });
-                  },
                 ),
-              ),
-              IconButton(
-                highlightColor: Colors.transparent, // 물결 효과 제거
-                splashColor: Colors.transparent, // 물결 효과 제거
-                onPressed: () {},
-                //_enteredMessage.trim().isEmpty ? null : _sendMessage,
-                icon: Image.asset(
-                  "assets/icons/send_button.png",
-                  width: 20,
-                ),
-              )
-            ]),
+                IconButton(
+                  highlightColor: Colors.transparent, // 물결 효과 제거
+                  splashColor: Colors.transparent, // 물결 효과 제거
+                  onPressed: () {},
+                  //_enteredMessage.trim().isEmpty ? null : _sendMessage,
+                  icon: Image.asset(
+                    "assets/icons/send_button.png",
+                    width: 20,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ],
