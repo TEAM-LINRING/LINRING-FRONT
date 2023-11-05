@@ -1,70 +1,91 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
+import 'package:http/http.dart' as http;
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({
-    super.key,
-    // required this.user,
-  });
-
-  // final User user;
+  final LoginInfo loginInfo;
+  final ChatRoom room;
+  const ChatScreen({required this.loginInfo, required this.room, super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-// Dummy Data Start
-List tag = [
-  '자율주행스튜디오',
-  ['다른 과', '선배'],
-  '친구하기'
-];
-
-String username = 'Hanata';
-String logginedUser = 'CJW';
-
-// Dummy Data End
-
 class _ChatScreenState extends State<ChatScreen> {
-  var _enteredMessage = '';
+  late User opponentUser;
+  late Tagset opponentTagset;
+  List<Message> _messages = [];
+
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  // void _sendMessage() {
-  //   FocusScope.of(context).unfocus();
-  //   // 서버에 채팅 메세지 전송하는 것으로 변경 예정
-  //   allMessage.add(
-  //     Message(
-  //       room: Room(
-  //         relation: User(name: 'CJW'),
-  //         relation2: User(name: 'Hanata'),
-  //       ),
-  //       sender: User(name: 'CJW'),
-  //       receiver: User(name: 'Hanata'),
-  //       message: _enteredMessage,
-  //       isRead: true,
-  //       type: 1,
-  //     ),
-  //   );
-  //   _controller.clear();
-  //   _scrollController.animateTo(
-  //     0,
-  //     duration: const Duration(milliseconds: 300),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
+  Future<void> _loadMessages() async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/chat/message/');
+    final token = widget.loginInfo.access;
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(utf8.decode(response.bodyBytes));
+      _messages = (body['results'] as List<dynamic>)
+          .map<Message>((e) => Message.fromJson(e))
+          .toList();
+    } else {
+      throw Exception('Failed to load messages.');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    (widget.loginInfo.user.id == widget.room.relation2.id)
+        ? {
+            opponentUser = widget.room.relation,
+            opponentTagset = widget.room.tag,
+          }
+        : {
+            opponentUser = widget.room.relation2,
+            opponentTagset = widget.room.tag2,
+          };
+    _loadMessages().then((value) => setState(() {}));
+  }
+
+  void _sendMessage() {
+    FocusScope.of(context).unfocus();
+    // 서버에 채팅 메세지 전송 추가
+    _controller.clear();
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(title: username),
+      appBar: CustomAppBar(title: opponentUser.nickname ?? "LINRING"),
       backgroundColor: const Color(0xfffff6f4),
       body: Column(
         children: [
           _matchInfo(),
-          // _chatContainer(),
+          _chatContainer(),
           _chatInput(),
         ],
       ),
@@ -98,100 +119,166 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // Widget _chatContainer() {
-  //   List<Message> messages = List.from(allMessage.reversed);
+  Widget _timeChat() {
+    DateTime datetime = DateTime.parse("2023-11-20 18:26:00.000");
+    final promise = DateFormat('M월 d일 (E) H시 m분', 'ko_KR').format(datetime);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xffc8aaaa)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            const TextSpan(
+              text: '알림',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: ' $promise로 약속 시간을 정했어요.',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-  //   return Expanded(
-  //     child: Padding(
-  //       padding: const EdgeInsets.symmetric(horizontal: 14),
-  //       child: GestureDetector(
-  //         onTap: () {
-  //           FocusScope.of(context).unfocus(); // 가상 키보드 unfocusing
-  //         },
-  //         child: Align(
-  //           alignment: Alignment.topCenter,
-  //           child: ListView.builder(
-  //             shrinkWrap: true,
-  //             reverse: true,
-  //             controller: _scrollController,
-  //             itemCount: messages.length,
-  //             itemBuilder: (context, int index) {
-  //               final message = messages[index];
-  //               // email로 해야하는데 임시로 이름으로 해두었습니다.
-  //               bool isMine = message.sender.name == logginedUser;
-  //               return Container(
-  //                 margin: const EdgeInsets.only(top: 8),
-  //                 child: Row(
-  //                   mainAxisAlignment: isMine
-  //                       ? MainAxisAlignment.end
-  //                       : MainAxisAlignment.start,
-  //                   crossAxisAlignment: CrossAxisAlignment.end,
-  //                   children: [
-  //                     _chatBubble(message, isMine),
-  //                   ],
-  //                 ),
-  //               );
-  //             },
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _chatContainer() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus(); // 가상 키보드 unfocusing
+          },
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20.0),
+                  margin: const EdgeInsets.symmetric(vertical: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: const Color(0xffc8aaaa)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Text.rich(
+                    TextSpan(
+                      children: <TextSpan>[
+                        const TextSpan(
+                          text: '알림',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                              ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  reverse: true,
+                  controller: _scrollController,
+                  itemCount: _messages.length,
+                  itemBuilder: (context, int index) {
+                    final message = _messages[index];
+                    bool isMine = message.sender.id == widget.loginInfo.user.id;
+                    return Container(
+                      margin: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        mainAxisAlignment: isMine
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [_chatBubble(message, isMine)],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   // 매칭 정보(태그 정보, 약속 시간 표시)
   Widget _matchInfo() {
-    // 태그 정보 --> 해시 태그 Format으로 변경
-    String formattedTag = '';
-    for (var item in tag) {
-      if (item is String) {
-        formattedTag += '#$item ';
-      } else if (item is List<String>) {
-        formattedTag += '#${item.join('_')} ';
-      }
-    }
-    formattedTag = formattedTag.trim();
-
     return Row(
       children: [
         Expanded(
           child: Container(
             height: 60,
-            margin: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
               border: Border.all(
                 color: const Color(0xffc8aaaa),
               ),
             ),
-            child: Row(children: [
-              Expanded(
-                child: Text(
-                  formattedTag,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const VerticalDivider(
-                indent: 10,
-                endIndent: 10,
-                thickness: 1,
-                color: Color(0xffc8aaaa),
-              ),
-              SizedBox(
-                width: 90,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "약속 시간\n 정하기",
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}",
                     textAlign: TextAlign.center,
                   ),
                 ),
-              )
-            ]),
+                const VerticalDivider(
+                  indent: 10,
+                  endIndent: 10,
+                  thickness: 1,
+                  color: Color(0xffc8aaaa),
+                ),
+                SizedBox(
+                  width: 90,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      textStyle: MaterialStateProperty.all<TextStyle?>(
+                        const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final selectedDate = await showOmniDateTimePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 365),
+                        ),
+                        is24HourMode: false,
+                        isShowSeconds: false,
+                        minutesInterval: 1,
+                        secondsInterval: 1,
+                        isForce2Digits: true,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "약속 시간\n 정하기",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         )
       ],
@@ -215,30 +302,33 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        // _enteredMessage = value;
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      _enteredMessage = value;
-                    });
-                  },
                 ),
-              ),
-              // IconButton(
-              //   highlightColor: Colors.transparent, // 물결 효과 제거
-              //   splashColor: Colors.transparent, // 물결 효과 제거
-              //   onPressed: _enteredMessage.trim().isEmpty ? null : _sendMessage,
-              //   icon: Image.asset(
-              //     "assets/icons/send_button.png",
-              //     width: 20,
-              //   ),
-              // )
-            ]),
+                IconButton(
+                  highlightColor: Colors.transparent, // 물결 효과 제거
+                  splashColor: Colors.transparent, // 물결 효과 제거
+                  onPressed: () {},
+                  //_enteredMessage.trim().isEmpty ? null : _sendMessage,
+                  icon: Image.asset(
+                    "assets/icons/send_button.png",
+                    width: 20,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ],

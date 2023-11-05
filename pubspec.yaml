@@ -40,6 +40,9 @@ dependencies:
   flutter_dotenv: ^5.0.2
   url_launcher: ^6.1.14
   flutter_secure_storage: ^9.0.0
+  omni_datetime_picker: ^1.0.9
+  flutter_rating_bar: ^4.0.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
