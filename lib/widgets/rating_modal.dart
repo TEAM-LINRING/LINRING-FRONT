@@ -48,7 +48,7 @@ class _RatingModalState extends State<RatingModal> {
                               ],
                             ),
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Text(
                                 '여섯글자이름님과 잘 만나고 오셨나요?',
                                 style: TextStyle(fontSize: 20),
@@ -58,7 +58,7 @@ class _RatingModalState extends State<RatingModal> {
                               height: 5,
                             ),
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Text(
                                 '알고리즘 성능 향상을 위해',
                                 style: TextStyle(fontSize: 20),
@@ -68,7 +68,7 @@ class _RatingModalState extends State<RatingModal> {
                               height: 5,
                             ),
                             const Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Text(
                                 '매너평가를 남겨주세요!',
                                 style: TextStyle(fontSize: 20),
@@ -78,7 +78,7 @@ class _RatingModalState extends State<RatingModal> {
                               height: 20,
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 20, 0),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: CustomOutlinedButton(
                                 label: '상대방 매너평가 남기기',
                                 backgroundColor: const Color(0xFFFEC2B5),
@@ -91,6 +91,7 @@ class _RatingModalState extends State<RatingModal> {
                                             BorderRadius.circular(25.0),
                                       ),
                                       builder: (BuildContext context) {
+                                        var currentSliderValue = 20.0;
                                         return Container(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 10, 10),
@@ -127,6 +128,20 @@ class _RatingModalState extends State<RatingModal> {
                                                       ),
                                                     ],
                                                   ),
+                                                  Slider(
+                                                    value: currentSliderValue,
+                                                    max: 100,
+                                                    divisions: 5,
+                                                    label: currentSliderValue
+                                                        .round()
+                                                        .toString(),
+                                                    onChanged: (double value) {
+                                                      setState(() {
+                                                        currentSliderValue =
+                                                            value;
+                                                      });
+                                                    },
+                                                  ),
                                                   const Text(
                                                     '최고의 만남이었어요!',
                                                     style:
@@ -148,7 +163,7 @@ class _RatingModalState extends State<RatingModal> {
                                                   Padding(
                                                       padding: const EdgeInsets
                                                           .fromLTRB(
-                                                          10, 0, 20, 0),
+                                                          10, 0, 10, 0),
                                                       child: CustomOutlinedButton(
                                                           backgroundColor:
                                                               const Color(
