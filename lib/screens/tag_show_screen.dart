@@ -99,73 +99,78 @@ class _TagShowScreenState extends State<TagShowScreen> {
                           carouselItems.add(
                             Builder(
                               builder: (BuildContext context) {
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${tag.place}에서\n${(tag.isSameDepartment) ? "같은 과" : "다른 과"} ${tag.person}랑\n${tag.method}하기",
-                                          style: const TextStyle(fontSize: 24),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          tag.introduction != null
-                                              ? "\"${tag.introduction}\""
-                                              : "",
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Color(0xff999999),
+                                return SizedBox(
+                                  width: 400,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                    ),
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${tag.place}에서\n${(tag.isSameDepartment) ? "같은 과" : "다른 과"} ${tag.person}랑\n${tag.method}하기",
+                                            style:
+                                                const TextStyle(fontSize: 24),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 64,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Column(
-                                              children: [
-                                                const Text(
-                                                  "상대방이 나를\n검색할 수 있어요.",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: Color(0xff999999),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 80,
-                                                  child: FittedBox(
-                                                    fit: BoxFit.fill,
-                                                    child: CupertinoSwitch(
-                                                      activeColor: const Color(
-                                                          0xff57e554),
-                                                      value: tag.isActive,
-                                                      onChanged: (value) {},
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            tag.introduction != null
+                                                ? "\"${tag.introduction}\""
+                                                : "",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Color(0xff999999),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 64,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  const Text(
+                                                    "상대방이 나를\n검색할 수 있어요.",
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Color(0xff999999),
                                                     ),
                                                   ),
-                                                )
-                                              ],
-                                            ),
-                                            const Icon(
-                                              Icons.search_rounded,
-                                              color: Color(0xfffec2b5),
-                                              size: 37,
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                                                  SizedBox(
+                                                    width: 80,
+                                                    child: FittedBox(
+                                                      fit: BoxFit.fill,
+                                                      child: CupertinoSwitch(
+                                                        activeColor:
+                                                            const Color(
+                                                                0xff57e554),
+                                                        value: tag.isActive,
+                                                        onChanged: (value) {},
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              const Icon(
+                                                Icons.search_rounded,
+                                                color: Color(0xfffec2b5),
+                                                size: 37,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
@@ -192,30 +197,64 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                   ),
                                 );
                               },
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                color: Colors.white,
-                                child: const Padding(
-                                  padding: EdgeInsets.all(20.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "태그 추가하기",
-                                        style: TextStyle(fontSize: 24),
-                                      ),
-                                    ],
+                              child: SizedBox(
+                                width: 400,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  color: Colors.white,
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(20.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "클릭해서\n태그 추가하기",
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w300,
+                                                color: Color(0xff898989),
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              "태그는 3개까지 추가할 수 있어요.",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w300,
+                                                color: Color(0xff898989),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          height: 36,
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Image(
+                                              image: AssetImage(
+                                                'assets/icons/add_circle.png',
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           );
                         }
-
                         return carouselItems;
                       }(),
                     );
