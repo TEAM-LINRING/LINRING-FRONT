@@ -5,6 +5,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/chat_screen.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -50,6 +53,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfffff6f4),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
@@ -85,15 +89,49 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   Widget _chatRoom(ChatRoom room, BuildContext context) {
+    User opponentUser;
+    Tagset opponentTagset;
+
+    (widget.loginInfo.user.id == room.relation2.id)
+        ? {opponentUser = room.relation, opponentTagset = room.tag}
+        : {opponentUser = room.relation2, opponentTagset = room.tag2};
+
     return InkWell(
-      onTap: () => {Navigator.pushNamed(context, '/chat')},
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              loginInfo: widget.loginInfo,
+              room: room,
+            ),
+          ),
+        ),
+      },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        decoration: const BoxDecoration(
+            border: Border(
+          bottom: BorderSide(
+            color: Color(0xffc8aaaa),
+          ),
+        )),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundColor: Color(0xffd9d9d9),
-              radius: 28,
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border:
+                      Border.all(color: const Color(0xffc8c8c8), width: 0.7)),
+              child: const Center(
+                  child: Image(
+                image: AssetImage('assets/images/avartar_1.png'),
+                width: 49,
+              )),
             ),
             const SizedBox(
               width: 14,
@@ -101,10 +139,32 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(room.relation2.nickname ?? ""),
                 Text(
-                    "#${room.tag2.place} #${room.tag2.owner} #${room.tag2.method}"),
-                const Text("최근 대화 내용"),
+                  opponentUser.nickname!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff191919),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                const Text(
+                  "최근 대화 내용",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff191919),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xff92867c),
+                  ),
+                ),
               ],
             )
           ],

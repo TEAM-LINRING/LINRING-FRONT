@@ -9,9 +9,10 @@ import 'package:linring_front_flutter/screens/profile_screen.dart';
 import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
-import 'package:linring_front_flutter/screens/tag_add_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+  await initializeDateFormatting("ko_KR", null);
   await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
@@ -31,7 +32,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/selectmajor': (context) => SelectMajor(),
-        '/add': (context) => const TagAddScreen(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/changePassword': (context) => const ChangePasswordScreen(),
         '/report': (context) => ReportScreen(),
