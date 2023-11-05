@@ -153,6 +153,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     fontSize: 16,
                     color: Color(0xff191919),
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 7),
                 Text(
