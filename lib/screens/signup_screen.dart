@@ -774,7 +774,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
@@ -817,7 +821,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
@@ -860,7 +868,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       splashRadius: 0,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(3)),
+                      side: MaterialStateBorderSide.resolveWith(
+                        (states) =>
+                            const BorderSide(width: 1.0, color: Colors.black),
+                      ),
                     ),
                   ),
                 ),
