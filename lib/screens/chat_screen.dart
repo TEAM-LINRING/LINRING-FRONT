@@ -117,6 +117,26 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+              backgroundColor: const Color(0xfffec2b5),
+              side: const BorderSide(width: 1, color: Color(0xfffec2b5)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+            child: const Text(
+              "좋아요",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          OutlinedButton(
+            onPressed: () {},
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              side: const BorderSide(width: 1, color: Color(0xfffec2b5)),
   Widget _chatContainer() {
     return Expanded(
       child: Padding(
