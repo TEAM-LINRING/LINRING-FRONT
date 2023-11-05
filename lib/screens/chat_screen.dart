@@ -8,6 +8,8 @@ import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:http/http.dart' as http;
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -117,26 +119,36 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-              backgroundColor: const Color(0xfffec2b5),
-              side: const BorderSide(width: 1, color: Color(0xfffec2b5)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-            ),
-            child: const Text(
-              "좋아요",
+  Widget _timeChat() {
+    DateTime datetime = DateTime.parse("2023-11-20 18:26:00.000");
+    final promise = DateFormat('M월 d일 (E) H시 m분', 'ko_KR').format(datetime);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xffc8aaaa)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            const TextSpan(
+              text: '알림',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              side: const BorderSide(width: 1, color: Color(0xfffec2b5)),
+            TextSpan(
+              text: ' $promise로 약속 시간을 정했어요.',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _chatContainer() {
     return Expanded(
       child: Padding(
@@ -150,6 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               children: [
                 Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(20.0),
                   margin: const EdgeInsets.symmetric(vertical: 24),
                   decoration: BoxDecoration(
@@ -240,7 +253,24 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final selectedDate = await showOmniDateTimePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 365),
+                        ),
+                        is24HourMode: false,
+                        isShowSeconds: false,
+                        minutesInterval: 1,
+                        secondsInterval: 1,
+                        isForce2Digits: true,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      );
+                    },
                     child: const Text(
                       "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
