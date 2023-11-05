@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class RatingModal extends StatefulWidget {
@@ -9,6 +10,10 @@ class RatingModal extends StatefulWidget {
 }
 
 class _RatingModalState extends State<RatingModal> {
+  static const IconData star_rounded = IconData(
+    0xf01d4,
+    fontFamily: 'MaterialIcons',
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +96,6 @@ class _RatingModalState extends State<RatingModal> {
                                             BorderRadius.circular(25.0),
                                       ),
                                       builder: (BuildContext context) {
-                                        var currentSliderValue = 20.0;
                                         return Container(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 10, 10),
@@ -128,20 +132,40 @@ class _RatingModalState extends State<RatingModal> {
                                                       ),
                                                     ],
                                                   ),
-                                                  Slider(
-                                                    value: currentSliderValue,
-                                                    max: 100,
-                                                    divisions: 5,
-                                                    label: currentSliderValue
-                                                        .round()
-                                                        .toString(),
-                                                    onChanged: (double value) {
-                                                      setState(() {
-                                                        currentSliderValue =
-                                                            value;
-                                                      });
-                                                    },
-                                                  ),
+                                                  // Slider(
+                                                  //   value: currentSliderValue,
+                                                  //   max: 100,
+                                                  //   divisions: 5,
+                                                  //   label: currentSliderValue
+                                                  //       .round()
+                                                  //       .toString(),
+                                                  //   onChanged: (double value) {
+                                                  //     setState(() {
+                                                  //       currentSliderValue =
+                                                  //           value;
+                                                  //     });
+                                                  //   },
+                                                  // ),
+                                                  RatingBar.builder(
+                                                      initialRating: 0,
+                                                      minRating: 1,
+                                                      direction:
+                                                          Axis.horizontal,
+                                                      allowHalfRating: false,
+                                                      itemCount: 5,
+                                                      itemPadding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal: 2),
+                                                      itemBuilder:
+                                                          (context, _) =>
+                                                              const Icon(
+                                                                star_rounded,
+                                                                color: Color(
+                                                                    0xFFFFED4E),
+                                                              ),
+                                                      onRatingUpdate:
+                                                          (rating) {}),
                                                   const Text(
                                                     '별점을 남겨주세요.',
                                                     style: TextStyle(
