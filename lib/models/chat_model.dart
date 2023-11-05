@@ -37,10 +37,10 @@ class ChatRoom {
 }
 
 class Pagination {
-  final int count;
-  final int? next;
-  final int? previous;
-  final List<Message>? results;
+  late int? count;
+  late int? next;
+  late int? previous;
+  late List<Message> results;
 
   Pagination({
     required this.count,
@@ -49,14 +49,16 @@ class Pagination {
     required this.results,
   });
 
-  factory Pagination.fromJson(Map<String, dynamic> json) {
-    return Pagination(
-      count: json["count"],
-      next: json["next"],
-      previous: json["previous"],
-      results: List<Message>.from(
-          json["results"].map((messageJson) => Message.fromJson(messageJson))),
-    );
+  Pagination.fromJson(Map<String, dynamic> json) {
+    count = json["count"];
+    next = json["next"];
+    previous = json["previous"];
+    results = <Message>[];
+    if (json[results] != null) {
+      for (var v in (json[results] as List)) {
+        results.add(Message.fromJson(v));
+      }
+    }
   }
 }
 
