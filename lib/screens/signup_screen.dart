@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({super.key});
@@ -870,12 +872,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(
                   width: 10,
                 ),
-                const Text(
-                  '(필수) 이용약관 및 개인정보수집이용에 동의해요.',
-                  style: TextStyle(
-                    fontSize: 13,
-                  ),
-                ),
+                RichText(
+                    text: TextSpan(children: [
+                  const TextSpan(
+                      text: '(필수) ',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                  TextSpan(
+                      text: '이용약관',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse(
+                              'https://www.notion.so/kkamantokki/21a25cf722a84c98b576da0149b04eae?pvs=4'));
+                        }),
+                  const TextSpan(
+                      text: ' 및 ',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                  TextSpan(
+                      text: '개인정보수집이용',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Colors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(Uri.parse(
+                              'https://www.notion.so/kkamantokki/10be477f20dd4039b3c84af83d7d570e?pvs=4'));
+                        }),
+                  const TextSpan(
+                      text: '에 동의해요.',
+                      style: TextStyle(fontSize: 13, color: Colors.black)),
+                ]))
               ],
             ),
           ),
