@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class RatingModal extends StatefulWidget {
@@ -30,7 +31,7 @@ class _RatingModalState extends State<RatingModal> {
               builder: (BuildContext context) {
                 return Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    height: 280,
+                    height: 270,
                     child: Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
@@ -99,7 +100,7 @@ class _RatingModalState extends State<RatingModal> {
                                         return Container(
                                             padding: const EdgeInsets.fromLTRB(
                                                 10, 10, 10, 10),
-                                            height: 300,
+                                            height: 330,
                                             child: Container(
                                                 decoration: const BoxDecoration(
                                                   color: Colors.white,
@@ -115,12 +116,12 @@ class _RatingModalState extends State<RatingModal> {
                                                         height: 20,
                                                       ),
                                                       const Text(
-                                                        '여섯글자이름님과의 만남은 ...',
+                                                        '여섯글자이름님과의 만남 매너 평가',
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w500),
+                                                                    .w600),
                                                       ),
                                                       IconButton(
                                                         icon: const Icon(
@@ -132,46 +133,39 @@ class _RatingModalState extends State<RatingModal> {
                                                       ),
                                                     ],
                                                   ),
-                                                  // Slider(
-                                                  //   value: currentSliderValue,
-                                                  //   max: 100,
-                                                  //   divisions: 5,
-                                                  //   label: currentSliderValue
-                                                  //       .round()
-                                                  //       .toString(),
-                                                  //   onChanged: (double value) {
-                                                  //     setState(() {
-                                                  //       currentSliderValue =
-                                                  //           value;
-                                                  //     });
-                                                  //   },
-                                                  // ),
-                                                  RatingBar.builder(
-                                                      initialRating: 0,
-                                                      minRating: 1,
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      allowHalfRating: false,
-                                                      itemCount: 5,
-                                                      itemPadding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 2),
-                                                      itemBuilder:
-                                                          (context, _) =>
-                                                              const Icon(
-                                                                star_rounded,
-                                                                color: Color(
-                                                                    0xFFFFED4E),
-                                                              ),
-                                                      onRatingUpdate:
-                                                          (rating) {}),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  RatingBar(
+                                                    initialRating: 0,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: false,
+                                                    itemCount: 5,
+                                                    ratingWidget: RatingWidget(
+                                                      full: image(
+                                                          'assets/images/fullStar.png'),
+                                                      half: image(
+                                                          'assets/images/fullStar.png'),
+                                                      empty: image(
+                                                          'assets/images/emptyStar.png'),
+                                                    ),
+                                                    itemPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4.0),
+                                                    onRatingUpdate: (rating) {
+                                                      print(rating);
+                                                    },
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 25,
+                                                  ),
                                                   const Text(
                                                     '별점을 남겨주세요.',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 17,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -180,9 +174,9 @@ class _RatingModalState extends State<RatingModal> {
                                                   const Text(
                                                     '상대방은 평가 결과를 알 수 없으니 안심하세요!',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 17,
                                                       fontWeight:
-                                                          FontWeight.w400,
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -210,6 +204,14 @@ class _RatingModalState extends State<RatingModal> {
           },
         ),
       ),
+    );
+  }
+
+  Widget image(String asset) {
+    return Image.asset(
+      asset,
+      height: 25,
+      width: 25,
     );
   }
 }
