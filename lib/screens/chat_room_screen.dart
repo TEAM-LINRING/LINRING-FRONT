@@ -108,12 +108,29 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         ),
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        decoration: const BoxDecoration(
+            border: Border(
+          bottom: BorderSide(
+            color: Color(0xffc8aaaa),
+          ),
+        )),
         child: Row(
           children: [
-            const CircleAvatar(
-              backgroundColor: Color(0xffd9d9d9),
-              radius: 28,
+            Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border:
+                      Border.all(color: const Color(0xffc8c8c8), width: 0.7)),
+              child: const Center(
+                  child: Image(
+                image: AssetImage('assets/images/avartar_1.png'),
+                width: 49,
+              )),
             ),
             const SizedBox(
               width: 14,
@@ -121,10 +138,31 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(opponentUser.nickname ?? ""),
                 Text(
-                    "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}"),
-                const Text("최근 대화 내용"),
+                  opponentUser.nickname!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xff191919),
+                  ),
+                ),
+                const SizedBox(height: 3),
+                const Text(
+                  "최근 대화 내용",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff191919),
+                  ),
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  "#${opponentTagset.place} #${opponentTagset.person} #${opponentTagset.method}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xff92867c),
+                  ),
+                ),
               ],
             )
           ],
