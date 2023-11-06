@@ -307,7 +307,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           CustomTextField(
             controller: passwordController,
             onChanged: (value) {
-              final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$');
+              final regex =
+                  RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]*$');
+
               setState(() {
                 isPasswordValid = regex.hasMatch(value);
                 isSignUpButtonEnabled = checkFormValidity();
