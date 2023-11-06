@@ -119,8 +119,19 @@ class _TagShowScreenState extends State<TagShowScreen> {
                   ],
                 ),
               ),
-              const Text(
-                "어떤 친구를 만나게 될까요?",
+              const SizedBox(height: 36),
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                child: const Text(
+                  "나의 태그",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 28,
+                  ),
+                ),
               ),
               FutureBuilder(
                 future: _futureTagsets,
