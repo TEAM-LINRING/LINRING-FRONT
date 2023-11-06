@@ -78,7 +78,50 @@ class _TagShowScreenState extends State<TagShowScreen> {
           ),
           Column(
             children: [
-              const Text("어떤 친구를 만나게 될까요?"),
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 18),
+                      child: Image(
+                        width: 45,
+                        image: AssetImage('assets/images/avartar_1.png'),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(108, 89, 22, 0.10),
+                              offset: Offset(0, 0),
+                              blurRadius: 20,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          "안녕~ 오늘은 어떤 친구를 만날까?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Text(
+                "어떤 친구를 만나게 될까요?",
+              ),
               FutureBuilder(
                 future: _futureTagsets,
                 builder: (context, snapshot) {
