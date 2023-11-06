@@ -626,6 +626,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ))),
 
           Container(
+            clipBehavior: Clip.hardEdge,
             //padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
             margin: const EdgeInsets.fromLTRB(30, 0, 30, 8),
             decoration: BoxDecoration(
