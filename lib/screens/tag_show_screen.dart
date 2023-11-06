@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +23,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
   @override
   void initState() {
     super.initState();
+    updateRandomGreeting();
     _futureTagsets = _callAPI();
   }
 
@@ -46,6 +48,24 @@ class _TagShowScreenState extends State<TagShowScreen> {
     } else {
       throw Exception('Failed to load tagset.');
     }
+  }
+
+  final List<String> greetings = [
+    "안녕~ 오늘은 어떤 친구를 만날까?",
+    "태그를 추가해서 새로운 친구를 만날 수 있어!",
+    "개발자와 매칭이 되면 선물을 준다는데?",
+  ];
+
+  String randomGreeting = "안녕~ 오늘은 어떤 친구를 만날까?";
+
+  void updateRandomGreeting() {
+    final random = Random();
+    final index = random.nextInt(greetings.length);
+    setState(
+      () {
+        randomGreeting = greetings[index];
+      },
+    );
   }
 
   @override
@@ -106,12 +126,17 @@ class _TagShowScreenState extends State<TagShowScreen> {
                             ),
                           ],
                         ),
-                        child: const Text(
-                          "안녕~ 오늘은 어떤 친구를 만날까?",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16,
+                        child: GestureDetector(
+                          onTap: () {
+                            updateRandomGreeting();
+                          },
+                          child: Text(
+                            randomGreeting,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
