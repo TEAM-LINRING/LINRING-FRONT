@@ -923,14 +923,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           //가입하기 버튼
           CustomOutlinedButton(
-              label: '가입하기',
-              onPressed: isSignUpButtonEnabled
-                  ? () {
-                      // 회원가입 로직
-                      _createAccount(context);
-                    }
-                  : () {},
-              backgroundColor: const Color(0xFFFEC2B5)),
+            label: '가입하기',
+            onPressed: isSignUpButtonEnabled
+                ? () {
+                    // 회원가입 로직
+                    _createAccount(context);
+                  }
+                : () {},
+            backgroundColor: isSignUpButtonEnabled
+                ? const Color(0xFFFEC2B5)
+                : const Color(0xFFC8C8C8),
+          ),
           const SizedBox(height: 40),
         ]),
       ),
@@ -996,6 +999,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
-        ((_isChecked1 && _isChecked2) || (_isChecked1 && _isChecked2));
+        ((_isChecked1 && _isChecked2));
   }
 }
