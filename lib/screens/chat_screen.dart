@@ -29,6 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
+  bool afterMeeting = false;
+
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/chat/message/');
@@ -298,25 +300,34 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      final selectedDate = await showOmniDateTimePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(
-                          const Duration(days: 365),
-                        ),
-                        is24HourMode: false,
-                        isShowSeconds: false,
-                        minutesInterval: 1,
-                        secondsInterval: 1,
-                        isForce2Digits: true,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      );
+                      if (afterMeeting) {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => ReportScreen(
+                        //             loginInfo: widget.loginInfo,
+                        //             room: widget.room)));
+                      } else {
+                        final selectedDate = await showOmniDateTimePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(
+                            const Duration(days: 365),
+                          ),
+                          is24HourMode: false,
+                          isShowSeconds: false,
+                          minutesInterval: 1,
+                          secondsInterval: 1,
+                          isForce2Digits: true,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        );
+                      }
                     },
-                    child: const Text(
-                      "약속 시간\n 정하기",
+                    child: Text(
+                      afterMeeting ? "매너평가하기" : "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
                     ),
                   ),
