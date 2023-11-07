@@ -98,7 +98,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "password1": passwordController.text,
       "password2": passwordConfirmController.text,
       "nickname": nickNameController.text,
+      "college": selectedData!['college'],
       "department": selectedData!['major'],
+      "profile": 1,
       "gender": selectedGender,
       "student_number": studentNumberController.text,
       "birth": ageController.text,
@@ -211,103 +213,161 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: '회원가입',
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const SizedBox(
             height: 40,
           ),
           //아이디
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 0),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '아이디',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
+
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '아이디',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
+
+          // Column(
+          //   children: [
+          //     Row(
+          //       children: [
+          //         const TextField(),
+          //         TextButton(onPressed: () {}, child: const Text('중복확인'))
+          //       ],
+          //     ),
+          //     const Text('에러메세지')
+          //   ],
+          // ),
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: idController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      errorText: errorID,
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      errorStyle: const TextStyle(
+                        height: 0.7,
+                        color: Colors.red,
+                      ),
+                      helperStyle: const TextStyle(
+                        height: 0.7,
+                        color: Color.fromARGB(255, 0, 64, 255),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0) +
+                          const EdgeInsets.symmetric(
+                            vertical: 20,
+                          ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
+                      suffixIcon: const Padding(
+                        padding: EdgeInsets.only(right: 10.0),
+                        child: Align(
+                          alignment: Alignment.center,
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: Text('@kookmin.ac.kr'),
+                        ),
+                      ),
+                      helperText: helperID ?? ' ',
                     ),
-                  ))),
-          SizedBox(
-            height: 100,
-            child: Stack(alignment: Alignment.centerRight, children: [
-              CustomTextField(
-                controller: idController,
-                obscureText: false,
-                suffixIcon: const Padding(
-                  padding: EdgeInsets.only(right: 70.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: Text('@kookmin.ac.kr'),
                   ),
                 ),
-                helperText: helperID,
-                errorText: errorID,
-              ),
-              Positioned(
-                  right: 30,
-                  bottom: 30,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)))),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 1, 0, 0),
                     child: OutlinedButton(
-                        onPressed: () async {
-                          bool? result = await _validationEmail(context);
-                          setState(() {
-                            if (result != null) {
-                              if (result) {
-                                isIDUnique = true;
-                                errorID = null;
-                                helperID = '사용 가능한 메일주소입니다.';
-                              } else {
-                                isIDUnique = false;
-                                helperID = null;
-                                errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
-                              }
-
-                              isSignUpButtonEnabled = checkFormValidity();
+                      onPressed: () async {
+                        bool? result = await _validationEmail(context);
+                        setState(() {
+                          if (result != null) {
+                            if (result) {
+                              isIDUnique = true;
+                              errorID = null;
+                              helperID = '사용 가능한 메일주소입니다.';
+                            } else {
+                              isIDUnique = false;
+                              helperID = null;
+                              errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
                             }
-                          });
-                        },
-                        style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: const EdgeInsets.symmetric(vertical: 20)),
-                        child: const Text(
-                          '중복 확인',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              height: 0),
-                        )),
-                  )),
-            ]),
+
+                            isSignUpButtonEnabled = checkFormValidity();
+                          }
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        backgroundColor: const Color(0xFFFEC2B5),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(
+                                width: 1, color: Color(0xFFC8AAAA))),
+                      ),
+                      child: const Text(
+                        '중복 확인',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          height: 0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+
           const SizedBox(height: 30),
           //비밀번호
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '비밀번호',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '비밀번호',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
           CustomTextField(
             controller: passwordController,
             onChanged: (value) {
-              final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$');
+              final regex =
+                  RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]*$');
+
               setState(() {
                 isPasswordValid = regex.hasMatch(value);
                 isSignUpButtonEnabled = checkFormValidity();
@@ -321,19 +381,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //비밀번호 확인
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '비밀번호 확인',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '비밀번호 확인',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
           CustomTextField(
             obscureText: true,
             controller: passwordConfirmController,
@@ -349,19 +407,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //이름
-          const Padding(
-              padding: EdgeInsets.only(left: 30, bottom: 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '이름',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '이름',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
           CustomTextField(
             controller: nameController,
             obscureText: false,
@@ -375,21 +431,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //닉네임
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 0),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '닉네임',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '닉네임',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
           SizedBox(
-            height: 100,
+            height: 80,
             child: Stack(alignment: Alignment.centerRight, children: [
               CustomTextField(
                 controller: nickNameController,
@@ -460,77 +514,68 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //학과(제1전공)
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '학과 (제1전공)',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
-            child: OutlinedButton(
-              onPressed: () async {
-                final result =
-                    await Navigator.pushNamed(context, '/selectmajor');
-                if (result is Map<String, String>) {
-                  setState(() {
-                    selectedData = result;
-                    isSignUpButtonEnabled = checkFormValidity();
-                  });
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                elevation: 5,
-                shadowColor: const Color(0x196C5916),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '학과 (제1전공)',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
                 ),
-                fixedSize: const Size(350, 60),
+              )),
+          OutlinedButton(
+            onPressed: () async {
+              final result = await Navigator.pushNamed(context, '/selectmajor');
+              if (result is Map<String, String>) {
+                setState(() {
+                  selectedData = result;
+                  isSignUpButtonEnabled = checkFormValidity();
+                });
+              }
+            },
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.white,
+              side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+              elevation: 5,
+              shadowColor: const Color(0x196C5916),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: selectedData == null
-                  ? const Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        Icons.search,
-                        size: 24.0,
-                        color: Colors.black,
-                      ))
-                  : Text(
-                      "${selectedData!['college']}  -  ${selectedData!['major']}",
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w400),
-                    ),
+              fixedSize: const Size(350, 60),
             ),
+            child: selectedData == null
+                ? const Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.search,
+                      size: 24.0,
+                      color: Colors.black,
+                    ))
+                : Text(
+                    "${selectedData!['college']}  -  ${selectedData!['major']}",
+                    style: const TextStyle(
+                        fontSize: 17, fontWeight: FontWeight.w400),
+                  ),
           ),
 
           const SizedBox(height: 30),
 
           //학번 및 학년
-          const Padding(
-              padding: EdgeInsets.only(left: 30.0, bottom: 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '학번 및 학년',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '학번 및 학년',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
           Container(
-            margin: const EdgeInsets.fromLTRB(30, 0, 30, 8),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
@@ -607,23 +652,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //성별 및 나이
-          const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 0, 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '성별 및 나이',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ))),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '성별 및 나이',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              )),
 
           Container(
-            //padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-            margin: const EdgeInsets.fromLTRB(30, 0, 30, 8),
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
@@ -705,232 +747,228 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 30),
 
           //특이사항
-          const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 0, 8),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: [
-                      Text(
-                        '특이사항',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        '*선택사항',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ],
-                  ))),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 23, 5),
-            child: Wrap(
-                alignment: WrapAlignment.start,
-                children: List.generate(remark.length, (index) {
-                  return buildRemark(index);
-                })),
-          ),
+          const Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Text(
+                    '특이사항',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    '*선택사항',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  ),
+                ],
+              )),
+
+          Wrap(
+              alignment: WrapAlignment.start,
+              children: List.generate(remark.length, (index) {
+                return buildRemark(index);
+              })),
 
           const SizedBox(height: 30),
 
           //동의
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 18),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: 1.2,
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Checkbox(
-                      value: _isCheckedAll,
-                      onChanged: (value) {
-                        setState(() {
-                          _isCheckedAll = value!;
-                          _isChecked1 = value;
-                          _isChecked2 = value;
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.white;
-                        }
-                        return null;
-                      }),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      splashRadius: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)),
-                      side: MaterialStateBorderSide.resolveWith(
-                        (states) =>
-                            const BorderSide(width: 1.0, color: Colors.black),
-                      ),
+          Row(
+            children: [
+              Transform.scale(
+                scale: 1.2,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Checkbox(
+                    value: _isCheckedAll,
+                    onChanged: (value) {
+                      setState(() {
+                        _isCheckedAll = value!;
+                        _isChecked1 = value;
+                        _isChecked2 = value;
+                        isSignUpButtonEnabled = checkFormValidity();
+                      });
+                    },
+                    checkColor: Colors.black,
+                    activeColor: Colors.white,
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Colors.white;
+                      }
+                      return null;
+                    }),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    splashRadius: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3)),
+                    side: MaterialStateBorderSide.resolveWith(
+                      (states) =>
+                          const BorderSide(width: 1.0, color: Colors.black),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  '전체 동의',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const Text(
+                '전체 동의',
+                style: TextStyle(fontSize: 15),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: 1.2,
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Checkbox(
-                      value: _isChecked1,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChecked1 = value!;
-                          _isCheckedAll = _isChecked1 && _isChecked2;
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.white;
-                        }
-                        return null;
-                      }),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      splashRadius: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)),
-                      side: MaterialStateBorderSide.resolveWith(
-                        (states) =>
-                            const BorderSide(width: 1.0, color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                const Text(
-                  '(필수) 허위사실 기재시 서비스 이용이 제한됨을 인지했어요.',
-                  style: TextStyle(fontSize: 13),
-                ),
-              ],
-            ),
+          const SizedBox(
+            height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 0, 7),
-            child: Row(
-              children: [
-                Transform.scale(
-                  scale: 1.2,
-                  child: SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: Checkbox(
-                      value: _isChecked2,
-                      onChanged: (value) {
-                        setState(() {
-                          _isChecked2 = value!;
-                          _isCheckedAll = _isChecked1 && _isChecked2;
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                      checkColor: Colors.black,
-                      activeColor: Colors.white,
-                      fillColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.selected)) {
-                          return Colors.white;
-                        }
-                        return null;
-                      }),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      splashRadius: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)),
-                      side: MaterialStateBorderSide.resolveWith(
-                        (states) =>
-                            const BorderSide(width: 1.0, color: Colors.black),
-                      ),
+          Row(
+            children: [
+              Transform.scale(
+                scale: 1.2,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Checkbox(
+                    value: _isChecked1,
+                    onChanged: (value) {
+                      setState(() {
+                        _isChecked1 = value!;
+                        _isCheckedAll = _isChecked1 && _isChecked2;
+                        isSignUpButtonEnabled = checkFormValidity();
+                      });
+                    },
+                    checkColor: Colors.black,
+                    activeColor: Colors.white,
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Colors.white;
+                      }
+                      return null;
+                    }),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    splashRadius: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3)),
+                    side: MaterialStateBorderSide.resolveWith(
+                      (states) =>
+                          const BorderSide(width: 1.0, color: Colors.black),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const Text(
+                '(필수) 허위사실 기재시 서비스 이용이 제한됨을 인지했어요.',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            children: [
+              Transform.scale(
+                scale: 1.2,
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Checkbox(
+                    value: _isChecked2,
+                    onChanged: (value) {
+                      setState(() {
+                        _isChecked2 = value!;
+                        _isCheckedAll = _isChecked1 && _isChecked2;
+                        isSignUpButtonEnabled = checkFormValidity();
+                      });
+                    },
+                    checkColor: Colors.black,
+                    activeColor: Colors.white,
+                    fillColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return Colors.white;
+                      }
+                      return null;
+                    }),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    splashRadius: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3)),
+                    side: MaterialStateBorderSide.resolveWith(
+                      (states) =>
+                          const BorderSide(width: 1.0, color: Colors.black),
+                    ),
+                  ),
                 ),
-                RichText(
-                    text: TextSpan(children: [
-                  const TextSpan(
-                      text: '(필수) ',
-                      style: TextStyle(fontSize: 13, color: Colors.black)),
-                  TextSpan(
-                      text: '이용약관',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(Uri.parse(
-                              'https://www.notion.so/kkamantokki/21a25cf722a84c98b576da0149b04eae?pvs=4'));
-                        }),
-                  const TextSpan(
-                      text: ' 및 ',
-                      style: TextStyle(fontSize: 13, color: Colors.black)),
-                  TextSpan(
-                      text: '개인정보수집이용',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          launchUrl(Uri.parse(
-                              'https://www.notion.so/kkamantokki/10be477f20dd4039b3c84af83d7d570e?pvs=4'));
-                        }),
-                  const TextSpan(
-                      text: '에 동의해요.',
-                      style: TextStyle(fontSize: 13, color: Colors.black)),
-                ]))
-              ],
-            ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              RichText(
+                  text: TextSpan(children: [
+                const TextSpan(
+                    text: '(필수) ',
+                    style: TextStyle(fontSize: 12, color: Colors.black)),
+                TextSpan(
+                    text: '이용약관',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(Uri.parse(
+                            'https://www.notion.so/kkamantokki/21a25cf722a84c98b576da0149b04eae?pvs=4'));
+                      }),
+                const TextSpan(
+                    text: ' 및 ',
+                    style: TextStyle(fontSize: 12, color: Colors.black)),
+                TextSpan(
+                    text: '개인정보수집이용',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                      decoration: TextDecoration.underline,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(Uri.parse(
+                            'https://www.notion.so/kkamantokki/10be477f20dd4039b3c84af83d7d570e?pvs=4'));
+                      }),
+                const TextSpan(
+                    text: '에 동의해요.',
+                    style: TextStyle(fontSize: 12, color: Colors.black)),
+              ]))
+            ],
           ),
 
           const SizedBox(height: 30),
 
           //가입하기 버튼
           CustomOutlinedButton(
-              label: '가입하기',
-              onPressed: isSignUpButtonEnabled
-                  ? () {
-                      // 회원가입 로직
-                      _createAccount(context);
-                    }
-                  : () {},
-              backgroundColor: const Color(0xFFFEC2B5)),
+            label: '가입하기',
+            onPressed: isSignUpButtonEnabled
+                ? () {
+                    // 회원가입 로직
+                    _createAccount(context);
+                  }
+                : () {},
+            backgroundColor: isSignUpButtonEnabled
+                ? const Color(0xFFFEC2B5)
+                : const Color(0xFFC8C8C8),
+          ),
           const SizedBox(height: 40),
         ]),
       ),
@@ -955,12 +993,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget buildRemark(index) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 6, 7),
+      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
       child: ChoiceChip(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
-        labelPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+        labelPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
         label: Text(
           remark[index]['state'],
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -996,6 +1034,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
         ageController.text.isNotEmpty &&
-        ((_isChecked1 && _isChecked2) || (_isChecked1 && _isChecked2));
+        ((_isChecked1 && _isChecked2));
   }
 }
