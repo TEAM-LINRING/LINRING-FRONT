@@ -27,6 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
   List<Message> _messages = [];
+  String ratingScore = "";
 
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
@@ -52,6 +53,29 @@ class _ChatScreenState extends State<ChatScreen> {
           .toList();
     } else {
       throw Exception('Failed to load messages.');
+    }
+  }
+
+  void _createRating(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/rating/update/');
+    final token = widget.loginInfo.access;
+
+    String body = jsonEncode({"user": opponentUser.id, "rating": ratingScore});
+
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    debugPrint((response.statusCode).toString());
+    debugPrint(body);
+    if (response.statusCode == 200) {
+      if (!mounted) return;
+      Navigator.pop(context);
     }
   }
 
@@ -89,9 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: opponentUser.nickname ?? "LINRING",
         suffix: PopupMenuButton<int>(
           onSelected: (int result) {
-            // 팝업 메뉴 항목 선택 시 실행할 코드를 여기에 작성합니다.
             if (result == 1) {
-              // 팝업 메뉴 항목 1을 선택한 경우에 실행할 코드
             } else if (result == 2) {
               // 팝업 메뉴 항목 2를 선택한 경우에 실행할 코드
               Navigator.push(
@@ -342,12 +364,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ),
                                           ],
                                         ),
-                                        const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 10, 0),
                                           child: Text(
-                                            '여섯글자이름님과 잘 만나고 오셨나요?',
-                                            style: TextStyle(fontSize: 20),
+                                            '${opponentUser.nickname}님과 잘 만나고 오셨나요?',
+                                            style:
+                                                const TextStyle(fontSize: 20),
                                           ),
                                         ),
                                         const SizedBox(
@@ -418,9 +441,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                         height:
                                                                             20,
                                                                       ),
-                                                                      const Text(
-                                                                        '여섯글자이름님과의 만남 매너 평가',
-                                                                        style: TextStyle(
+                                                                      Text(
+                                                                        "${opponentUser.nickname}과의 만남 매너 평가",
+                                                                        style: const TextStyle(
                                                                             fontSize:
                                                                                 18,
                                                                             fontWeight:
@@ -465,8 +488,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                             4.0),
                                                                     onRatingUpdate:
                                                                         (rating) {
+                                                                      ratingScore =
+                                                                          (rating.toInt())
+                                                                              .toString();
                                                                       print(
-                                                                          rating);
+                                                                          ratingScore);
                                                                     },
                                                                   ),
                                                                   const SizedBox(
@@ -508,12 +534,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                           10,
                                                                           0),
                                                                       child: CustomOutlinedButton(
-                                                                          backgroundColor: const Color(
-                                                                              0xFFFEC2B5),
-                                                                          label:
-                                                                              '상대방 매너평가 남기기',
-                                                                          onPressed:
-                                                                              () {}))
+                                                                          backgroundColor: const Color(0xFFFEC2B5),
+                                                                          label: '상대방 매너평가 남기기',
+                                                                          onPressed: () {
+                                                                            _createRating(context);
+                                                                          }))
                                                                 ])));
                                                   });
                                             },
