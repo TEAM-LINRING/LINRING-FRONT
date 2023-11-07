@@ -6,6 +6,7 @@ import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
@@ -36,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer $token',
       },
     );
 
@@ -80,7 +81,50 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(title: opponentUser.nickname ?? "LINRING"),
+      appBar: CustomAppBar(
+        title: opponentUser.nickname ?? "LINRING",
+        suffix: PopupMenuButton<int>(
+          onSelected: (int result) {
+            // 팝업 메뉴 항목 선택 시 실행할 코드를 여기에 작성합니다.
+            if (result == 1) {
+              // 팝업 메뉴 항목 1을 선택한 경우에 실행할 코드
+            } else if (result == 2) {
+              // 팝업 메뉴 항목 2를 선택한 경우에 실행할 코드
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ReportScreen(
+                          loginInfo: widget.loginInfo, room: widget.room)));
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Row(
+                  children: [
+                    Icon(Icons.add),
+                    Text("프로필 확인하기"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Row(
+                  children: [
+                    Icon(Icons.edit),
+                    Text("신고하기"),
+                  ],
+                ),
+              ),
+            ];
+          },
+          child: const Icon(
+            Icons.more_vert,
+            color: Colors.black,
+          ),
+        ),
+      ),
       backgroundColor: const Color(0xfffff6f4),
       body: Column(
         children: [

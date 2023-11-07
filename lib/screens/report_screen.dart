@@ -1,12 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/models/chat_model.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ReportScreen extends StatefulWidget {
-  ReportScreen({super.key});
+  final LoginInfo loginInfo;
+  final ChatRoom room;
+  ReportScreen({required this.loginInfo, required this.room, super.key});
   String? selectedCollege;
   String? selectedMajor;
 
@@ -17,6 +23,8 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   dynamic reasonNumber;
   dynamic reasonTextController;
+
+  late User opponentUser;
 
   bool _isChecked1 = false;
   bool _isChecked2 = false;
@@ -31,18 +39,20 @@ class _ReportScreenState extends State<ReportScreen> {
   void _createReport(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/report/report/');
+    final token = widget.loginInfo.access;
 
     String body = jsonEncode({
-      "Reason": '$reasonNumber',
-      "ReasonText": reasonTextController.text,
-      "user": 0,
-      "target": 0
+      "reason": '$reasonNumber',
+      "description": reasonTextController.text,
+      "user": widget.loginInfo.user.id,
+      "target": opponentUser.id
     });
 
     final response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
       },
       body: body,
     );
@@ -52,6 +62,19 @@ class _ReportScreenState extends State<ReportScreen> {
       if (!mounted) return;
       Navigator.pop(context);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    (widget.loginInfo.user.id == widget.room.relation2.id)
+        ? {
+            opponentUser = widget.room.relation,
+          }
+        : {
+            opponentUser = widget.room.relation2,
+          };
   }
 
   @override
@@ -85,13 +108,13 @@ class _ReportScreenState extends State<ReportScreen> {
               const SizedBox(
                 height: 20,
               ),
-              const Padding(
-                  padding: EdgeInsets.only(left: 30.0, bottom: 0),
+              Padding(
+                  padding: const EdgeInsets.only(left: 30.0, bottom: 0),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '여섯글자이름 님',
-                      style: TextStyle(
+                      "${opponentUser.nickname}님",
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
