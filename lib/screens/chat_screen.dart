@@ -11,7 +11,6 @@ import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
-import 'package:linring_front_flutter/widgets/rating_modal.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -32,11 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  bool afterMeeting = false;
-  static const IconData star_rounded = IconData(
-    0xf01d4,
-    fontFamily: 'MaterialIcons',
-  );
+  bool afterMeeting = true;
 
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
