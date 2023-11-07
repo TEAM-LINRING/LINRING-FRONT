@@ -6,7 +6,7 @@ class User {
   final String? name;
   final String? email;
   final String? nickname;
-  final String? profile;
+  final int? profile;
   final String? department;
   final int? studentNumber;
   final String? gender;
