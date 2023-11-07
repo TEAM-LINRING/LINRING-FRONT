@@ -232,61 +232,123 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-          SizedBox(
-            height: 80,
-            child: Stack(alignment: Alignment.centerRight, children: [
-              CustomTextField(
-                controller: idController,
-                obscureText: false,
-                suffixIcon: const Padding(
-                  padding: EdgeInsets.only(right: 70.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    widthFactor: 1.0,
-                    heightFactor: 1.0,
-                    child: Text('@kookmin.ac.kr'),
+
+          // Column(
+          //   children: [
+          //     Row(
+          //       children: [
+          //         const TextField(),
+          //         TextButton(onPressed: () {}, child: const Text('중복확인'))
+          //       ],
+          //     ),
+          //     const Text('에러메세지')
+          //   ],
+          // ),
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: idController,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      errorText: errorID,
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      errorStyle: const TextStyle(
+                        height: 0.7,
+                        color: Colors.red,
+                      ),
+                      helperStyle: const TextStyle(
+                        height: 0.7,
+                        color: Color.fromARGB(255, 0, 64, 255),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0) +
+                          const EdgeInsets.symmetric(
+                            vertical: 20,
+                          ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                            width: 1, color: Color(0xFFC8AAAA)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
+                      suffixIcon: const Padding(
+                        padding: EdgeInsets.only(right: 10.0),
+                        child: Align(
+                          alignment: Alignment.center,
+                          widthFactor: 1.0,
+                          heightFactor: 1.0,
+                          child: Text('@kookmin.ac.kr'),
+                        ),
+                      ),
+                      helperText: helperID ?? ' ',
+                    ),
                   ),
                 ),
-                helperText: helperID,
-                errorText: errorID,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                    border: Border(
-                        left: BorderSide(width: 1, color: Color(0xFFC8AAAA)))),
-                child: OutlinedButton(
-                    onPressed: () async {
-                      bool? result = await _validationEmail(context);
-                      setState(() {
-                        if (result != null) {
-                          if (result) {
-                            isIDUnique = true;
-                            errorID = null;
-                            helperID = '사용 가능한 메일주소입니다.';
-                          } else {
-                            isIDUnique = false;
-                            helperID = null;
-                            errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
-                          }
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 1, 0, 0),
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        bool? result = await _validationEmail(context);
+                        setState(() {
+                          if (result != null) {
+                            if (result) {
+                              isIDUnique = true;
+                              errorID = null;
+                              helperID = '사용 가능한 메일주소입니다.';
+                            } else {
+                              isIDUnique = false;
+                              helperID = null;
+                              errorID = '이미 존재하는 계정입니다. 로그인해주세요.';
+                            }
 
-                          isSignUpButtonEnabled = checkFormValidity();
-                        }
-                      });
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide.none,
-                        padding: const EdgeInsets.symmetric(vertical: 20)),
-                    child: const Text(
-                      '중복 확인',
-                      style: TextStyle(
+                            isSignUpButtonEnabled = checkFormValidity();
+                          }
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        backgroundColor: const Color(0xFFFEC2B5),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(
+                                width: 1, color: Color(0xFFC8AAAA))),
+                      ),
+                      child: const Text(
+                        '중복 확인',
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
-                          height: 0),
-                    )),
-              ),
-            ]),
+                          height: 0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
+
           const SizedBox(height: 30),
           //비밀번호
           const Align(
