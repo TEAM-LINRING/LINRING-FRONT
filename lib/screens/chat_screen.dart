@@ -80,7 +80,45 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(title: opponentUser.nickname ?? "LINRING"),
+      appBar: CustomAppBar(
+        title: opponentUser.nickname ?? "LINRING",
+        suffix: PopupMenuButton<int>(
+          onSelected: (int result) {
+            // 팝업 메뉴 항목 선택 시 실행할 코드를 여기에 작성합니다.
+            if (result == 1) {
+              // 팝업 메뉴 항목 1을 선택한 경우에 실행할 코드
+            } else if (result == 2) {
+              // 팝업 메뉴 항목 2를 선택한 경우에 실행할 코드
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Row(
+                  children: [
+                    Icon(Icons.add),
+                    Text("프로필 확인하기"),
+                  ],
+                ),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Row(
+                  children: [
+                    Icon(Icons.edit),
+                    Text("신고하기"),
+                  ],
+                ),
+              ),
+            ];
+          },
+          child: const Icon(
+            Icons.more_vert,
+            color: Colors.black,
+          ),
+        ),
+      ),
       backgroundColor: const Color(0xfffff6f4),
       body: Column(
         children: [
