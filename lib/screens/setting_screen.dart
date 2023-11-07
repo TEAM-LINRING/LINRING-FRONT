@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/delete_account.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -175,7 +176,12 @@ class SettingScreen extends StatelessWidget {
             _settingItems("비밀번호 변경", false, () {
               Navigator.pushNamed(context, '/forgotPassword');
             }),
-            _settingItems("서비스 탈퇴하기", false, () {}),
+            _settingItems("서비스 탈퇴하기", false, () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DeleteAccountScreen()));
+            }),
             _settingItems("로그아웃", true, () {
               _logout(context);
               Navigator.pushNamed(context, '/login');
