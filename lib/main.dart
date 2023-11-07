@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/selectmajor': (context) => SelectMajor(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
         '/changePassword': (context) => const ChangePasswordScreen(),
-        '/report': (context) => ReportScreen(),
+        //'/report': (context) => ReportScreen(loginInfo: ,),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/accoutactive') {

@@ -6,6 +6,7 @@ import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
@@ -36,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
       url,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer $token',
       },
     );
 
@@ -89,6 +90,11 @@ class _ChatScreenState extends State<ChatScreen> {
               // 팝업 메뉴 항목 1을 선택한 경우에 실행할 코드
             } else if (result == 2) {
               // 팝업 메뉴 항목 2를 선택한 경우에 실행할 코드
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ReportScreen(
+                          loginInfo: widget.loginInfo, room: widget.room)));
             }
           },
           itemBuilder: (BuildContext context) {
