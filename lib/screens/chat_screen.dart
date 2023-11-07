@@ -115,7 +115,6 @@ class _ChatScreenState extends State<ChatScreen> {
           onSelected: (int result) {
             if (result == 1) {
             } else if (result == 2) {
-              // 팝업 메뉴 항목 2를 선택한 경우에 실행할 코드
               Navigator.push(
                   context,
                   MaterialPageRoute(
