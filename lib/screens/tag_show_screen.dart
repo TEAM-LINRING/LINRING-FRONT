@@ -49,11 +49,11 @@ class _TagShowScreenState extends State<TagShowScreen> {
       uriPrefix: "https://$yourDomain.page.link",
       link: Uri.parse("https://$yourDomain.page.link/test"),
       androidParameters: const AndroidParameters(
-        packageName: "linring_front",
+        packageName: "com.example.linring_front_flutter",
         minimumVersion: 0,
       ),
       iosParameters: const IOSParameters(
-        bundleId: "linring_front",
+        bundleId: "com.example.linring_front_flutter",
         minimumVersion: '0',
       ),
     );
