@@ -7,6 +7,7 @@ class User {
   final String? email;
   final String? nickname;
   final int? profile;
+  final String? college;
   final String? department;
   final int? studentNumber;
   final String? gender;
@@ -27,6 +28,7 @@ class User {
     this.email,
     this.nickname,
     this.profile,
+    this.college,
     this.department,
     this.studentNumber,
     this.gender,
@@ -49,6 +51,7 @@ class User {
       email: json['email'],
       nickname: json['nickname'],
       profile: json['profile'],
+      college: json["college"],
       department: json['department'],
       studentNumber: json['student_number'],
       gender: json['gender'],
@@ -72,6 +75,7 @@ class User {
       "email": email,
       "nickname": nickname,
       "profile": profile,
+      "college": college,
       "department": department,
       "student_number": studentNumber,
       "gender": gender,
