@@ -662,6 +662,7 @@ class _ChatScreenState extends State<ChatScreen> {
     debugPrint(opponentUser.department);
     debugPrint(opponentUser.significant.toString());
     debugPrint(opponentUser.birth.toString());
+    debugPrint(opponentTagset.introduction);
     int? birth = opponentUser.birth;
     int? year = 2024 - birth!;
     List<int>? selectedNumbers = opponentUser.significant;
@@ -782,11 +783,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: Text(
-                    '"카페에서 같이 공부할 사람!"',
-                    style: TextStyle(fontSize: 20),
+                    '"${opponentTagset.introduction}"',
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
                 const SizedBox(
