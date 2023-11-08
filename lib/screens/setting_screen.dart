@@ -111,8 +111,9 @@ class SettingScreen extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                              ""), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
+                          Text(
+                            "${loginInfo.user.college}",
+                          ), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
                           const SizedBox(
                             height: 4,
                           ),
