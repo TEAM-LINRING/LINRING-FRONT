@@ -389,7 +389,12 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           ),
           CustomTextField(
             textLimit: 30,
-            onChanged: (value) => {introduction = value},
+            onChanged: (value) => {
+              introduction = value,
+              setState(
+                () {},
+              )
+            },
             obscureText: false,
             hintText: "ex. 같이 카페에서 각자 공부할 사람 구해요!",
             padding: const EdgeInsets.all(0.0),
@@ -405,7 +410,9 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
             isActive: (place != null &&
                 department != null &&
                 person != null &&
-                method != null),
+                method != null &&
+                introduction != null &&
+                introduction != ""),
             backgroundColor: const Color(0xfffec2b5),
           )
         ],
