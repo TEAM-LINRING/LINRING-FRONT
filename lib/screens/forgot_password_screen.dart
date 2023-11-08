@@ -13,7 +13,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  _sendEmail(BuildContext context) async {
+  _sendEmail() async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/password/reset/');
 
@@ -36,6 +36,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   final emailController = TextEditingController();
+  bool emailNotNull = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(
+      () {
+        (emailController.text != "")
+            ? emailNotNull = true
+            : emailNotNull = false;
+        setState(() {});
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +115,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             const SizedBox(height: 40),
             CustomOutlinedButton(
-                label: '인증 메일 받기',
-                onPressed: () {
-                  _sendEmail(context);
-                  // Navigator.pushNamed(context, '/changePassword');
-                },
-                backgroundColor: const Color(0xFFFEC2B5)),
+              label: '인증 메일 받기',
+              onPressed: () {
+                _sendEmail();
+              },
+              isActive: emailNotNull,
+              backgroundColor: const Color(0xFFFEC2B5),
+            ),
           ],
         ),
       ),

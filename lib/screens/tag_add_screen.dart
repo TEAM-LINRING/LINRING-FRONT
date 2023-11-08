@@ -400,13 +400,12 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           CustomOutlinedButton(
             label: '저장',
             onPressed: () {
-              if (place != null &&
-                  department != null &&
-                  person != null &&
-                  method != null) {
-                _createTagset(context);
-              }
+              _createTagset(context);
             },
+            isActive: (place != null &&
+                department != null &&
+                person != null &&
+                method != null),
             backgroundColor: const Color(0xfffec2b5),
           )
         ],

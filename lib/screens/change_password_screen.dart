@@ -95,9 +95,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
           const SizedBox(height: 40),
           CustomOutlinedButton(
-              label: '비밀번호 변경하기',
-              onPressed: () {},
-              backgroundColor: const Color(0xFFFEC2B5)),
+            label: '비밀번호 변경하기',
+            onPressed: () {},
+            backgroundColor: const Color(0xFFFEC2B5),
+            isActive: isPasswordValid && isPasswordConfirmValid,
+          ),
         ],
       ),
     );
