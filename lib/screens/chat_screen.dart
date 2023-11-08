@@ -639,12 +639,34 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  final List<String> remark = [
+    '유학생',
+    '전과생',
+    '편입생',
+    '외국인',
+    '교환학생',
+    '복수전공생',
+    '부전공생',
+    '휴학생',
+  ];
+  String getStatesByNumbers(List<int> numbers) {
+    List<String> selectedStates = numbers
+        .where((number) => number >= 1 && number <= remark.length)
+        .map((number) => remark[number - 1])
+        .toList();
+
+    return selectedStates.join(', ');
+  }
+
   void _showProfileModal(BuildContext context) {
     debugPrint(opponentUser.department);
-    debugPrint(opponentUser.gender);
+    debugPrint(opponentUser.significant.toString());
     debugPrint(opponentUser.birth.toString());
     int? birth = opponentUser.birth;
     int? year = 2024 - birth!;
+    List<int>? selectedNumbers = opponentUser.significant;
+    String selectedStatesString = getStatesByNumbers(selectedNumbers!);
+
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -738,15 +760,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                     fontSize: 17, color: Colors.black),
                               ),
                               TextSpan(
-                                text: '${opponentUser.gender}자',
+                                text: '${opponentUser.gender}자 ',
                                 style: const TextStyle(
                                     fontSize: 17, color: Colors.black),
                               ),
-                              // TextSpan(
-                              //   text: '${opponentUser.significant}',
-                              //   style: const TextStyle(
-                              //       fontSize: 17, color: Colors.black),
-                              // ),
+                              TextSpan(
+                                text: selectedStatesString,
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
                             ])),
                           ),
                           const SizedBox(
