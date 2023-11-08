@@ -200,28 +200,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             height: 100,
             child: Stack(alignment: Alignment.centerRight, children: [
-              CustomTextField(
-                controller: nickNameController,
-                onChanged: (value) {
-                  setState(() {
-                    errorNickName = null;
-                    helperNickName = null;
-                    if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
-                      isNickNameValid = false;
-                      errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
-                    } else if (value.length > 6) {
-                      isNickNameValid = false;
-                      errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
-                    } else {
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                child: CustomTextField(
+                  controller: nickNameController,
+                  onChanged: (value) {
+                    setState(() {
                       errorNickName = null;
-                      isNickNameValid = true;
-                    }
-                  });
-                },
-                errorText: errorNickName,
-                hintText: '6글자 이내의 닉네임',
-                obscureText: false,
-                helperText: helperNickName,
+                      helperNickName = null;
+                      if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
+                        isNickNameValid = false;
+                        errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
+                      } else if (value.length > 6) {
+                        isNickNameValid = false;
+                        errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
+                      } else {
+                        errorNickName = null;
+                        isNickNameValid = true;
+                      }
+                    });
+                  },
+                  errorText: errorNickName,
+                  hintText: '6글자 이내의 닉네임',
+                  obscureText: false,
+                  helperText: helperNickName,
+                ),
               ),
               Positioned(
                   right: 30,
