@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
