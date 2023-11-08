@@ -5,17 +5,37 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/delete_account.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
+import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
-class SettingScreen extends StatelessWidget {
-  static const storage = FlutterSecureStorage();
+class SettingScreen extends StatefulWidget {
   final LoginInfo loginInfo;
   const SettingScreen({required this.loginInfo, super.key});
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  static const storage = FlutterSecureStorage();
 
   _logout(BuildContext context) async {
     await storage.delete(key: 'user');
   }
 
+  final profileItem = [
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+    Image.asset('assets/images/avartar_1.png'),
+  ];
+
   Future _displayProfileSheet(BuildContext context) {
+    int selectedIndex = 0;
+
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -25,10 +45,81 @@ class SettingScreen extends StatelessWidget {
           top: Radius.circular(30),
         ),
       ),
-      builder: (context) => const Column(
-        children: [
-          Text("프로필 이미지"),
-        ],
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return SizedBox(
+            height: 400,
+            child: Column(
+              children: [
+                const SizedBox(height: 40),
+                const Text(
+                  "프로필 이미지",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 24),
+                    child: GridView.builder(
+                      physics:
+                          const NeverScrollableScrollPhysics(), // ListView Scroll 제한
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        childAspectRatio: 1 / 1,
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                      ),
+                      itemCount: profileItem.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(
+                              () {
+                                selectedIndex = index;
+                              },
+                            );
+                          },
+                          child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: selectedIndex == index
+                                    ? const Color(0xffc8aaaa)
+                                    : Colors.transparent,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: profileItem[index].image,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: CustomOutlinedButton(
+                    label: '저장하기',
+                    onPressed: () {},
+                    backgroundColor: const Color(0xfffec2b5),
+                    isActive: true,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -79,7 +170,7 @@ class SettingScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -102,7 +193,7 @@ class SettingScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${loginInfo.user.nickname} 님",
+                            "${widget.loginInfo.user.nickname} 님",
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
@@ -112,13 +203,13 @@ class SettingScreen extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            "${loginInfo.user.college}",
+                            "${widget.loginInfo.user.college}",
                           ), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
                           const SizedBox(
                             height: 4,
                           ),
                           Text(
-                              "${loginInfo.user.department} ${loginInfo.user.studentNumber}"), // 학부 or 학과 + 학번
+                              "${widget.loginInfo.user.department} ${widget.loginInfo.user.studentNumber}"), // 학부 or 학과 + 학번
                         ],
                       ),
                       Stack(
@@ -169,7 +260,7 @@ class SettingScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProfileScreen(
-                      loginInfo: loginInfo,
+                      loginInfo: widget.loginInfo,
                     ),
                   ),
                 );
@@ -184,7 +275,7 @@ class SettingScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => DeleteAccountScreen(
-                    loginInfo: loginInfo,
+                    loginInfo: widget.loginInfo,
                   ),
                 ),
               );
