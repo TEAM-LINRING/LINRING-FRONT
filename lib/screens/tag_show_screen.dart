@@ -40,33 +40,6 @@ class _TagShowScreenState extends State<TagShowScreen> {
       },
     );
 
-    ///
-    ///
-    ///
-    String yourDomain = "linring";
-
-    DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
-      uriPrefix: "https://$yourDomain.page.link",
-      link: Uri.parse("https://$yourDomain.page.link/test"),
-      androidParameters: const AndroidParameters(
-        packageName: "com.example.linring_front_flutter",
-        minimumVersion: 0,
-      ),
-      iosParameters: const IOSParameters(
-        bundleId: "com.example.linring_front_flutter",
-        minimumVersion: '0',
-      ),
-    );
-    ShortDynamicLink dynamicLink =
-        await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
-
-    String testurl = dynamicLink.shortUrl.toString();
-    print(testurl);
-    print("meow");
-
-    ///
-    ///
-
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));
       List<Tagset> tagsets =
