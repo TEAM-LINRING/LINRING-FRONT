@@ -96,6 +96,33 @@ class _TagShowScreenState extends State<TagShowScreen> {
     );
   }
 
+  Future<bool> _updateActiveState(Tagset tag) async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/v2/tagset/${tag.id}/');
+    final token = widget.loginInfo.access;
+    final body = jsonEncode({
+      "place": tag.place,
+      "isSameDepartment": tag.isSameDepartment,
+      "person": tag.person,
+      "method": tag.method,
+      "is_active": !(tag.isActive),
+      "introduction": tag.introduction,
+      "owner": widget.loginInfo.user.id
+    });
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -203,11 +230,11 @@ class _TagShowScreenState extends State<TagShowScreen> {
                       ),
                       items: () {
                         List<Widget> carouselItems = [];
-
                         for (var tag in snapshot.data!) {
                           carouselItems.add(
                             Builder(
                               builder: (BuildContext context) {
+                                bool isActive = tag.isActive;
                                 return SizedBox(
                                   width: 400,
                                   child: Card(
@@ -264,11 +291,13 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                                         activeColor:
                                                             const Color(
                                                                 0xff57e554),
-                                                        value: tag.isActive,
-                                                        onChanged: (value) {},
+                                                        value: isActive,
+                                                        onChanged: (value) {
+                                                          isActive = value;
+                                                        },
                                                       ),
                                                     ),
-                                                  )
+                                                  ),
                                                 ],
                                               ),
                                               const Icon(
