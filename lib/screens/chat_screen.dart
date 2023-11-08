@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  bool afterMeeting = true;
+  bool afterMeeting = false;
 
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
@@ -114,6 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
         suffix: PopupMenuButton<int>(
           onSelected: (int result) {
             if (result == 1) {
+              _showProfileModal(context);
             } else if (result == 2) {
               Navigator.push(
                   context,
@@ -635,6 +636,175 @@ class _ChatScreenState extends State<ChatScreen> {
       asset,
       height: 25,
       width: 25,
+    );
+  }
+
+  final List<String> remark = [
+    '유학생',
+    '전과생',
+    '편입생',
+    '외국인',
+    '교환학생',
+    '복수전공생',
+    '부전공생',
+    '휴학생',
+  ];
+  String getStatesByNumbers(List<int> numbers) {
+    List<String> selectedStates = numbers
+        .where((number) => number >= 1 && number <= remark.length)
+        .map((number) => remark[number - 1])
+        .toList();
+
+    return selectedStates.join(', ');
+  }
+
+  void _showProfileModal(BuildContext context) {
+    debugPrint(opponentUser.profile.toString());
+    int? birth = opponentUser.birth;
+    int? year = 2024 - birth!;
+    List<int>? selectedNumbers = opponentUser.significant;
+    String selectedStatesString = getStatesByNumbers(selectedNumbers!);
+
+    showModalBottomSheet<void>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          height: 300,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      width: 48,
+                      height: 20,
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close_rounded,
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 72,
+                        height: 72,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color(0xffc8c8c8),
+                            width: 0.7,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Image(
+                            image: AssetImage('assets/images/avartar_1.png'),
+                            width: 100,
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Text(
+                              '${opponentUser.nickname}님',
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: '${opponentUser.department} ',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: '${opponentUser.studentNumber}학번',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            ])),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: '$year살 ',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: '${opponentUser.gender}자 ',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: selectedStatesString,
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            ])),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Text(
+                    '"${opponentTagset.introduction}"',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: CustomOutlinedButton(
+                    label: '프로필 닫기',
+                    backgroundColor: const Color(0xFFFEC2B5),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
