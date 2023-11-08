@@ -659,10 +659,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _showProfileModal(BuildContext context) {
-    debugPrint(opponentUser.department);
-    debugPrint(opponentUser.significant.toString());
-    debugPrint(opponentUser.birth.toString());
-    debugPrint(opponentTagset.introduction);
+    debugPrint(opponentUser.profile.toString());
     int? birth = opponentUser.birth;
     int? year = 2024 - birth!;
     List<int>? selectedNumbers = opponentUser.significant;
