@@ -56,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _createRating(BuildContext context) async {
+  void _createRating() async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/rating/update/');
     final token = widget.loginInfo.access;
@@ -405,6 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                             label: '상대방 매너평가 남기기',
                                             backgroundColor:
                                                 const Color(0xFFFEC2B5),
+                                            isActive: true,
                                             onPressed: () {
                                               Navigator.pop(context);
                                               showModalBottomSheet(
@@ -527,18 +528,29 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                     height: 30,
                                                                   ),
                                                                   Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .fromLTRB(
-                                                                          10,
-                                                                          0,
-                                                                          10,
-                                                                          0),
-                                                                      child: CustomOutlinedButton(
-                                                                          backgroundColor: const Color(0xFFFEC2B5),
-                                                                          label: '상대방 매너평가 남기기',
-                                                                          onPressed: () {
-                                                                            _createRating(context);
-                                                                          }))
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .fromLTRB(
+                                                                            10,
+                                                                            0,
+                                                                            10,
+                                                                            0),
+                                                                    child:
+                                                                        CustomOutlinedButton(
+                                                                      backgroundColor:
+                                                                          const Color(
+                                                                              0xFFFEC2B5),
+                                                                      label:
+                                                                          '상대방 매너평가 남기기',
+                                                                      onPressed:
+                                                                          () {
+                                                                        _createRating();
+                                                                      },
+                                                                      isActive:
+                                                                          ratingScore !=
+                                                                              "",
+                                                                    ),
+                                                                  )
                                                                 ])));
                                                   });
                                             },

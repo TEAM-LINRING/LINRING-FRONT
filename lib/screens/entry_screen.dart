@@ -17,60 +17,68 @@ class EntryScreen extends StatelessWidget {
             image: AssetImage('assets/images/blur1.png'),
             fit: BoxFit.cover,
           )),
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            const Spacer(
-              flex: 2,
-            ),
-
-            // LINRING text
-            Text(
-              'LINRING',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
-                fontSize: 55,
-                fontWeight: FontWeight.w900,
-                height: 0,
-                letterSpacing: 1.80,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Spacer(
+                flex: 2,
               ),
-            ),
 
-            //너와 나를 잇는 울림 text
-            const Text(
-              '너와 나를 잇는 울림',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w400,
-                height: 0,
+              // LINRING text
+              Text(
+                'LINRING',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.75),
+                  fontSize: 55,
+                  fontWeight: FontWeight.w900,
+                  height: 0,
+                  letterSpacing: 1.80,
+                ),
               ),
-            ),
 
-            //로그인 버튼
-            const Spacer(
-              flex: 1,
-            ),
+              //너와 나를 잇는 울림 text
+              const Text(
+                '너와 나를 잇는 울림',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  height: 0,
+                ),
+              ),
 
-            //로그인 버튼
-            CustomOutlinedButton(
+              //로그인 버튼
+              const Spacer(
+                flex: 1,
+              ),
+
+              //로그인 버튼
+              CustomOutlinedButton(
                 label: '로그인',
                 onPressed: () => {
-                      Navigator.pushNamed(context, '/login'),
-                    },
-                backgroundColor: Colors.white),
+                  Navigator.pushNamed(context, '/login'),
+                },
+                backgroundColor: Colors.white,
+                isActive: true,
+              ),
 
-            const SizedBox(
-              height: 10,
-            ),
+              const SizedBox(
+                height: 10,
+              ),
 
-            //회원가입 버튼
-            CustomOutlinedButton(
+              //회원가입 버튼
+              CustomOutlinedButton(
                 label: '회원가입',
                 onPressed: () => {Navigator.pushNamed(context, '/signup')},
-                backgroundColor: const Color(0xFFFEC2B5)),
-            const Spacer(
-              flex: 1,
-            )
-          ])),
+                backgroundColor: const Color(0xFFFEC2B5),
+                isActive: true,
+              ),
+              const Spacer(
+                flex: 1,
+              )
+            ]),
+          )),
     );
   }
 }

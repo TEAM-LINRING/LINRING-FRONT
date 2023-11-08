@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 class AccoutActiveScreen extends StatefulWidget {
   final String email;
 
-  const AccoutActiveScreen({Key? key, required this.email}) : super(key: key);
+  const AccoutActiveScreen({super.key, required this.email});
 
   @override
   State<AccoutActiveScreen> createState() => _AccoutActiveScreenState();
@@ -62,11 +62,13 @@ class _AccoutActiveScreenState extends State<AccoutActiveScreen> {
             ),
             const SizedBox(height: 40),
             CustomOutlinedButton(
-                label: 'Gmail로 이동하기',
-                onPressed: () {
-                  launchUrl(Uri.parse('https://mail.google.com'));
-                },
-                backgroundColor: const Color(0xFFFEC2B5)),
+              label: 'Gmail로 이동하기',
+              onPressed: () {
+                launchUrl(Uri.parse('https://mail.google.com'));
+              },
+              backgroundColor: const Color(0xFFFEC2B5),
+              isActive: true,
+            ),
           ],
         ),
       ),

@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 70),
 
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: TextField(
                 controller: loginIDController,
                 obscureText: false,
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: TextField(
                 controller: loginPasswordController,
                 obscureText: true,
@@ -200,29 +200,33 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 30,
             ),
             //로그인 버튼
-            CustomOutlinedButton(
-              label: '로그인',
-              onPressed: () async {
-                bool loginSuccessful = await _loginAPI(context);
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutlinedButton(
+                label: '로그인',
+                onPressed: () async {
+                  bool loginSuccessful = await _loginAPI(context);
 
-                if (loginSuccessful) {
-                  String? res = await storage.read(key: 'user');
+                  if (loginSuccessful) {
+                    String? res = await storage.read(key: 'user');
 
-                  if (res != null) {
-                    final String decodedString = utf8.decode(res.codeUnits);
-                    final Map parsed = json.decode(decodedString);
-                    final loginInfo = LoginInfo.fromJson(parsed);
+                    if (res != null) {
+                      final String decodedString = utf8.decode(res.codeUnits);
+                      final Map parsed = json.decode(decodedString);
+                      final loginInfo = LoginInfo.fromJson(parsed);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainScreen(loginInfo),
-                      ),
-                    );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(loginInfo),
+                        ),
+                      );
+                    }
                   }
-                }
-              },
-              backgroundColor: const Color(0xFFFEC2B5),
+                },
+                backgroundColor: const Color(0xFFFEC2B5),
+                isActive: true,
+              ),
             ),
             const SizedBox(
               height: 10,
