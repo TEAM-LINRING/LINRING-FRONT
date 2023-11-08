@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
@@ -178,9 +180,13 @@ class SettingScreen extends StatelessWidget {
             }),
             _settingItems("서비스 탈퇴하기", false, () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const DeleteAccountScreen()));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DeleteAccountScreen(
+                    loginInfo: loginInfo,
+                  ),
+                ),
+              );
             }),
             _settingItems("로그아웃", true, () {
               _logout(context);
