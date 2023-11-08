@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
-  bool afterMeeting = true;
+  bool afterMeeting = false;
 
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
