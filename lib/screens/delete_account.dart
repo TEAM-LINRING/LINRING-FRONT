@@ -1,15 +1,45 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
-import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
-  const DeleteAccountScreen({super.key});
+  final LoginInfo loginInfo;
+  const DeleteAccountScreen({required this.loginInfo, super.key});
 
   @override
   State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  void _deleteAccount(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url =
+        Uri.parse('$apiAddress/accounts/v2/user/${widget.loginInfo.user.id}/');
+    final token = widget.loginInfo.access;
+
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    debugPrint((response.statusCode).toString());
+    if (response.statusCode == 204) {
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const EntryScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +167,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
             ])),
             const SizedBox(height: 30),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                _deleteAccount(context);
+              },
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.black,
                 backgroundColor: const Color(0xFFFF0000),
