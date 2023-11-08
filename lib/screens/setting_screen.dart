@@ -1,11 +1,13 @@
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/delete_account.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
+import 'package:http/http.dart' as http;
 
 class SettingScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -32,6 +34,28 @@ class _SettingScreenState extends State<SettingScreen> {
     Image.asset('assets/images/avartar_1.png'),
     Image.asset('assets/images/avartar_1.png'),
   ];
+
+  void _updateProfile(int index) async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/v2/user/me/');
+    final token = widget.loginInfo.access;
+    final body = jsonEncode({"profile": index});
+    await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+  }
+
+  void _updateUserInfo() async {
+    /*
+    사용자 정보 변경이 있는 경우
+    기존 loginInfo를 갱신
+    */
+  }
 
   Future _displayProfileSheet(BuildContext context) {
     int selectedIndex = 0;
@@ -108,7 +132,10 @@ class _SettingScreenState extends State<SettingScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: CustomOutlinedButton(
                     label: '저장하기',
-                    onPressed: () {},
+                    onPressed: () {
+                      _updateProfile(selectedIndex + 1);
+                      _updateUserInfo();
+                    },
                     backgroundColor: const Color(0xfffec2b5),
                     isActive: true,
                   ),
@@ -204,12 +231,12 @@ class _SettingScreenState extends State<SettingScreen> {
                           ),
                           Text(
                             "${widget.loginInfo.user.college}",
-                          ), // 단과대학 <- 현재 단과대학을 저장하는 field가 존재하지 않음 (11/04)
+                          ),
                           const SizedBox(
                             height: 4,
                           ),
                           Text(
-                              "${widget.loginInfo.user.department} ${widget.loginInfo.user.studentNumber}"), // 학부 or 학과 + 학번
+                              "${widget.loginInfo.user.department} ${widget.loginInfo.user.studentNumber}"),
                         ],
                       ),
                       Stack(
