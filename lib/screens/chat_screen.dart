@@ -640,6 +640,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _showProfileModal(BuildContext context) {
+    debugPrint(opponentUser.department);
+    debugPrint(opponentUser.gender);
+    debugPrint(opponentUser.birth.toString());
+    int? birth = opponentUser.birth;
+    int? year = 2024 - birth!;
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -693,36 +698,59 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         ),
                       ),
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.baseline,
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: Text(
-                              '여섯글자이름님',
-                              style: TextStyle(fontSize: 20),
+                              '${opponentUser.nickname}님',
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Text(
-                              '소프트웨어학부 21학번',
-                              style: TextStyle(fontSize: 17),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2,
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: '${opponentUser.department} ',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: '${opponentUser.studentNumber}학번',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                            ])),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            child: Text(
-                              '22살 여자 휴학생',
-                              style: TextStyle(fontSize: 17),
-                            ),
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                text: '$year살 ',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              TextSpan(
+                                text: '${opponentUser.gender}자',
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.black),
+                              ),
+                              // TextSpan(
+                              //   text: '${opponentUser.significant}',
+                              //   style: const TextStyle(
+                              //       fontSize: 17, color: Colors.black),
+                              // ),
+                            ])),
+                          ),
+                          const SizedBox(
+                            height: 2,
                           ),
                         ],
                       ),
