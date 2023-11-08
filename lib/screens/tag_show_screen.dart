@@ -69,33 +69,6 @@ class _TagShowScreenState extends State<TagShowScreen> {
     );
   }
 
-  Future<bool> _updateActiveState(Tagset tag) async {
-    String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/accounts/v2/tagset/${tag.id}/');
-    final token = widget.loginInfo.access;
-    final body = jsonEncode({
-      "place": tag.place,
-      "isSameDepartment": tag.isSameDepartment,
-      "person": tag.person,
-      "method": tag.method,
-      "is_active": !(tag.isActive),
-      "introduction": tag.introduction,
-      "owner": widget.loginInfo.user.id
-    });
-    final response = await http.put(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-      body: body,
-    );
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -205,87 +178,9 @@ class _TagShowScreenState extends State<TagShowScreen> {
                         List<Widget> carouselItems = [];
                         for (var tag in snapshot.data!) {
                           carouselItems.add(
-                            Builder(
-                              builder: (BuildContext context) {
-                                bool isActive = tag.isActive;
-                                return SizedBox(
-                                  width: 400,
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${tag.place}에서\n${(tag.isSameDepartment) ? "같은 과" : "다른 과"} ${tag.person}랑\n${tag.method}하기",
-                                            style:
-                                                const TextStyle(fontSize: 24),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            tag.introduction != null
-                                                ? "\"${tag.introduction}\""
-                                                : "",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Color(0xff999999),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 64,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  const Text(
-                                                    "상대방이 나를\n검색할 수 있어요.",
-                                                    style: TextStyle(
-                                                      fontSize: 11,
-                                                      color: Color(0xff999999),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 80,
-                                                    child: FittedBox(
-                                                      fit: BoxFit.fill,
-                                                      child: CupertinoSwitch(
-                                                        activeColor:
-                                                            const Color(
-                                                                0xff57e554),
-                                                        value: isActive,
-                                                        onChanged: (value) {
-                                                          isActive = value;
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const Icon(
-                                                Icons.search_rounded,
-                                                color: Color(0xfffec2b5),
-                                                size: 37,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                            TagCard(
+                              tag: tag,
+                              loginInfo: widget.loginInfo,
                             ),
                           );
                         }
@@ -375,6 +270,130 @@ class _TagShowScreenState extends State<TagShowScreen> {
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class TagCard extends StatefulWidget {
+  final Tagset tag;
+  final LoginInfo loginInfo;
+
+  const TagCard({super.key, required this.tag, required this.loginInfo});
+
+  @override
+  _TagCardState createState() => _TagCardState();
+}
+
+class _TagCardState extends State<TagCard> {
+  late bool isActive;
+
+  @override
+  void initState() {
+    super.initState();
+    isActive = widget.tag.isActive;
+  }
+
+  Future<bool> _updateActiveState(Tagset tag) async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/v2/tagset/${tag.id}/');
+    final token = widget.loginInfo.access;
+    final body = jsonEncode({
+      "place": tag.place,
+      "isSameDepartment": tag.isSameDepartment,
+      "person": tag.person,
+      "method": tag.method,
+      "is_active": !(tag.isActive),
+      "introduction": tag.introduction,
+      "owner": widget.loginInfo.user.id
+    });
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 400,
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}하기",
+                style: const TextStyle(fontSize: 24),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.tag.introduction != null
+                    ? "\"${widget.tag.introduction}\""
+                    : "",
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Color(0xff999999),
+                ),
+              ),
+              const SizedBox(
+                height: 64,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        "상대방이 나를\n검색할 수 있어요.",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Color(0xff999999),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 80,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: CupertinoSwitch(
+                            activeColor: const Color(0xff57e554),
+                            value: isActive,
+                            onChanged: (value) {
+                              isActive = value;
+                              _updateActiveState(widget.tag);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Icon(
+                    Icons.search_rounded,
+                    color: Color(0xfffec2b5),
+                    size: 37,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
