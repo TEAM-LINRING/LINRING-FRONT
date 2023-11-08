@@ -9,10 +9,11 @@ import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class TagShowScreen extends StatefulWidget {
   final LoginInfo loginInfo;
-  const TagShowScreen({required this.loginInfo, Key? key}) : super(key: key);
+  const TagShowScreen({required this.loginInfo, super.key});
 
   @override
   State createState() => _TagShowScreenState();
@@ -38,6 +39,33 @@ class _TagShowScreenState extends State<TagShowScreen> {
         'Authorization': 'Bearer $token'
       },
     );
+
+    ///
+    ///
+    ///
+    String yourDomain = "linring";
+
+    DynamicLinkParameters dynamicLinkParams = DynamicLinkParameters(
+      uriPrefix: "https://$yourDomain.page.link",
+      link: Uri.parse("https://$yourDomain.page.link/test"),
+      androidParameters: const AndroidParameters(
+        packageName: "com.example.linring_front_flutter",
+        minimumVersion: 0,
+      ),
+      iosParameters: const IOSParameters(
+        bundleId: "com.example.linring_front_flutter",
+        minimumVersion: '0',
+      ),
+    );
+    ShortDynamicLink dynamicLink =
+        await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
+
+    String testurl = dynamicLink.shortUrl.toString();
+    print(testurl);
+    print("meow");
+
+    ///
+    ///
 
     if (response.statusCode == 200) {
       List<dynamic> body = jsonDecode(utf8.decode(response.bodyBytes));

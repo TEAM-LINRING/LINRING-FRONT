@@ -1,12 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/firebase_options.dart';
 import 'package:linring_front_flutter/screens/accout_active_screen.dart';
 import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
-import 'package:linring_front_flutter/screens/profile_screen.dart';
-import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -14,6 +14,8 @@ import 'package:intl/date_symbol_data_local.dart';
 void main() async {
   await initializeDateFormatting("ko_KR", null);
   await dotenv.load(fileName: '.env');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "947019787484",
+    "project_id": "linring-a3e66",
+    "storage_bucket": "linring-a3e66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947019787484:android:9e982d0a06ac6521789819",
+        "android_client_info": {
+          "package_name": "com.example.linring_front_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnY84w6K8EmbwlI6KzdFqgnXi3nTqPCKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947019787484:android:7c84df82c737808a789819",
+        "android_client_info": {
+          "package_name": "com.linring"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnY84w6K8EmbwlI6KzdFqgnXi3nTqPCKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
