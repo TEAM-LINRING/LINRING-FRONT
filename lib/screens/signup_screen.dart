@@ -355,7 +355,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: passwordController,
             onChanged: (value) {
               final regex =
-                  //RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]*$');
                   RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
 
               setState(() {
