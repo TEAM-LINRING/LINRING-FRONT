@@ -27,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final nameController = TextEditingController();
   final nickNameController = TextEditingController();
   final studentNumberController = TextEditingController();
-  final ageController = TextEditingController();
+  final birthController = TextEditingController();
 
   //중복 확인용 변수
   bool isIDUnique = false;
@@ -103,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "profile": 1,
       "gender": selectedGender,
       "student_number": studentNumberController.text,
-      "birth": ageController.text,
+      "birth": birthController.text,
       "grade": selectedGrade,
       "significant": significantRemarks,
     });
@@ -695,7 +695,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextField(
-                        controller: ageController,
+                        controller: birthController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -1018,7 +1018,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         selectedData != null &&
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
-        ageController.text.isNotEmpty &&
+        birthController.text.isNotEmpty &&
         ((_isChecked1 && _isChecked2));
   }
 }
