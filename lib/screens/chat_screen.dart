@@ -826,6 +826,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
+                    isActive: true,
                   ),
                 ),
               ],

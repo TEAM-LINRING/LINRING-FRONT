@@ -8,6 +8,7 @@ class ChatRoom {
   final Tagset tag;
   final Tagset tag2;
   final int? notice;
+  final DateTime? reservationTime;
   final DateTime created;
   final DateTime modified;
 
@@ -18,6 +19,7 @@ class ChatRoom {
     required this.tag,
     required this.tag2,
     required this.notice,
+    required this.reservationTime,
     required this.created,
     required this.modified,
   });
@@ -30,6 +32,7 @@ class ChatRoom {
       tag: Tagset.fromJson(json["tagset"]),
       tag2: Tagset.fromJson(json["tagset2"]),
       notice: json["notice"],
+      reservationTime: json["reservation_time"],
       created: DateTime.parse(json["created"]),
       modified: DateTime.parse(json["modified"]),
     );
