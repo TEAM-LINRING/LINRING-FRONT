@@ -233,17 +233,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               )),
 
-          // Column(
-          //   children: [
-          //     Row(
-          //       children: [
-          //         const TextField(),
-          //         TextButton(onPressed: () {}, child: const Text('중복확인'))
-          //       ],
-          //     ),
-          //     const Text('에러메세지')
-          //   ],
-          // ),
           IntrinsicHeight(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -366,7 +355,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: passwordController,
             onChanged: (value) {
               final regex =
-                  RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]*$');
+                  RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
 
               setState(() {
                 isPasswordValid = regex.hasMatch(value);

@@ -69,7 +69,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    selectedGender = widget.loginInfo.user.gender ?? "남";
     selectedGrade = widget.loginInfo.user.grade ?? "1학년";
 
     nickname = widget.loginInfo.user.nickname!;
@@ -86,24 +85,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'major': widget.loginInfo.user.department!
     };
 
-    (widget.loginInfo.user.gender! == "남") ? isMale = true : isFemale = true;
-
     isSelected = [isMale, isFemale];
   }
 
-  void _createAccount(BuildContext context) async {
+  void _profileChange(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
-    final url = Uri.parse('$apiAddress/accounts/register/');
+    final url = Uri.parse('$apiAddress/accounts/user/');
+    // 특이사항에서 isCheck가 true인 항목들만의 state 값을 추출
+    List<String> significantRemarks = remark
+        .where((item) => item['isCheck'] == true)
+        .map((item) => item['state'] as String)
+        .toList();
 
     String body = jsonEncode({
+      "last_login": "2019-08-24T14:15:22Z",
+      "name": widget.loginInfo.user.name,
+      "email": widget.loginInfo.user.email,
       "nickname": nickNameController.text,
+      "college": selectedData!['college'],
       "department": selectedData!['major'],
-      "gender": selectedGender,
       "student_number": studentNumberController.text,
       "grade": selectedGrade,
-      "significant": ["유학생", "전과생"]
+      "birth": 0,
+      "rating": "string",
+      "is_active": true,
+      "profile": 0,
+      "groups": [0],
+      "user_permissions": [0],
+      "significant": significantRemarks,
     });
-    final response = await http.post(
+    final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: body,
     );
     debugPrint((response.statusCode).toString());
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       if (!mounted) return;
       // Navigator.push(
       //   context,
@@ -236,20 +247,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
                         onPressed: () async {
-                          if (isNickNameValid == true) {
-                            //bool? result = await _validationNickName(context);
-                            // setState(() {
-                            //   if (result) {
-                            //     isNickNameUnique = true;
-                            //     errorNickName = null;
-                            //     helperNickName = '사용 가능한 닉네임입니다.';
-                            //   } else {
-                            //     isNickNameUnique = false;
-                            //     helperNickName = null;
-                            //     errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
-                            //   }
-                            //   isSignUpButtonEnabled = checkFormValidity();
-                            // });
+                          if (nickNameController.text == nickname) {
+                          } else if (isNickNameValid == true) {
+                            bool? result = await _validationNickName(context);
+                            setState(() {
+                              if (result != null) {
+                                if (result) {
+                                  isNickNameUnique = true;
+                                  errorNickName = null;
+                                  helperNickName = '사용 가능한 닉네임입니다.';
+                                } else {
+                                  isNickNameUnique = false;
+                                  helperNickName = null;
+                                  errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                }
+                              }
+                              isSignUpButtonEnabled = checkFormValidity();
+                            });
                           }
                         },
                         style: OutlinedButton.styleFrom(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -27,12 +28,13 @@ class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
   List<Message> _messages = [];
-  String ratingScore = "";
+  String ratingScore = "0";
 
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
   bool afterMeeting = false;
+  bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
@@ -75,6 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
     debugPrint(body);
     if (response.statusCode == 200) {
       if (!mounted) return;
+      afterMeeting = false;
       Navigator.pop(context);
     }
   }
@@ -489,11 +492,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                             4.0),
                                                                     onRatingUpdate:
                                                                         (rating) {
-                                                                      ratingScore =
-                                                                          (rating.toInt())
-                                                                              .toString();
-                                                                      print(
-                                                                          ratingScore);
+                                                                      setState(
+                                                                          () {
+                                                                        ratingScore =
+                                                                            (rating.toInt()).toString();
+                                                                        print(
+                                                                            ratingScore);
+                                                                        // buttonIsActive =
+                                                                        //     _buttonIsActive();
+                                                                      });
                                                                     },
                                                                   ),
                                                                   const SizedBox(
@@ -537,6 +544,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                             0),
                                                                     child:
                                                                         CustomOutlinedButton(
+                                                                      isActive:
+                                                                          true,
+                                                                      //buttonIsActive,
                                                                       backgroundColor:
                                                                           const Color(
                                                                               0xFFFEC2B5),
@@ -546,9 +556,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                                           () {
                                                                         _createRating();
                                                                       },
-                                                                      isActive:
-                                                                          ratingScore !=
-                                                                              "",
                                                                     ),
                                                                   )
                                                                 ])));
@@ -592,6 +599,14 @@ class _ChatScreenState extends State<ChatScreen> {
       ],
     );
   }
+
+  // bool _buttonIsActive() {
+  //   if (ratingScore.isNotEmpty) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   // 채팅 입력창
   Widget _chatInput() {
@@ -805,6 +820,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   child: CustomOutlinedButton(
+                    isActive: true,
                     label: '프로필 닫기',
                     backgroundColor: const Color(0xFFFEC2B5),
                     onPressed: () {
