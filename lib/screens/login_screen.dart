@@ -85,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFF6F4),
       body: Container(
 
@@ -98,6 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             const SizedBox(height: 250), // LINRING text
+
             Text(
               'LINRING',
               style: TextStyle(
@@ -119,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 0,
               ),
             ),
+
             const SizedBox(height: 70),
 
             Padding(
