@@ -232,6 +232,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
 
           IntrinsicHeight(
             child: Row(
@@ -338,7 +339,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           //비밀번호
           const Align(
               alignment: Alignment.centerLeft,
@@ -351,6 +352,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             controller: passwordController,
             onChanged: (value) {
@@ -367,7 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPasswordValid ? null : '비밀번호는 영문자와 숫자를 조합해 8자리 이상이어야 합니다.',
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //비밀번호 확인
           const Align(
@@ -381,6 +383,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             obscureText: true,
             controller: passwordConfirmController,
@@ -393,7 +396,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //이름
           const Align(
@@ -407,6 +410,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             controller: nameController,
             obscureText: false,
@@ -417,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //닉네임
           const Align(
@@ -431,7 +435,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-
+          const SizedBox(height: 10),
           IntrinsicHeight(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -507,7 +511,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ]),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //학과(제1전공)
           const Align(
@@ -521,6 +525,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 60,
@@ -562,7 +567,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //학번 및 학년
           const Align(
@@ -576,6 +581,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           Container(
             height: 60,
             decoration: BoxDecoration(
@@ -653,7 +659,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //성별 및 나이
           const Align(
@@ -667,7 +673,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-
+          const SizedBox(height: 10),
           Container(
             height: 60,
             clipBehavior: Clip.hardEdge,
@@ -756,7 +762,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //특이사항
           const Align(
@@ -784,14 +790,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ],
               )),
-
+          const SizedBox(height: 10),
           Wrap(
               alignment: WrapAlignment.start,
               children: List.generate(remark.length, (index) {
                 return buildRemark(index);
               })),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //동의
           Row(
@@ -966,7 +972,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 25),
 
           //가입하기 버튼
           CustomOutlinedButton(
