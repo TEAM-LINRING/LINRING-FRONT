@@ -236,7 +236,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: OutlinedButton(
                         onPressed: () async {
-                          if (isNickNameValid == true) {
+                          if (nickNameController.text == nickname) {
+                          } else if (isNickNameValid == true) {
                             bool? result = await _validationNickName(context);
                             setState(() {
                               if (result != null) {
