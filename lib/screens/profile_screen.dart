@@ -69,7 +69,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    selectedGender = widget.loginInfo.user.gender ?? "남";
     selectedGrade = widget.loginInfo.user.grade ?? "1학년";
 
     nickname = widget.loginInfo.user.nickname!;
@@ -86,22 +85,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'major': widget.loginInfo.user.department!
     };
 
-    (widget.loginInfo.user.gender! == "남") ? isMale = true : isFemale = true;
-
     isSelected = [isMale, isFemale];
   }
 
   void _profileChange(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/user/');
+    // 특이사항에서 isCheck가 true인 항목들만의 state 값을 추출
+    List<String> significantRemarks = remark
+        .where((item) => item['isCheck'] == true)
+        .map((item) => item['state'] as String)
+        .toList();
 
     String body = jsonEncode({
+      "last_login": "2019-08-24T14:15:22Z",
+      "name": widget.loginInfo.user.name,
+      "email": widget.loginInfo.user.email,
       "nickname": nickNameController.text,
+      "college": selectedData!['college'],
       "department": selectedData!['major'],
-      "gender": selectedGender,
       "student_number": studentNumberController.text,
       "grade": selectedGrade,
-      "significant": ["유학생", "전과생"]
+      "birth": 0,
+      "rating": "string",
+      "is_active": true,
+      "profile": 0,
+      "groups": [0],
+      "user_permissions": [0],
+      "significant": significantRemarks,
     });
     final response = await http.patch(
       url,
