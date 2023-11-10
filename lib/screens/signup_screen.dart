@@ -1034,12 +1034,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool checkFormValidity() {
-    // debugPrint(isIDUnique.toString());
-    // debugPrint(isPasswordValid.toString());
-    // debugPrint(isPasswordConfirmValid.toString());
-    // debugPrint(isNickNameUnique.toString());
-    // debugPrint((selectedData != null).toString());
-    // debugPrint((studentNumberController.text.isNotEmpty).toString());
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&
