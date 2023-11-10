@@ -217,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const SizedBox(
-            height: 40,
+            height: 20,
           ),
           //아이디
 

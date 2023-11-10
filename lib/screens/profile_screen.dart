@@ -197,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const SizedBox(
-            height: 40,
+            height: 20,
           ),
 
           //닉네임
