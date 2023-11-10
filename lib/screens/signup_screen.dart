@@ -27,7 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final nameController = TextEditingController();
   final nickNameController = TextEditingController();
   final studentNumberController = TextEditingController();
-  final ageController = TextEditingController();
+  final birthController = TextEditingController();
 
   //중복 확인용 변수
   bool isIDUnique = false;
@@ -103,7 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "profile": 1,
       "gender": selectedGender,
       "student_number": studentNumberController.text,
-      "birth": ageController.text,
+      "birth": birthController.text,
       "grade": selectedGrade,
       "significant": significantRemarks,
     });
@@ -217,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           const SizedBox(
-            height: 40,
+            height: 20,
           ),
           //아이디
 
@@ -232,6 +232,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
 
           IntrinsicHeight(
             child: Row(
@@ -338,7 +339,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           //비밀번호
           const Align(
               alignment: Alignment.centerLeft,
@@ -351,6 +352,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             controller: passwordController,
             onChanged: (value) {
@@ -367,7 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 isPasswordValid ? null : '비밀번호는 영문자와 숫자를 조합해 8자리 이상이어야 합니다.',
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //비밀번호 확인
           const Align(
@@ -381,6 +383,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             obscureText: true,
             controller: passwordConfirmController,
@@ -393,7 +396,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //이름
           const Align(
@@ -407,6 +410,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           CustomTextField(
             controller: nameController,
             obscureText: false,
@@ -417,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //닉네임
           const Align(
@@ -431,76 +435,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-          SizedBox(
-            height: 80,
-            child: Stack(alignment: Alignment.centerRight, children: [
-              CustomTextField(
-                controller: nickNameController,
-                onChanged: (value) {
-                  setState(() {
-                    errorNickName = null;
-                    helperNickName = null;
-                    if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
-                      isNickNameValid = false;
-                      errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
-                    } else if (value.length > 6) {
-                      isNickNameValid = false;
-                      errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
-                    } else {
-                      errorNickName = null;
-                      isNickNameValid = true;
-                    }
-                  });
-                },
-                errorText: errorNickName,
-                hintText: '6글자 이내의 닉네임',
-                obscureText: false,
-                helperText: helperNickName,
-              ),
-              Positioned(
-                  right: 30,
-                  bottom: 30,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            left: BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)))),
-                    child: OutlinedButton(
-                        onPressed: () async {
-                          if (isNickNameValid == true) {
-                            bool? result = await _validationNickName(context);
-                            setState(() {
-                              if (result != null) {
-                                if (result) {
-                                  isNickNameUnique = true;
-                                  errorNickName = null;
-                                  helperNickName = '사용 가능한 닉네임입니다.';
-                                } else {
-                                  isNickNameUnique = false;
-                                  helperNickName = null;
-                                  errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
-                                }
-                              }
-                              isSignUpButtonEnabled = checkFormValidity();
-                            });
+          const SizedBox(height: 10),
+          IntrinsicHeight(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: CustomTextField(
+                      controller: nickNameController,
+                      onChanged: (value) {
+                        setState(() {
+                          errorNickName = null;
+                          helperNickName = null;
+                          if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
+                            isNickNameValid = false;
+                            errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
+                          } else if (value.length > 6) {
+                            isNickNameValid = false;
+                            errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
+                          } else {
+                            errorNickName = null;
+                            isNickNameValid = true;
                           }
-                        },
-                        style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: const EdgeInsets.symmetric(vertical: 20)),
-                        child: const Text(
-                          '중복 확인',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              height: 0),
-                        )),
-                  )),
-            ]),
+                        });
+                      },
+                      errorText: errorNickName,
+                      hintText: '6글자 이내의 닉네임',
+                      obscureText: false,
+                      helperText: helperNickName,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 1, 0, 0),
+                      child: OutlinedButton(
+                          onPressed: () async {
+                            if (isNickNameValid == true) {
+                              bool? result = await _validationNickName(context);
+                              setState(() {
+                                if (result != null) {
+                                  if (result) {
+                                    isNickNameUnique = true;
+                                    errorNickName = null;
+                                    helperNickName = '사용 가능한 닉네임입니다.';
+                                  } else {
+                                    isNickNameUnique = false;
+                                    helperNickName = null;
+                                    errorNickName =
+                                        '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                  }
+                                }
+                                isSignUpButtonEnabled = checkFormValidity();
+                              });
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            backgroundColor: const Color(0xFFFEC2B5),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: const BorderSide(
+                                    width: 1, color: Color(0xFFC8AAAA))),
+                          ),
+                          child: const Text(
+                            '중복 확인',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                height: 0),
+                          )),
+                    ),
+                  )
+                ]),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //학과(제1전공)
           const Align(
@@ -514,43 +525,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-          OutlinedButton(
-            onPressed: () async {
-              final result = await Navigator.pushNamed(context, '/selectmajor');
-              if (result is Map<String, String>) {
-                setState(() {
-                  selectedData = result;
-                  isSignUpButtonEnabled = checkFormValidity();
-                });
-              }
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-              elevation: 5,
-              shadowColor: const Color(0x196C5916),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            height: 60,
+            child: OutlinedButton(
+              onPressed: () async {
+                final result =
+                    await Navigator.pushNamed(context, '/selectmajor');
+                if (result is Map<String, String>) {
+                  setState(() {
+                    selectedData = result;
+                    isSignUpButtonEnabled = checkFormValidity();
+                  });
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                elevation: 5,
+                shadowColor: const Color(0x196C5916),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fixedSize: const Size(350, 60),
               ),
-              fixedSize: const Size(350, 60),
+              child: selectedData == null
+                  ? const Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.search,
+                        size: 24.0,
+                        color: Colors.black,
+                      ))
+                  : Text(
+                      "${selectedData!['college']}  -  ${selectedData!['major']}",
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w400),
+                    ),
             ),
-            child: selectedData == null
-                ? const Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.search,
-                      size: 24.0,
-                      color: Colors.black,
-                    ))
-                : Text(
-                    "${selectedData!['college']}  -  ${selectedData!['major']}",
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w400),
-                  ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //학번 및 학년
           const Align(
@@ -564,7 +581,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
+          const SizedBox(height: 10),
           Container(
+            height: 60,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
@@ -575,11 +594,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    height: double.infinity,
                     decoration: const BoxDecoration(
                         border: Border(
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
+                      textAlign: TextAlign.end,
                       controller: studentNumberController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -593,13 +614,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: null,
-                        contentPadding: EdgeInsets.fromLTRB(65, 14, 0, 0),
+                        contentPadding: EdgeInsets.only(top: 19),
                         suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 45.0),
+                          padding: EdgeInsets.only(right: 50.0),
                           child: Align(
                             alignment: Alignment.center,
                             widthFactor: 1.0,
-                            heightFactor: 1.0,
+                            heightFactor: 4.0,
                             child: Text(
                               '학번',
                               style: TextStyle(fontSize: 16),
@@ -638,7 +659,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //성별 및 나이
           const Align(
@@ -652,8 +673,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-
+          const SizedBox(height: 10),
           Container(
+            height: 60,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -665,6 +687,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    height: double.infinity,
                     decoration: const BoxDecoration(
                         border: Border(
                             right: BorderSide(
@@ -676,26 +699,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       selectedColor: Colors.black,
                       borderWidth: 0,
                       //borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      children: const [
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(33, 5, 35, 5),
-                            child: Text(
+                      children: [
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 45) / 4,
+                            child: const Text(
                               '남',
                               style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
                             )),
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(33, 5, 34, 5),
-                            child: Text('여', style: TextStyle(fontSize: 16))),
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 45) / 4,
+                            child: const Text(
+                              '여',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            )),
                       ],
                     ),
                   ),
                 ),
                 Expanded(
                     flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: SizedBox(
+                      height: double.infinity,
                       child: TextField(
-                        controller: ageController,
+                        textAlign: TextAlign.end,
+                        controller: birthController,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
@@ -708,13 +737,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           errorBorder: InputBorder.none,
                           disabledBorder: InputBorder.none,
                           hintText: null,
-                          contentPadding: EdgeInsets.fromLTRB(48, 15, 0, 0),
+                          contentPadding: EdgeInsets.only(top: 19),
                           suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 45.0),
+                            padding: EdgeInsets.only(right: 50.0),
                             child: Align(
                               alignment: Alignment.center,
                               widthFactor: 1.0,
-                              heightFactor: 1.0,
+                              heightFactor: 4.0,
                               child: Text(
                                 '년생',
                                 style: TextStyle(fontSize: 16),
@@ -728,12 +757,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
                         },
                       ),
-                    ))
+                    )),
               ],
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //특이사항
           const Align(
@@ -761,14 +790,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ],
               )),
-
+          const SizedBox(height: 10),
           Wrap(
               alignment: WrapAlignment.start,
               children: List.generate(remark.length, (index) {
                 return buildRemark(index);
               })),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           //동의
           Row(
@@ -943,7 +972,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 25),
 
           //가입하기 버튼
           CustomOutlinedButton(
@@ -1005,12 +1034,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   bool checkFormValidity() {
-    // debugPrint(isIDUnique.toString());
-    // debugPrint(isPasswordValid.toString());
-    // debugPrint(isPasswordConfirmValid.toString());
-    // debugPrint(isNickNameUnique.toString());
-    // debugPrint((selectedData != null).toString());
-    // debugPrint((studentNumberController.text.isNotEmpty).toString());
     return isIDUnique &&
         isPasswordValid &&
         isPasswordConfirmValid &&
@@ -1018,7 +1041,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         selectedData != null &&
         studentNumberController.text.isNotEmpty &&
         (isMale || isFemale) &&
-        ageController.text.isNotEmpty &&
+        birthController.text.isNotEmpty &&
         ((_isChecked1 && _isChecked2));
   }
 }
