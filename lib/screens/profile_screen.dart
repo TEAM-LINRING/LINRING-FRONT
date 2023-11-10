@@ -573,7 +573,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 return buildRemark(index);
               })),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
+          const Row(
+            children: [
+              Icon(
+                Icons.report,
+                color: Colors.red,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                '허위 사실 기재시 서비스 이용이 제한됩니다.',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 10),
+            ],
+          ),
         ]),
       ),
     );
