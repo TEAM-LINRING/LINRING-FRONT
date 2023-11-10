@@ -591,7 +591,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.end,
                       controller: studentNumberController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -605,9 +605,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: null,
-                        contentPadding: EdgeInsets.fromLTRB(65, 15, 0, 0),
+                        contentPadding: EdgeInsets.only(top: 15),
                         suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 45.0),
+                          padding: EdgeInsets.only(right: 50.0),
                           child: Align(
                             alignment: Alignment.center,
                             widthFactor: 1.0,
