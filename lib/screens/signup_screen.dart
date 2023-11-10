@@ -591,6 +591,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             right: BorderSide(
                                 width: 1, color: Color(0xFFC8AAAA)))),
                     child: TextField(
+                      textAlign: TextAlign.center,
                       controller: studentNumberController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -604,7 +605,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: null,
-                        contentPadding: EdgeInsets.fromLTRB(65, 14, 0, 0),
+                        contentPadding: EdgeInsets.fromLTRB(65, 15, 0, 0),
                         suffixIcon: Padding(
                           padding: EdgeInsets.only(right: 45.0),
                           child: Align(
@@ -711,6 +712,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: TextField(
+                          textAlign: TextAlign.end,
                           controller: birthController,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
@@ -724,14 +726,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             errorBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             hintText: null,
-                            contentPadding: EdgeInsets.fromLTRB(48, 15, 0, 0),
-                            suffixIcon: Align(
-                              alignment: Alignment.center,
-                              widthFactor: 1.0,
-                              heightFactor: 1.0,
-                              child: Text(
-                                '년생',
-                                style: TextStyle(fontSize: 16),
+                            contentPadding: EdgeInsets.only(top: 15),
+                            suffixIcon: Padding(
+                              padding: EdgeInsets.only(right: 50.0),
+                              child: Align(
+                                alignment: Alignment.center,
+                                widthFactor: 1.0,
+                                heightFactor: 1.0,
+                                child: Text(
+                                  '년생',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
                           ),
@@ -740,7 +745,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               isSignUpButtonEnabled = checkFormValidity();
                             });
                           },
-                        )))
+                        ))),
               ],
             ),
           ),
