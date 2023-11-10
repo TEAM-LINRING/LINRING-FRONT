@@ -57,7 +57,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           CustomTextField(
             controller: passwordController,
             onChanged: (value) {
-              final regex = RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$');
+              final regex =
+                  RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
+
               setState(() {
                 isPasswordValid = regex.hasMatch(value);
               });

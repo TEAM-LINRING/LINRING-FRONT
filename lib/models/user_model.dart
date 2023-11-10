@@ -1,3 +1,5 @@
+import 'package:linring_front_flutter/major_data.dart';
+
 class User {
   final int? id;
   final String? lastLogin;
@@ -51,7 +53,7 @@ class User {
       email: json['email'],
       nickname: json['nickname'],
       profile: json['profile'],
-      college: json["college"],
+      college: json['college'],
       department: json['department'],
       studentNumber: json['student_number'],
       gender: json['gender'],
