@@ -69,10 +69,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    selectedGrade = widget.loginInfo.user.grade ?? "1학년";
 
     nickname = widget.loginInfo.user.nickname!;
+    selectedData = {
+      'college': widget.loginInfo.user.college!,
+      'major': widget.loginInfo.user.department!
+    };
+    debugPrint(widget.loginInfo.user.gender);
     studnetNumber = widget.loginInfo.user.studentNumber!;
+    selectedGrade = widget.loginInfo.user.grade ?? "1학년";
+    selectedGender = widget.loginInfo.user.gender!;
+    if (selectedGender == '남') {
+      isMale = true;
+    } else {
+      isFemale = true;
+    }
+    isSelected = [isMale, isFemale];
     birth = widget.loginInfo.user.birth!;
 
     nickNameController = TextEditingController(text: nickname);
@@ -80,57 +92,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
         TextEditingController(text: studnetNumber.toString());
     birthController = TextEditingController(text: birth.toString());
 
-    selectedData = {
-      'college': '기존 대학',
-      'major': widget.loginInfo.user.department!
-    };
-
-    isSelected = [isMale, isFemale];
+    List<int>? indicesToSetTrue = widget.loginInfo.user.significant;
+// 주어진 인덱스에 해당하는 항목의 isCheck를 true로 설정
+    indicesToSetTrue?.forEach((index) {
+      if (index >= 0 && index < remark.length) {
+        remark[index]['isCheck'] = true;
+      }
+    });
   }
 
   void _profileChange(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/accounts/user/');
+    final token = widget.loginInfo.access;
     // 특이사항에서 isCheck가 true인 항목들만의 state 값을 추출
-    List<String> significantRemarks = remark
+    List<int> significantRemarks = remark
         .where((item) => item['isCheck'] == true)
-        .map((item) => item['state'] as String)
+        .map((item) => remark.indexOf(item))
         .toList();
 
     String body = jsonEncode({
-      "last_login": "2019-08-24T14:15:22Z",
-      "name": widget.loginInfo.user.name,
-      "email": widget.loginInfo.user.email,
       "nickname": nickNameController.text,
       "college": selectedData!['college'],
       "department": selectedData!['major'],
       "student_number": studentNumberController.text,
       "grade": selectedGrade,
+      "gender": selectedGender,
       "birth": birthController.text,
-      "rating": "string",
-      "is_active": true,
-      "profile": widget.loginInfo.user.profile,
-      "groups": [0],
-      "user_permissions": [0],
       "significant": significantRemarks,
     });
     final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
       },
       body: body,
     );
     debugPrint((response.statusCode).toString());
+    debugPrint(body);
     if (response.statusCode == 200) {
       if (!mounted) return;
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) =>
-      //         AccoutActiveScreen(email: '${idController.text}@kookmin.ac.kr'),
-      //   ),
-      // );
     }
   }
 
@@ -180,7 +182,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: CustomAppBar(
         title: '프로필 관리',
         suffix: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            _profileChange(context);
+          },
           child: const Text(
             '완료',
             style: TextStyle(fontSize: 19, color: Colors.black),
