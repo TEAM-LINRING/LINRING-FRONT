@@ -523,6 +523,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               )),
           SizedBox(
             width: double.infinity,
+            height: 60,
             child: OutlinedButton(
               onPressed: () async {
                 final result =
@@ -576,6 +577,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               )),
           Container(
+            height: 60,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
@@ -586,6 +588,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    height: double.infinity,
                     decoration: const BoxDecoration(
                         border: Border(
                             right: BorderSide(
@@ -605,13 +608,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         errorBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         hintText: null,
-                        contentPadding: EdgeInsets.only(top: 15),
+                        contentPadding: EdgeInsets.only(top: 19),
                         suffixIcon: Padding(
                           padding: EdgeInsets.only(right: 50.0),
                           child: Align(
                             alignment: Alignment.center,
                             widthFactor: 1.0,
-                            heightFactor: 1.0,
+                            heightFactor: 4.0,
                             child: Text(
                               '학번',
                               style: TextStyle(fontSize: 16),
@@ -666,6 +669,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               )),
 
           Container(
+            height: 60,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -677,6 +681,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    height: double.infinity,
                     decoration: const BoxDecoration(
                         border: Border(
                             right: BorderSide(
@@ -709,43 +714,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 Expanded(
                     flex: 1,
-                    child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: TextField(
-                          textAlign: TextAlign.end,
-                          controller: birthController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
-                            LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
-                          ],
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintText: null,
-                            contentPadding: EdgeInsets.only(top: 15),
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.only(right: 50.0),
-                              child: Align(
-                                alignment: Alignment.center,
-                                widthFactor: 1.0,
-                                heightFactor: 1.0,
-                                child: Text(
-                                  '년생',
-                                  style: TextStyle(fontSize: 16),
-                                ),
+                    child: SizedBox(
+                      height: double.infinity,
+                      child: TextField(
+                        textAlign: TextAlign.end,
+                        controller: birthController,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
+                          LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
+                        ],
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintText: null,
+                          contentPadding: EdgeInsets.only(top: 19),
+                          suffixIcon: Padding(
+                            padding: EdgeInsets.only(right: 50.0),
+                            child: Align(
+                              alignment: Alignment.center,
+                              widthFactor: 1.0,
+                              heightFactor: 4.0,
+                              child: Text(
+                                '년생',
+                                style: TextStyle(fontSize: 16),
                               ),
                             ),
                           ),
-                          onChanged: (value) {
-                            setState(() {
-                              isSignUpButtonEnabled = checkFormValidity();
-                            });
-                          },
-                        ))),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            isSignUpButtonEnabled = checkFormValidity();
+                          });
+                        },
+                      ),
+                    )),
               ],
             ),
           ),
