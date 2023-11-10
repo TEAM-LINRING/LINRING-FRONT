@@ -75,7 +75,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'college': widget.loginInfo.user.college!,
       'major': widget.loginInfo.user.department!
     };
-    debugPrint(widget.loginInfo.user.gender);
     studnetNumber = widget.loginInfo.user.studentNumber!;
     selectedGrade = widget.loginInfo.user.grade ?? "1학년";
     selectedGender = widget.loginInfo.user.gender!;
@@ -183,7 +182,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: '프로필 관리',
         suffix: TextButton(
           onPressed: () {
-            _profileChange(context);
+            if (checkFormValidity()) {
+              _profileChange(context);
+            }
           },
           child: const Text(
             '완료',
