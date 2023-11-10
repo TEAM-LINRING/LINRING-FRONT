@@ -687,16 +687,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       selectedColor: Colors.black,
                       borderWidth: 0,
                       //borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      children: const [
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(33, 5, 35, 5),
-                            child: Text(
+                      children: [
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 45) / 4,
+                            child: const Text(
                               '남',
                               style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
                             )),
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(33, 5, 34, 5),
-                            child: Text('여', style: TextStyle(fontSize: 16))),
+                        SizedBox(
+                            width: (MediaQuery.of(context).size.width - 45) / 4,
+                            child: const Text(
+                              '여',
+                              style: TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            )),
                       ],
                     ),
                   ),
@@ -704,25 +709,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Expanded(
                     flex: 1,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: TextField(
-                        controller: birthController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
-                          LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
-                        ],
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintText: null,
-                          contentPadding: EdgeInsets.fromLTRB(48, 15, 0, 0),
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 45.0),
-                            child: Align(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: TextField(
+                          controller: birthController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
+                            LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
+                          ],
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintText: null,
+                            contentPadding: EdgeInsets.fromLTRB(48, 15, 0, 0),
+                            suffixIcon: Align(
                               alignment: Alignment.center,
                               widthFactor: 1.0,
                               heightFactor: 1.0,
@@ -732,14 +735,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            isSignUpButtonEnabled = checkFormValidity();
-                          });
-                        },
-                      ),
-                    ))
+                          onChanged: (value) {
+                            setState(() {
+                              isSignUpButtonEnabled = checkFormValidity();
+                            });
+                          },
+                        )))
               ],
             ),
           ),
