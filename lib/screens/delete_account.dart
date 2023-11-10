@@ -48,8 +48,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         title: '탈퇴하기',
       ),
       body: Container(
-        padding:
-            const EdgeInsets.only(left: 20.0, top: 15, bottom: 0, right: 20),
+        width: double.infinity,
+        height: double.infinity,
+        padding: const EdgeInsets.only(left: 20, top: 15, bottom: 0, right: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -68,8 +69,8 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               height: 20,
             ),
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              alignment: Alignment.centerRight,
+              // padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              alignment: Alignment.center,
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
