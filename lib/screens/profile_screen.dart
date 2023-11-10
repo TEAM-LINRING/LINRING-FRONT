@@ -91,9 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     isSelected = [isMale, isFemale];
   }
 
-  void _createAccount(BuildContext context) async {
+  void _profileChange(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
-    final url = Uri.parse('$apiAddress/accounts/register/');
+    final url = Uri.parse('$apiAddress/accounts/user/');
 
     String body = jsonEncode({
       "nickname": nickNameController.text,
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "grade": selectedGrade,
       "significant": ["유학생", "전과생"]
     });
-    final response = await http.post(
+    final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: body,
     );
     debugPrint((response.statusCode).toString());
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       if (!mounted) return;
       // Navigator.push(
       //   context,
@@ -237,19 +237,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: OutlinedButton(
                         onPressed: () async {
                           if (isNickNameValid == true) {
-                            //bool? result = await _validationNickName(context);
-                            // setState(() {
-                            //   if (result) {
-                            //     isNickNameUnique = true;
-                            //     errorNickName = null;
-                            //     helperNickName = '사용 가능한 닉네임입니다.';
-                            //   } else {
-                            //     isNickNameUnique = false;
-                            //     helperNickName = null;
-                            //     errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
-                            //   }
-                            //   isSignUpButtonEnabled = checkFormValidity();
-                            // });
+                            bool? result = await _validationNickName(context);
+                            setState(() {
+                              if (result != null) {
+                                if (result) {
+                                  isNickNameUnique = true;
+                                  errorNickName = null;
+                                  helperNickName = '사용 가능한 닉네임입니다.';
+                                } else {
+                                  isNickNameUnique = false;
+                                  helperNickName = null;
+                                  errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                }
+                              }
+                              isSignUpButtonEnabled = checkFormValidity();
+                            });
                           }
                         },
                         style: OutlinedButton.styleFrom(
