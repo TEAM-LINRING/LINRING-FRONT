@@ -506,74 +506,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   )
                 ]),
           ),
-          // SizedBox(
-          //   height: 80,
-          //   child: Stack(alignment: Alignment.centerRight, children: [
-          //     CustomTextField(
-          //       controller: nickNameController,
-          //       onChanged: (value) {
-          //         setState(() {
-          //           errorNickName = null;
-          //           helperNickName = null;
-          //           if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
-          //             isNickNameValid = false;
-          //             errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
-          //           } else if (value.length > 6) {
-          //             isNickNameValid = false;
-          //             errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
-          //           } else {
-          //             errorNickName = null;
-          //             isNickNameValid = true;
-          //           }
-          //         });
-          //       },
-          //       errorText: errorNickName,
-          //       hintText: '6글자 이내의 닉네임',
-          //       obscureText: false,
-          //       helperText: helperNickName,
-          //     ),
-          //     Positioned(
-          //         right: 30,
-          //         bottom: 30,
-          //         child: Container(
-          //           decoration: const BoxDecoration(
-          //               border: Border(
-          //                   left: BorderSide(
-          //                       width: 1, color: Color(0xFFC8AAAA)))),
-          //           child: OutlinedButton(
-          //               onPressed: () async {
-          //                 if (isNickNameValid == true) {
-          //                   bool? result = await _validationNickName(context);
-          //                   setState(() {
-          //                     if (result != null) {
-          //                       if (result) {
-          //                         isNickNameUnique = true;
-          //                         errorNickName = null;
-          //                         helperNickName = '사용 가능한 닉네임입니다.';
-          //                       } else {
-          //                         isNickNameUnique = false;
-          //                         helperNickName = null;
-          //                         errorNickName = '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
-          //                       }
-          //                     }
-          //                     isSignUpButtonEnabled = checkFormValidity();
-          //                   });
-          //                 }
-          //               },
-          //               style: OutlinedButton.styleFrom(
-          //                   side: BorderSide.none,
-          //                   padding: const EdgeInsets.symmetric(vertical: 20)),
-          //               child: const Text(
-          //                 '중복 확인',
-          //                 style: TextStyle(
-          //                     color: Colors.black,
-          //                     fontSize: 13,
-          //                     fontWeight: FontWeight.w400,
-          //                     height: 0),
-          //               )),
-          //         )),
-          //   ]),
-          // ),
 
           const SizedBox(height: 30),
 
@@ -589,40 +521,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 0,
                 ),
               )),
-          OutlinedButton(
-            onPressed: () async {
-              final result = await Navigator.pushNamed(context, '/selectmajor');
-              if (result is Map<String, String>) {
-                setState(() {
-                  selectedData = result;
-                  isSignUpButtonEnabled = checkFormValidity();
-                });
-              }
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.white,
-              side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-              elevation: 5,
-              shadowColor: const Color(0x196C5916),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () async {
+                final result =
+                    await Navigator.pushNamed(context, '/selectmajor');
+                if (result is Map<String, String>) {
+                  setState(() {
+                    selectedData = result;
+                    isSignUpButtonEnabled = checkFormValidity();
+                  });
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                elevation: 5,
+                shadowColor: const Color(0x196C5916),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                fixedSize: const Size(350, 60),
               ),
-              fixedSize: const Size(350, 60),
+              child: selectedData == null
+                  ? const Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.search,
+                        size: 24.0,
+                        color: Colors.black,
+                      ))
+                  : Text(
+                      "${selectedData!['college']}  -  ${selectedData!['major']}",
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w400),
+                    ),
             ),
-            child: selectedData == null
-                ? const Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.search,
-                      size: 24.0,
-                      color: Colors.black,
-                    ))
-                : Text(
-                    "${selectedData!['college']}  -  ${selectedData!['major']}",
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w400),
-                  ),
           ),
 
           const SizedBox(height: 30),
