@@ -54,7 +54,7 @@ class _SettingScreenState extends State<SettingScreen> {
 
   void _updateProfile(int index) async {
     String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/accounts/v2/user/me/');
+    final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
     final body = jsonEncode({"profile": index});
     await http.patch(
@@ -65,6 +65,7 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       body: body,
     );
+    print(body);
   }
 
   void _updateUserInfo() async {
@@ -148,6 +149,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   child: CustomOutlinedButton(
                     label: '저장하기',
                     onPressed: () {
+                      Navigator.pop(context);
                       _updateProfile(selectedIndex + 1);
                       _updateUserInfo();
                     },
