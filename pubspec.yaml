@@ -43,6 +43,7 @@ dependencies:
   omni_datetime_picker: ^1.0.9
   flutter_rating_bar: ^4.0.1
   intl: ^0.18.1
+  flutter_svg: ^1.0.1
 
   firebase_core: ^2.21.0
   firebase_dynamic_links: ^5.4.3
@@ -80,6 +81,7 @@ flutter:
     - assets/fonts/
     - assets/icons/
     - assets/images/
+    - assets/images/characters/
     - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
