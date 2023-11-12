@@ -290,7 +290,9 @@ class _SettingScreenState extends State<SettingScreen> {
                       loginInfo: widget.loginInfo,
                     ),
                   ),
-                );
+                ).then((value) {
+                  setState(() {});
+                });
               },
             ),
             _settingItems("친구 초대", false, () {}),
