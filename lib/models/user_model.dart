@@ -7,19 +7,19 @@ class User {
   final String? modified;
   final String? name;
   final String? email;
-  final String? nickname;
-  final int? profile;
-  final String? college;
-  final String? department;
-  final int? studentNumber;
-  final String? gender;
-  final int? birth;
-  final String? grade;
+  String? nickname;
+  int? profile;
+  String? college;
+  String? department;
+  int? studentNumber;
+  String? gender;
+  int? birth;
+  String? grade;
   final String? rating;
   final bool? isActive;
   final List<int>? groups;
   final List<int>? userPermissions;
-  final List<int>? significant;
+  List<int>? significant;
 
   User({
     this.id,

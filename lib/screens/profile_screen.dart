@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late int studnetNumber;
   late int birth;
 
-  bool isNickNameUnique = false;
+  bool isNickNameUnique = true;
   //정규식 유효성 검사용 변수
   bool isPasswordValid = true;
   bool isPasswordConfirmValid = true;
@@ -131,6 +131,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     debugPrint((response.statusCode).toString());
     debugPrint(body);
     if (response.statusCode == 200) {
+      setState(() {
+        widget.loginInfo.user.nickname = nickNameController.text;
+        widget.loginInfo.user.college = selectedData!['college'];
+        widget.loginInfo.user.department = selectedData!['major'];
+        widget.loginInfo.user.studentNumber =
+            int.parse(studentNumberController.text);
+        widget.loginInfo.user.grade = selectedGrade;
+        widget.loginInfo.user.gender = selectedGender;
+        widget.loginInfo.user.birth = int.parse(birthController.text);
+        widget.loginInfo.user.significant = significantRemarks;
+      });
       if (!mounted) return;
     }
   }
