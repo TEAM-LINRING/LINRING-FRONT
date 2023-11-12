@@ -48,6 +48,7 @@ class _SettingScreenState extends State<SettingScreen> {
         profileImagePaths[index],
         width: 100,
         height: 100,
+        fit: BoxFit.contain,
       ),
     );
   }
@@ -65,7 +66,6 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       body: body,
     );
-    print(body);
   }
 
   void _updateUserInfo() async {
@@ -229,7 +229,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 elevation: 0,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.fromLTRB(16, 18, 6, 6),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -258,9 +258,29 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                       Stack(
                         children: [
-                          const CircleAvatar(
-                            backgroundColor: Color(0xffd9d9d9),
-                            radius: 42,
+                          Container(
+                            padding: const EdgeInsets.only(top: 40),
+                            width: 100,
+                            height: 100,
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                          ),
+                          Positioned(
+                            width: 90,
+                            height: 90,
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: const Color(0xffc8c8c8),
+                                      width: 0.7)),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                    'assets/images/characters/01.svg'),
+                              ),
+                            ),
                           ),
                           Positioned(
                             bottom: 0,
