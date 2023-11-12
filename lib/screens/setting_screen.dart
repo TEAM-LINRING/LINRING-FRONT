@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/delete_account.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
@@ -19,21 +20,37 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   static const storage = FlutterSecureStorage();
+  late List<SvgPicture> profileItem;
 
+  late List<String> profileImagePaths;
   _logout(BuildContext context) async {
     await storage.delete(key: 'user');
   }
 
-  final profileItem = [
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-    Image.asset('assets/images/avartar_1.png'),
-  ];
+  @override
+  void initState() {
+    super.initState();
+
+    profileImagePaths = [
+      'assets/images/characters/01.svg',
+      'assets/images/characters/02.svg',
+      'assets/images/characters/03.svg',
+      'assets/images/characters/04.svg',
+      'assets/images/characters/05.svg',
+      'assets/images/characters/06.svg',
+      'assets/images/characters/07.svg',
+      'assets/images/characters/08.svg',
+    ];
+
+    profileItem = List.generate(
+      profileImagePaths.length,
+      (index) => SvgPicture.asset(
+        profileImagePaths[index],
+        width: 100,
+        height: 100,
+      ),
+    );
+  }
 
   void _updateProfile(int index) async {
     String apiAddress = dotenv.get("API_ADDRESS");
@@ -118,10 +135,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                 width: 1,
                               ),
                               borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: profileItem[index].image,
-                              ),
                             ),
+                            child: profileItem[index],
                           ),
                         );
                       },
