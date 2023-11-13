@@ -36,7 +36,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
               child: Stack(
             alignment: Alignment.center,
             children: [
-              SvgPicture.asset('assets/images/characters/01.svg'),
+              SvgPicture.asset(
+                  'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
               const SizedBox(
                 height: 5,
               ),
@@ -54,11 +55,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SvgPicture.asset('assets/images/characters/01.svg'),
+                        SvgPicture.asset(
+                            'assets/images/characters/0${widget.searchUser[0].profile}.svg'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('0${widget.searchUser[0].nickname}')
+                        Text('${widget.searchUser[0].nickname}')
                       ],
                     ),
                   ),
@@ -78,11 +80,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SvgPicture.asset('assets/images/characters/01.svg'),
+                        SvgPicture.asset(
+                            'assets/images/characters/0${widget.searchUser[1].profile}.svg'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('1${widget.searchUser[1].nickname}')
+                        Text('${widget.searchUser[1].nickname}')
                       ],
                     ),
                   ),
@@ -102,11 +105,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SvgPicture.asset('assets/images/characters/01.svg'),
+                        SvgPicture.asset(
+                            'assets/images/characters/0${widget.searchUser[2].profile}.svg'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('2${widget.searchUser[2].nickname}')
+                        Text('${widget.searchUser[2].nickname}')
                       ],
                     ),
                   ),
@@ -126,11 +130,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SvgPicture.asset('assets/images/characters/01.svg'),
+                        SvgPicture.asset(
+                            'assets/images/characters/0${widget.searchUser[3].profile}.svg'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('3${widget.searchUser[3].nickname}')
+                        Text('${widget.searchUser[3].nickname}')
                       ],
                     ),
                   ),
