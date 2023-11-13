@@ -28,6 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
   List<Message> _messages = [];
+  String _enteredMessage = "";
   String ratingScore = "0";
 
   final _controller = TextEditingController();
@@ -97,9 +98,48 @@ class _ChatScreenState extends State<ChatScreen> {
     _loadMessages().then((value) => setState(() {}));
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     FocusScope.of(context).unfocus();
     // 서버에 채팅 메세지 전송 추가
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/chat/message/');
+    final token = widget.loginInfo.access;
+
+    String body = jsonEncode({
+      "message": _enteredMessage,
+      "is_read": false,
+      "type": 1,
+      "args": null,
+      "room": widget.room.id,
+      "sender": widget.loginInfo.user.id,
+      "receiver": opponentUser.id,
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+
+    setState(() {
+      // 로컬 리스트에 임시 저장
+      _messages.add(Message(
+        id: 0,
+        sender: widget.loginInfo.user,
+        receiver: opponentUser,
+        created: "",
+        modified: "",
+        message: _enteredMessage,
+        isRead: true,
+        type: 1,
+        args: null,
+        room: widget.room.id,
+      ));
+    });
+
     _controller.clear();
     _scrollController.animateTo(
       0,
@@ -635,7 +675,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        // _enteredMessage = value;
+                        _enteredMessage = value;
                       });
                     },
                   ),
@@ -643,8 +683,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 IconButton(
                   highlightColor: Colors.transparent, // 물결 효과 제거
                   splashColor: Colors.transparent, // 물결 효과 제거
-                  onPressed: () {},
-                  //_enteredMessage.trim().isEmpty ? null : _sendMessage,
+                  onPressed: () {
+                    _enteredMessage.trim().isEmpty ? null : _sendMessage();
+                  },
                   icon: Image.asset(
                     "assets/icons/send_button.png",
                     width: 20,
