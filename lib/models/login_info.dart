@@ -3,7 +3,7 @@ import 'package:linring_front_flutter/models/user_model.dart';
 class LoginInfo {
   final String access;
   final String refresh;
-  final User user;
+  User user;
 
   LoginInfo({
     required this.access,
