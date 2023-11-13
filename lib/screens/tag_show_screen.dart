@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:linring_front_flutter/screens/matching_loading_screen.dart';
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
@@ -384,10 +385,22 @@ class _TagCardState extends State<TagCard> {
                       ),
                     ],
                   ),
-                  const Icon(
-                    Icons.search_rounded,
-                    color: Color(0xfffec2b5),
-                    size: 37,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MatchingLoadingScreen(
+                                  loginInfo: widget.loginInfo,
+                                  myTagSet: widget.tag,
+                                )),
+                      );
+                    },
+                    child: const Icon(
+                      Icons.search_rounded,
+                      color: Color(0xfffec2b5),
+                      size: 37,
+                    ),
                   ),
                 ],
               )

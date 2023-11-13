@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:flutter_svg/svg.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 import 'package:flutter/material.dart';
 
 class MatchingMainScreen extends StatefulWidget {
-  const MatchingMainScreen({super.key});
+  final LoginInfo loginInfo;
+  const MatchingMainScreen({super.key, required this.loginInfo});
 
   @override
   State<MatchingMainScreen> createState() => _MatchingMainScreenState();
