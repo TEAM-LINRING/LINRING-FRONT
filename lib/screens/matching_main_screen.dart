@@ -70,6 +70,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                 child: GestureDetector(
                   onTap: () {
                     debugPrint('1번 온탭 !!!');
+                    _showSearchDetailModal(
+                        widget.searchUser[1], widget.searchTagset[1]);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(130.0),
@@ -92,6 +94,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                 child: GestureDetector(
                   onTap: () {
                     debugPrint('2번 온탭 !!!');
+                    _showSearchDetailModal(
+                        widget.searchUser[2], widget.searchTagset[2]);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(180.0),
@@ -114,6 +118,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                 child: GestureDetector(
                   onTap: () {
                     debugPrint('3번 온탭 !!!');
+                    _showSearchDetailModal(
+                        widget.searchUser[3], widget.searchTagset[3]);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(100.0),
