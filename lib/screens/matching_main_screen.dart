@@ -1,24 +1,26 @@
 import 'dart:math';
 import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/tagset_model.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 import 'package:flutter/material.dart';
 
 class MatchingMainScreen extends StatefulWidget {
+  final List<Tagset> searchTagset;
   final LoginInfo loginInfo;
-  const MatchingMainScreen({super.key, required this.loginInfo});
+  final List<User> searchUser;
+  const MatchingMainScreen(
+      {super.key,
+      required this.loginInfo,
+      required this.searchTagset,
+      required this.searchUser});
 
   @override
   State<MatchingMainScreen> createState() => _MatchingMainScreenState();
 }
 
 class _MatchingMainScreenState extends State<MatchingMainScreen> {
-  final Random random = Random();
-
-  int getRandomInt(int max) {
-    return random.nextInt(max);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset('assets/images/characters/01.svg'),
-                getRandomWidget(3),
+                getFixedWidget([0, 1, 2, 3]),
               ],
             ),
           ),
@@ -44,40 +46,13 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
     );
   }
 
-  Widget getRandomWidget(int count) {
-    int max = 4;
-
-    if (count == 0) {
-      // Condition 0: Do not show anything
-      return Container();
-    } else if (count == 4) {
-      // Condition 4: Show images in all positions
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(max, (index) {
-          return getImageWidget(index);
-        }),
-      );
-    } else {
-      // Conditions 1, 2, 3: Show images in random positions
-      List<int> selectedPositions = [];
-
-      while (selectedPositions.length < count) {
-        int position = getRandomInt(max);
-
-        // Ensure the position is not selected before
-        if (!selectedPositions.contains(position)) {
-          selectedPositions.add(position);
-        }
-      }
-
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(count, (index) {
-          return getImageWidget(selectedPositions[index]);
-        }),
-      );
-    }
+  Widget getFixedWidget(List<int> positions) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: positions.map((position) {
+        return getImageWidget(position);
+      }).toList(),
+    );
   }
 
   Widget getImageWidget(int position) {
@@ -94,9 +69,14 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
       200 * sin(radians(270)),
       200 * sin(radians(0)),
     ];
+
+    // positions 리스트에 있는 각 인덱스에 해당하는 위치 정보 가져오기
+    double translation = translations[position];
+    double verticalTranslation = verticalTranslations[position];
+    // 해당 position에 대응하는 Tagset을 가져오기
     return Transform(
       transform: Matrix4.identity()
-        ..translate(translations[position], verticalTranslations[position]),
+        ..translate(translation, verticalTranslation),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -104,7 +84,7 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
           const SizedBox(
             height: 10,
           ),
-          const Text('닉네임')
+          Text('${widget.searchUser[position].nickname}'),
         ],
       ),
     );
