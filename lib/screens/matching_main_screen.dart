@@ -216,12 +216,10 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                                   border: Border.all(
                                       color: const Color(0xffc8c8c8),
                                       width: 0.7)),
-                              child: const Center(
-                                  child: Image(
-                                image:
-                                    AssetImage('assets/images/avartar_1.png'),
-                                width: 100,
-                              )),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                    'assets/images/characters/0${matchingUser.profile}.svg'),
+                              ),
                             ),
                           ),
                           Column(
