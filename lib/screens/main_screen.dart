@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
+import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -33,12 +37,25 @@ class _MainScreenState extends State<MainScreen> {
 
     final fcmToken = await messaging.getToken();
 
-    // const response = await apiCall.fetchAuthApi(`/api/fcm/devices/`, 'POST', JSON.stringify({
-    //         registration_id: token,
-    //         active: true,
-    //         type: 'web'
-    //       }))
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/fcm/devices/');
+    final token = widget.loginInfo.access;
+    final body = jsonEncode({
+      "registration_id": token,
+      "active": true,
+      "type": "android",
+    });
 
+    final result = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+
+    print(result.body);
     print(fcmToken);
     messaging.onTokenRefresh.listen((fcmToken) {}).onError((err) {});
   }
