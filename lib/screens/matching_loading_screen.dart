@@ -53,6 +53,7 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
                   loginInfo: widget.loginInfo,
                   searchTagset: searchTagsets,
                   searchUser: searchUsers,
+                  myTagset: widget.myTagSet,
                 )),
       );
     }

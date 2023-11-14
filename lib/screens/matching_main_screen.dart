@@ -1,27 +1,96 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter_svg/svg.dart';
+import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/chat_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MatchingMainScreen extends StatefulWidget {
   final List<Tagset> searchTagset;
   final LoginInfo loginInfo;
   final List<User> searchUser;
-  const MatchingMainScreen(
-      {super.key,
-      required this.loginInfo,
-      required this.searchTagset,
-      required this.searchUser});
+  final Tagset myTagset;
+  const MatchingMainScreen({
+    super.key,
+    required this.loginInfo,
+    required this.searchTagset,
+    required this.searchUser,
+    required this.myTagset,
+  });
 
   @override
   State<MatchingMainScreen> createState() => _MatchingMainScreenState();
 }
 
 class _MatchingMainScreenState extends State<MatchingMainScreen> {
+  Future<ChatRoom> _readChatRoom(int matchingRoomId) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/chat/room/$matchingRoomId');
+    final token = widget.loginInfo.access;
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      debugPrint((response.statusCode).toString());
+      Map<String, dynamic> createRoomData =
+          json.decode(utf8.decode(response.bodyBytes));
+      ChatRoom readChatRoom = ChatRoom.fromJson(createRoomData);
+      return readChatRoom;
+    } else {
+      throw Exception('Failed to load chat room');
+    }
+  }
+
+  void _createChatRoom(Tagset matchingTagset) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/chat/room/');
+    final token = widget.loginInfo.access;
+
+    String body = jsonEncode({
+      "relation": widget.loginInfo.user.id,
+      "relation2": matchingTagset.owner,
+      "tagset": widget.myTagset.id,
+      "tagset2": matchingTagset.id
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    if (response.statusCode == 201) {
+      debugPrint((response.body).toString());
+
+      Map<String, dynamic> createRoomData =
+          json.decode(utf8.decode(response.bodyBytes));
+      int matchingRoomId = createRoomData["id"];
+      ChatRoom readRoom = await _readChatRoom(matchingRoomId);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChatScreen(
+                  loginInfo: widget.loginInfo,
+                  room: readRoom,
+                )),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -281,7 +350,16 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                         label: '이 친구와 채팅하기',
                         backgroundColor: const Color(0xFFFEC2B5),
                         onPressed: () {
+                          _createChatRoom(matchingTagset);
                           Navigator.pop(context);
+                          // Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                                 builder: (context) => ChatScreen(
+//                                       loginInfo: widget.loginInfo,
+//                                       r
+//                                     )),
+//                           );
                         },
                       ),
                     )
