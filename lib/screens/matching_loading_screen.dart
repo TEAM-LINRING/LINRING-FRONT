@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/matching_main_screen.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 
 class MatchingLoadingScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -92,6 +93,8 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const CustomAppBar(title: ''),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
