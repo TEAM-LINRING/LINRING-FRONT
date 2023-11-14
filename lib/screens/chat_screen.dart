@@ -171,6 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(
+        loginInfo: widget.loginInfo,
         title: opponentUser.nickname ?? "LINRING",
         suffix: PopupMenuButton<int>(
           onSelected: (int result) {

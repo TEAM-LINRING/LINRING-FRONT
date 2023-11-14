@@ -6,6 +6,7 @@ import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/chat_screen.dart';
+import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 import 'package:flutter/material.dart';
@@ -94,6 +95,10 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: const CustomAppBar(
+        title: '',
+      ),
       body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(

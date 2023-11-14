@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MainScreen(loginInfo),
+            builder: (context) => MainScreen(loginInfo, 0),
           ),
         );
       }
@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainScreen(loginInfo),
+                          builder: (context) => MainScreen(loginInfo, 0),
                         ),
                       );
                     }
