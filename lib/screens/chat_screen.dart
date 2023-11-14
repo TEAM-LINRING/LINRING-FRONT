@@ -142,7 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _controller.clear();
     _scrollController.animateTo(
-      0,
+      _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
@@ -300,25 +300,27 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  reverse: true,
-                  controller: _scrollController,
-                  itemCount: _messages.length,
-                  itemBuilder: (context, int index) {
-                    final message = _messages[index];
-                    bool isMine = message.sender.id == widget.loginInfo.user.id;
-                    return Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        mainAxisAlignment: isMine
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [_chatBubble(message, isMine)],
-                      ),
-                    );
-                  },
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    itemCount: _messages.length,
+                    itemBuilder: (context, int index) {
+                      final message = _messages[index];
+                      bool isMine =
+                          message.sender.id == widget.loginInfo.user.id;
+                      return Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          mainAxisAlignment: isMine
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [_chatBubble(message, isMine)],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
