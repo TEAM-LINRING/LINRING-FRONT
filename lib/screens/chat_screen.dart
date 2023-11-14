@@ -51,9 +51,27 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
+      // 기존 채팅 불러오기
       _messages = (body['results'] as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
+
+      // 입장 알림 메세지 리스트 맨 앞에 추가
+      _messages.insert(
+          0,
+          Message(
+            id: 0,
+            sender: widget.loginInfo.user,
+            receiver: opponentUser,
+            created: "",
+            modified: "",
+            message:
+                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+            isRead: true,
+            type: 0,
+            args: null,
+            room: widget.room.id,
+          ));
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -205,6 +223,36 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // chat type 0
+  Widget _chatEntry(Message message) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xffc8aaaa)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            const TextSpan(
+              text: '알림',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: message.message,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // chat type 1
   Widget _chatBubble(Message message, bool isMine) {
     return Container(
       decoration: BoxDecoration(
@@ -274,32 +322,6 @@ class _ChatScreenState extends State<ChatScreen> {
             alignment: Alignment.topCenter,
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20.0),
-                  margin: const EdgeInsets.symmetric(vertical: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: const Color(0xffc8aaaa)),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      children: <TextSpan>[
-                        const TextSpan(
-                          text: '알림',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextSpan(
-                          text:
-                              ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -309,6 +331,17 @@ class _ChatScreenState extends State<ChatScreen> {
                       final message = _messages[index];
                       bool isMine =
                           message.sender.id == widget.loginInfo.user.id;
+
+                      Widget chatWidget;
+
+                      if (message.type == 0) {
+                        chatWidget = Expanded(child: _chatEntry(message));
+                      } else if (message.type == 1) {
+                        chatWidget = _chatBubble(message, isMine);
+                      } else {
+                        chatWidget = Container();
+                      }
+
                       return Container(
                         margin: const EdgeInsets.only(top: 8),
                         child: Row(
@@ -316,7 +349,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               ? MainAxisAlignment.end
                               : MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [_chatBubble(message, isMine)],
+                          children: [chatWidget],
                         ),
                       );
                     },
