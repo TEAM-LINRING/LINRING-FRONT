@@ -9,7 +9,7 @@
     </queries>
 
     <application
-        android:label="linring_front_flutter"
+        android:label="링링"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
