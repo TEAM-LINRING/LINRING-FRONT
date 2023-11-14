@@ -88,155 +88,153 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFFFFF6F4),
       body: Container(
-        //background blur img
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage('assets/images/blur2.png'),
-          fit: BoxFit.cover,
-        )),
-        child: Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 120),
-              Text(
-                'LINRING',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.75),
-                  fontSize: 55,
-                  fontWeight: FontWeight.w900,
-                  height: 0,
-                  letterSpacing: 1.80,
+
+          //background blur img
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage('assets/images/blur2.png'),
+            fit: BoxFit.cover,
+          )),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const SizedBox(height: 250), // LINRING text
+
+            Text(
+              'LINRING',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.75),
+                fontSize: 55,
+                fontWeight: FontWeight.w900,
+                height: 0,
+                letterSpacing: 1.80,
+              ),
+            ),
+
+            //너와 나를 잇는 울림 text
+            const Text(
+              '너와 나를 잇는 울림',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                height: 0,
+              ),
+            ),
+
+            const SizedBox(height: 70),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              child: TextField(
+                controller: loginIDController,
+                obscureText: false,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  suffixIcon: const Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      widthFactor: 1.0,
+                      heightFactor: 1.0,
+                      child: Text('@kookmin.ac.kr'),
+                    ),
+                  ),
                 ),
               ),
-
-              //너와 나를 잇는 울림 text
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              child: TextField(
+                controller: loginPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  hintText: '비밀번호',
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            if (_showError == false)
               const Text(
-                '너와 나를 잇는 울림',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
+                '',
+                style: TextStyle(fontSize: 15),
               ),
-              const SizedBox(height: 70),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                child: TextField(
-                  controller: loginIDController,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                    suffixIcon: const Padding(
-                      padding: EdgeInsets.only(right: 20.0),
-                      child: Align(
-                        alignment: Alignment.center,
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
-                        child: Text('@kookmin.ac.kr'),
-                      ),
-                    ),
+            if (_showError)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 38),
+                  child: Text(
+                    '비밀번호가 일치하지 않습니다.',
+                    style: TextStyle(color: Colors.red, fontSize: 15),
                   ),
+                  //'입력된 아이디가 존재하지 않습니다.'
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                child: TextField(
-                  controller: loginPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.fromLTRB(20, 40, 0, 0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: '비밀번호',
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              if (_showError == false)
-                const Text(
-                  '',
-                  style: TextStyle(fontSize: 15),
-                ),
-              if (_showError)
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 38),
-                    child: Text(
-                      '비밀번호가 일치하지 않습니다.',
-                      style: TextStyle(color: Colors.red, fontSize: 15),
-                    ),
-                    //'입력된 아이디가 존재하지 않습니다.'
-                  ),
-                ),
 
-              const SizedBox(
-                height: 30,
-              ),
-              //로그인 버튼
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: CustomOutlinedButton(
-                  label: '로그인',
-                  onPressed: () async {
-                    bool loginSuccessful = await _loginAPI(context);
+            const SizedBox(
+              height: 30,
+            ),
+            //로그인 버튼
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: CustomOutlinedButton(
+                label: '로그인',
+                onPressed: () async {
+                  bool loginSuccessful = await _loginAPI(context);
 
-                    if (loginSuccessful) {
-                      String? res = await storage.read(key: 'user');
+                  if (loginSuccessful) {
+                    String? res = await storage.read(key: 'user');
 
-                      if (res != null) {
-                        final String decodedString = utf8.decode(res.codeUnits);
-                        final Map parsed = json.decode(decodedString);
-                        final loginInfo = LoginInfo.fromJson(parsed);
+                    if (res != null) {
+                      final String decodedString = utf8.decode(res.codeUnits);
+                      final Map parsed = json.decode(decodedString);
+                      final loginInfo = LoginInfo.fromJson(parsed);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainScreen(loginInfo),
-                          ),
-                        );
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(loginInfo),
+                        ),
+                      );
                     }
-                  },
-                  backgroundColor: const Color(0xFFFEC2B5),
-                  isActive: true,
-                ),
+                  }
+                },
+                backgroundColor: const Color(0xFFFEC2B5),
+                isActive: true,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   const Spacer(flex: 2),
@@ -264,12 +262,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       )),
                   const Spacer(flex: 2)
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+                ]),
+            const SizedBox(
+              height: 100,
+            )
+          ])),
     );
   }
 }
