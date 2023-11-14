@@ -133,7 +133,7 @@ class _ChatScreenState extends State<ChatScreen> {
       "receiver": opponentUser.id,
     });
 
-    final response = await http.post(
+    await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
