@@ -28,6 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
   List<Message> _messages = [];
+  String _enteredMessage = "";
   String ratingScore = "0";
 
   final _controller = TextEditingController();
@@ -50,9 +51,27 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
+      // 기존 채팅 불러오기
       _messages = (body['results'] as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
+
+      // 입장 알림 메세지 리스트 맨 앞에 추가
+      _messages.insert(
+          0,
+          Message(
+            id: 0,
+            sender: widget.loginInfo.user,
+            receiver: opponentUser,
+            created: "",
+            modified: "",
+            message:
+                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+            isRead: true,
+            type: 0,
+            args: null,
+            room: widget.room.id,
+          ));
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -97,12 +116,51 @@ class _ChatScreenState extends State<ChatScreen> {
     _loadMessages().then((value) => setState(() {}));
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     FocusScope.of(context).unfocus();
     // 서버에 채팅 메세지 전송 추가
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/chat/message/');
+    final token = widget.loginInfo.access;
+
+    String body = jsonEncode({
+      "message": _enteredMessage,
+      "is_read": false,
+      "type": 1,
+      "args": null,
+      "room": widget.room.id,
+      "sender": widget.loginInfo.user.id,
+      "receiver": opponentUser.id,
+    });
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+
+    setState(() {
+      // 로컬 리스트에 임시 저장
+      _messages.add(Message(
+        id: 0,
+        sender: widget.loginInfo.user,
+        receiver: opponentUser,
+        created: "",
+        modified: "",
+        message: _enteredMessage,
+        isRead: true,
+        type: 1,
+        args: null,
+        room: widget.room.id,
+      ));
+    });
+
     _controller.clear();
     _scrollController.animateTo(
-      0,
+      _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
@@ -165,6 +223,36 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // chat type 0
+  Widget _chatEntry(Message message) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
+      margin: const EdgeInsets.symmetric(vertical: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xffc8aaaa)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Text.rich(
+        TextSpan(
+          children: <TextSpan>[
+            const TextSpan(
+              text: '알림',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            TextSpan(
+              text: message.message,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // chat type 1
   Widget _chatBubble(Message message, bool isMine) {
     return Container(
       decoration: BoxDecoration(
@@ -234,51 +322,38 @@ class _ChatScreenState extends State<ChatScreen> {
             alignment: Alignment.topCenter,
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20.0),
-                  margin: const EdgeInsets.symmetric(vertical: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: const Color(0xffc8aaaa)),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      children: <TextSpan>[
-                        const TextSpan(
-                          text: '알림',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    itemCount: _messages.length,
+                    itemBuilder: (context, int index) {
+                      final message = _messages[index];
+                      bool isMine =
+                          message.sender.id == widget.loginInfo.user.id;
+
+                      Widget chatWidget;
+
+                      if (message.type == 0) {
+                        chatWidget = Expanded(child: _chatEntry(message));
+                      } else if (message.type == 1) {
+                        chatWidget = _chatBubble(message, isMine);
+                      } else {
+                        chatWidget = Container();
+                      }
+
+                      return Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          mainAxisAlignment: isMine
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [chatWidget],
                         ),
-                        TextSpan(
-                          text:
-                              ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}하기를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}하기를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  reverse: true,
-                  controller: _scrollController,
-                  itemCount: _messages.length,
-                  itemBuilder: (context, int index) {
-                    final message = _messages[index];
-                    bool isMine = message.sender.id == widget.loginInfo.user.id;
-                    return Container(
-                      margin: const EdgeInsets.only(top: 8),
-                      child: Row(
-                        mainAxisAlignment: isMine
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [_chatBubble(message, isMine)],
-                      ),
-                    );
-                  },
                 ),
               ],
             ),
@@ -635,7 +710,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     onChanged: (value) {
                       setState(() {
-                        // _enteredMessage = value;
+                        _enteredMessage = value;
                       });
                     },
                   ),
@@ -643,8 +718,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 IconButton(
                   highlightColor: Colors.transparent, // 물결 효과 제거
                   splashColor: Colors.transparent, // 물결 효과 제거
-                  onPressed: () {},
-                  //_enteredMessage.trim().isEmpty ? null : _sendMessage,
+                  onPressed: () {
+                    _enteredMessage.trim().isEmpty ? null : _sendMessage();
+                  },
                   icon: Image.asset(
                     "assets/icons/send_button.png",
                     width: 20,
