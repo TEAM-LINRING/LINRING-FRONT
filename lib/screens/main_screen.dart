@@ -7,8 +7,9 @@ import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart'
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
+  final int? fixedIndex;
 
-  const MainScreen(this.loginInfo, {super.key});
+  const MainScreen(this.loginInfo, this.fixedIndex, {super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -19,6 +20,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    _selectedIndex = widget.fixedIndex ?? 0;
     super.initState();
   }
 
