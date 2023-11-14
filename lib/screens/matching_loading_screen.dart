@@ -47,7 +47,7 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
         User? user = await _GetUser(tagset.owner);
         searchUsers.add(user!);
       }
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) => MatchingMainScreen(
