@@ -21,6 +21,7 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   static const storage = FlutterSecureStorage();
   late List<SvgPicture> profileItem;
+  late int? selectedIndex = widget.loginInfo.user.profile;
 
   late List<String> profileImagePaths;
   _logout(BuildContext context) async {
@@ -53,19 +54,24 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  void _updateProfile(int index) async {
+  void _updateProfile() async {
+    print(selectedIndex);
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
-    final body = jsonEncode({"profile": index});
-    await http.patch(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: body,
-    );
+    final body = jsonEncode({"profile": selectedIndex});
+    await http
+        .patch(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: body,
+        )
+        .then((value) => setState(
+              () {},
+            ));
   }
 
   void _updateUserInfo() async {
@@ -76,8 +82,6 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future _displayProfileSheet(BuildContext context) {
-    int? selectedIndex = widget.loginInfo.user.profile;
-
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -121,7 +125,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           onTap: () {
                             setState(
                               () {
-                                selectedIndex = index;
+                                selectedIndex = index + 1;
                               },
                             );
                           },
@@ -130,7 +134,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             height: 100,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: selectedIndex == index
+                                color: selectedIndex == index + 1
                                     ? const Color(0xffc8aaaa)
                                     : Colors.transparent,
                                 width: 1,
@@ -150,8 +154,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     label: '저장하기',
                     onPressed: () {
                       Navigator.pop(context);
-                      _updateProfile(selectedIndex! + 1);
-                      _updateUserInfo();
+                      setState(
+                        () {
+                          _updateProfile();
+                        },
+                      );
                     },
                     backgroundColor: const Color(0xfffec2b5),
                     isActive: true,
