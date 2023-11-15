@@ -12,8 +12,9 @@ import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
+  final int? fixedIndex;
 
-  const MainScreen(this.loginInfo, {super.key});
+  const MainScreen(this.loginInfo, this.fixedIndex, {super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -62,6 +63,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
+    _selectedIndex = widget.fixedIndex ?? 0;
     super.initState();
     _initFCM();
   }

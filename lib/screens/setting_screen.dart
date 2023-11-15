@@ -21,6 +21,7 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   static const storage = FlutterSecureStorage();
   late List<SvgPicture> profileItem;
+  late int? selectedIndex = widget.loginInfo.user.profile;
 
   late List<String> profileImagePaths;
   _logout(BuildContext context) async {
@@ -53,11 +54,12 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
-  void _updateProfile(int index) async {
+  void _updateProfile() async {
+    print(selectedIndex);
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
-    final body = jsonEncode({"profile": index});
+    final body = jsonEncode({"profile": selectedIndex});
     await http.patch(
       url,
       headers: {
@@ -76,8 +78,6 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future _displayProfileSheet(BuildContext context) {
-    int selectedIndex = 0;
-
     return showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -121,7 +121,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           onTap: () {
                             setState(
                               () {
-                                selectedIndex = index;
+                                selectedIndex = index + 1;
                               },
                             );
                           },
@@ -130,7 +130,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             height: 100,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: selectedIndex == index
+                                color: selectedIndex == index + 1
                                     ? const Color(0xffc8aaaa)
                                     : Colors.transparent,
                                 width: 1,
@@ -150,8 +150,11 @@ class _SettingScreenState extends State<SettingScreen> {
                     label: '저장하기',
                     onPressed: () {
                       Navigator.pop(context);
-                      _updateProfile(selectedIndex + 1);
-                      _updateUserInfo();
+                      setState(
+                        () {
+                          _updateProfile();
+                        },
+                      );
                     },
                     backgroundColor: const Color(0xfffec2b5),
                     isActive: true,
@@ -165,6 +168,54 @@ class _SettingScreenState extends State<SettingScreen> {
           );
         },
       ),
+    );
+  }
+
+  Future _displayPreparingService(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      barrierColor: Colors.black87.withOpacity(0.7),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: 200,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 48,
+                    height: 20,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.close_rounded,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              const Text(
+                "서비스 준비중입니다.",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -214,12 +265,12 @@ class _SettingScreenState extends State<SettingScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               child: Card(
                 shape: RoundedRectangleBorder(
                   side: const BorderSide(
@@ -278,7 +329,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       width: 0.7)),
                               child: Center(
                                 child: SvgPicture.asset(
-                                    'assets/images/characters/01.svg'),
+                                    'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
                               ),
                             ),
                           ),
@@ -315,7 +366,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            _settingItems("공지사항 및 이벤트", false, () {}),
+            _settingItems("공지사항 및 이벤트", false, () {
+              _displayPreparingService(context);
+            }),
             _settingItems(
               "프로필 관리",
               false,
@@ -332,7 +385,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 });
               },
             ),
-            _settingItems("친구 초대", false, () {}),
+            _settingItems("친구 초대", false, () {
+              _displayPreparingService(context);
+            }),
             _settingItems("비밀번호 변경", false, () {
               Navigator.pushNamed(context, '/forgotPassword');
             }),

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/chat_room_screen.dart';
+import 'package:linring_front_flutter/screens/main_screen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? suffix;
+  final LoginInfo? loginInfo;
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.suffix,
-  }) : super(key: key);
+    this.loginInfo,
+  });
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -22,8 +27,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       leading: IconButton(
           onPressed: () => {
-                if (Navigator.of(context).canPop())
-                  {Navigator.of(context).pop()} //뒤로가기
+                if (loginInfo != null)
+                  {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainScreen(loginInfo!, 1),
+                      ),
+                    ),
+                  }
+                else if (Navigator.of(context).canPop())
+                  {print('pop!'), Navigator.of(context).pop()} //뒤로가기
               },
           color: const Color.fromARGB(255, 0, 0, 0),
           icon: const Icon(Icons.arrow_back)),
