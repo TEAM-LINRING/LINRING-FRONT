@@ -76,13 +76,34 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             return const Text("데이터 없음.");
           } else {
             List<ChatRoom>? rooms = snapshot.data;
-            return ListView.builder(
-              itemCount: rooms?.length,
-              itemBuilder: (context, int index) {
-                ChatRoom room = rooms![index];
-                return _chatRoom(room, context);
-              },
-            );
+            print(rooms?.length);
+            if (rooms!.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/characters/char_404.svg',
+                      width: 130,
+                    ),
+                    const SizedBox(height: 20), // 이미지와 텍스트 간격 조절
+                    const Text(
+                      '아직 채팅방이 없어요. \n 친구를 검색해서 말을 걸어 볼까요?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: rooms.length,
+                itemBuilder: (context, int index) {
+                  ChatRoom room = rooms[index];
+                  return _chatRoom(room, context);
+                },
+              );
+            }
           }
         },
       ),
