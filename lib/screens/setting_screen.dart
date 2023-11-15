@@ -76,7 +76,7 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future _displayProfileSheet(BuildContext context) {
-    int selectedIndex = 0;
+    int? selectedIndex = widget.loginInfo.user.profile;
 
     return showModalBottomSheet(
       context: context,
@@ -150,7 +150,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     label: '저장하기',
                     onPressed: () {
                       Navigator.pop(context);
-                      _updateProfile(selectedIndex + 1);
+                      _updateProfile(selectedIndex! + 1);
                       _updateUserInfo();
                     },
                     backgroundColor: const Color(0xfffec2b5),
@@ -278,7 +278,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       width: 0.7)),
                               child: Center(
                                 child: SvgPicture.asset(
-                                    'assets/images/characters/01.svg'),
+                                    'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
                               ),
                             ),
                           ),
