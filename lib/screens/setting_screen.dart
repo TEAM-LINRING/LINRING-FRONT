@@ -60,18 +60,14 @@ class _SettingScreenState extends State<SettingScreen> {
     final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
     final body = jsonEncode({"profile": selectedIndex});
-    await http
-        .patch(
-          url,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-          body: body,
-        )
-        .then((value) => setState(
-              () {},
-            ));
+    await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
   }
 
   void _updateUserInfo() async {
@@ -221,12 +217,12 @@ class _SettingScreenState extends State<SettingScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               child: Card(
                 shape: RoundedRectangleBorder(
                   side: const BorderSide(
