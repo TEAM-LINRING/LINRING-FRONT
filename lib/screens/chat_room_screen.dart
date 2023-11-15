@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
@@ -11,7 +12,7 @@ import 'package:linring_front_flutter/screens/chat_screen.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final LoginInfo loginInfo;
-  const ChatRoomScreen({required this.loginInfo, Key? key}) : super(key: key);
+  const ChatRoomScreen({required this.loginInfo, super.key});
 
   @override
   State createState() => _ChatRoomScreenState();
@@ -57,7 +58,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: const Text(
-          "대화 목록",
+          "채팅 목록",
           style: TextStyle(
             color: Colors.black,
             fontSize: 26,
@@ -127,11 +128,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   borderRadius: BorderRadius.circular(8),
                   border:
                       Border.all(color: const Color(0xffc8c8c8), width: 0.7)),
-              child: const Center(
-                  child: Image(
-                image: AssetImage('assets/images/avartar_1.png'),
-                width: 49,
-              )),
+              child: Center(
+                child: SvgPicture.asset(
+                    'assets/images/characters/0${opponentUser.profile}.svg',
+                    width: 49),
+              ),
             ),
             const SizedBox(
               width: 14,
