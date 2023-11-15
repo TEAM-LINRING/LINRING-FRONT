@@ -171,6 +171,54 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  Future _displayPreparingService(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      barrierColor: Colors.black87.withOpacity(0.7),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      builder: (context) {
+        return SizedBox(
+          height: 200,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(
+                    width: 48,
+                    height: 20,
+                  ),
+                  IconButton(
+                    icon: const Icon(
+                      Icons.close_rounded,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              const Text(
+                "서비스 준비중입니다.",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 40,
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _settingItems(String title, bool isLast, Function onTapAction) {
     return InkWell(
       onTap: () {
@@ -318,7 +366,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            _settingItems("공지사항 및 이벤트", false, () {}),
+            _settingItems("공지사항 및 이벤트", false, () {
+              _displayPreparingService(context);
+            }),
             _settingItems(
               "프로필 관리",
               false,
@@ -335,7 +385,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 });
               },
             ),
-            _settingItems("친구 초대", false, () {}),
+            _settingItems("친구 초대", false, () {
+              _displayPreparingService(context);
+            }),
             _settingItems("비밀번호 변경", false, () {
               Navigator.pushNamed(context, '/forgotPassword');
             }),
