@@ -31,8 +31,8 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> _messages = [];
   String _enteredMessage = "";
   String ratingScore = "0";
-  DateTime promiseDate = DateTime.now();
-  // late DateTime twoHoursLater;
+  DateTime? promiseDate;
+  late DateTime twoHoursLater;
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -108,17 +108,14 @@ class _ChatScreenState extends State<ChatScreen> {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}/');
     final token = widget.loginInfo.access;
-    print(promiseDate);
-    String isoFormattedString = formatISOTime(promiseDate);
-    print(DateTime.parse(isoFormattedString));
+    String isoFormattedString = formatISOTime(promiseDate!);
     final body = jsonEncode({
       "tagset": widget.room.tag.id,
       "tagset2": widget.room.tag2.id,
       "reservation_time": isoFormattedString,
     });
-    print(body);
-    // twoHoursLater = promiseDate.add(const Duration(hours: 2));
-    // afterMeeting = (DateTime.now()).isAfter(twoHoursLater);
+    twoHoursLater = promiseDate!.add(const Duration(hours: 2));
+    afterMeeting = (DateTime.now()).isAfter(twoHoursLater);
     await http.patch(
       url,
       headers: {
@@ -127,6 +124,10 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       body: body,
     );
+    widget.room.reservationTime = promiseDate;
+
+    print(promiseDate);
+    print(widget.room.reservationTime);
   }
 
   String formatISOTime(DateTime date) {
@@ -150,9 +151,13 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2,
           };
+    promiseDate = widget.room.reservationTime;
+    print(widget.room.reservationTime);
     if (widget.room.reservationTime != null) {
       afterPromise = true;
     }
+    print('initState');
+    print(widget.room.reservationTime);
     _loadMessages().then((value) => setState(() {}));
   }
 
@@ -717,7 +722,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       } else {
                         final selectedDate = await showOmniDateTimePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: widget.room.reservationTime,
                           firstDate: DateTime.now(),
                           lastDate: DateTime.now().add(
                             const Duration(days: 365),
@@ -735,13 +740,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         afterPromise = true;
                         updateMatchInfo();
                         _patchReservationTime();
+                        print('1번 프린트');
+                        print('patch 호출 후 print');
+                        print(widget.room.reservationTime);
                       }
                     },
                     child: Text(
                       afterMeeting
                           ? "매너평가하기"
                           : afterPromise
-                              ? "${promiseDate.year}-${promiseDate.month}-${promiseDate.day}\n${promiseDate.hour} : ${promiseDate.minute}"
+                              ? "${promiseDate!.year}-${promiseDate!.month}-${promiseDate!.day}\n${promiseDate!.hour} : ${promiseDate!.minute}"
                               : "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 13),

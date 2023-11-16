@@ -8,7 +8,7 @@ class ChatRoom {
   final Tagset tag;
   final Tagset tag2;
   final int? notice;
-  final DateTime? reservationTime;
+  DateTime? reservationTime;
   final DateTime created;
   final DateTime modified;
 
