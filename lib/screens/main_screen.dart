@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -55,6 +56,14 @@ class _MainScreenState extends State<MainScreen> {
       },
       body: body,
     );
+
+    void _initDynamicLinks() async {
+      FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData) {
+        final Uri deepLink = PendingDynamicLinkData.link;
+
+        print(deepLink);
+      });
+    }
 
     print(result.body);
     print(fcmToken);
