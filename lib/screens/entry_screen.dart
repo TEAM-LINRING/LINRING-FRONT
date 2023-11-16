@@ -15,7 +15,7 @@ class EntryScreen extends StatelessWidget {
           decoration: const BoxDecoration(
               image: DecorationImage(
             image: AssetImage('assets/images/blur1.png'),
-            fit: BoxFit.cover,
+            fit: BoxFit.none,
           )),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -39,10 +39,10 @@ class EntryScreen extends StatelessWidget {
 
               //너와 나를 잇는 울림 text
               const Text(
-                '너와 나를 잇는 울림',
+                '너와 나를 잇는 울림, 링링',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 26,
                   fontWeight: FontWeight.w400,
                   height: 0,
                 ),

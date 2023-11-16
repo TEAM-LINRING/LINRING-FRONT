@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
@@ -104,12 +105,10 @@ class _TagShowScreenState extends State<TagShowScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 18),
-                      child: Image(
-                        width: 45,
-                        image: AssetImage('assets/images/avartar_1.png'),
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                      child: SvgPicture.asset(
+                          'assets/images/characters/char_puring.svg'),
                     ),
                     Expanded(
                       child: Container(

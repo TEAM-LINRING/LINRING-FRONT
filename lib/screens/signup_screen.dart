@@ -285,7 +285,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           alignment: Alignment.center,
                           widthFactor: 1.0,
                           heightFactor: 1.0,
-                          child: Text('@kookmin.ac.kr'),
+                          child: Text(
+                            '@kookmin.ac.kr',
+                            style: TextStyle(fontSize: 17),
+                          ),
                         ),
                       ),
                       helperText: helperID ?? ' ',
@@ -841,7 +844,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const Text(
                 '전체 동의',
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 17),
               ),
             ],
           ),
@@ -888,7 +891,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               const Text(
                 '(필수) 허위사실 기재시 서비스 이용이 제한됨을 인지했어요.',
-                style: TextStyle(fontSize: 12),
+                style: TextStyle(fontSize: 13),
               ),
             ],
           ),
@@ -937,11 +940,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   text: TextSpan(children: [
                 const TextSpan(
                     text: '(필수) ',
-                    style: TextStyle(fontSize: 12, color: Colors.black)),
+                    style: TextStyle(fontSize: 13, color: Colors.black)),
                 TextSpan(
                     text: '이용약관',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: Colors.black,
                       decoration: TextDecoration.underline,
                     ),
@@ -952,11 +955,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }),
                 const TextSpan(
                     text: ' 및 ',
-                    style: TextStyle(fontSize: 12, color: Colors.black)),
+                    style: TextStyle(fontSize: 13, color: Colors.black)),
                 TextSpan(
                     text: '개인정보수집이용',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: Colors.black,
                       decoration: TextDecoration.underline,
                     ),
@@ -967,7 +970,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }),
                 const TextSpan(
                     text: '에 동의해요.',
-                    style: TextStyle(fontSize: 12, color: Colors.black)),
+                    style: TextStyle(fontSize: 13, color: Colors.black)),
               ]))
             ],
           ),
@@ -983,7 +986,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
               isActive: isSignUpButtonEnabled,
               backgroundColor: const Color(0xFFFEC2B5)),
-          const SizedBox(height: 40),
+          const SizedBox(height: 50),
         ]),
       ),
     );

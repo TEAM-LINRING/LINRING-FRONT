@@ -99,7 +99,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 23,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       height: 0,
                     ),
                   ),
@@ -112,11 +112,11 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "${opponentUser.nickname}님",
+                    "${opponentUser.nickname} 님",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       height: 0,
                     ),
                   ),
