@@ -7,9 +7,9 @@ class DynamicLinkService {
   static DynamicLinkService get instance => _singleton;
 
   // 새로운 다이나믹 링크 생성
-  void createDynamicLink() async {
+  void createDynamicLink(String path) async {
     final dynamicLinkParams = DynamicLinkParameters(
-      link: Uri.parse("https://linring.page.link/N2Q7"),
+      link: Uri.parse("https://linring.page.link/$path"),
       uriPrefix: "https://linring.page.link",
       androidParameters: const AndroidParameters(
           packageName: "com.example.linring_front_flutter"),

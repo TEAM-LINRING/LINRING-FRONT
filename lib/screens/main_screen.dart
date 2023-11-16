@@ -56,18 +56,23 @@ class _MainScreenState extends State<MainScreen> {
       },
       body: body,
     );
-
-    void _initDynamicLinks() async {
-      FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData) {
-        final Uri deepLink = PendingDynamicLinkData.link;
-
-        print(deepLink);
-      });
-    }
-
     print(result.body);
     print(fcmToken);
     messaging.onTokenRefresh.listen((fcmToken) {}).onError((err) {});
+  }
+
+  void _initDynamicLinks() async {
+    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData) {
+      final Uri deepLink = PendingDynamicLinkData.link;
+
+      if (deepLink.path == '/findpassword') {
+        Navigator.pushNamed(context, '/changePassword');
+      }
+
+      if (deepLink.path == '/successregister') {
+        Navigator.pushNamed(context, '/login');
+      }
+    });
   }
 
   @override
@@ -75,6 +80,7 @@ class _MainScreenState extends State<MainScreen> {
     _selectedIndex = widget.fixedIndex ?? 0;
     super.initState();
     _initFCM();
+    _initDynamicLinks();
   }
 
   @override
