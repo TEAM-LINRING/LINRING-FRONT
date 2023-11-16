@@ -22,6 +22,11 @@ class _SettingScreenState extends State<SettingScreen> {
   static const storage = FlutterSecureStorage();
   late List<SvgPicture> profileItem;
   late int? selectedIndex = widget.loginInfo.user.profile;
+  late int? currentIndex = widget.loginInfo.user.profile;
+  late String? nickname = widget.loginInfo.user.nickname;
+  late String? college = widget.loginInfo.user.college;
+  late String? department = widget.loginInfo.user.department;
+  late int? studentNumber = widget.loginInfo.user.studentNumber;
 
   late List<String> profileImagePaths;
   _logout(BuildContext context) async {
@@ -150,6 +155,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     label: '저장하기',
                     onPressed: () {
                       Navigator.pop(context);
+
                       setState(
                         () {
                           _updateProfile();
@@ -288,7 +294,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${widget.loginInfo.user.nickname} 님",
+                            "$nickname님",
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
@@ -298,13 +304,12 @@ class _SettingScreenState extends State<SettingScreen> {
                             height: 10,
                           ),
                           Text(
-                            "${widget.loginInfo.user.college}",
+                            "$college",
                           ),
                           const SizedBox(
                             height: 4,
                           ),
-                          Text(
-                              "${widget.loginInfo.user.department} ${widget.loginInfo.user.studentNumber}"),
+                          Text("$department $studentNumber"),
                         ],
                       ),
                       Stack(
@@ -329,7 +334,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       width: 0.7)),
                               child: Center(
                                 child: SvgPicture.asset(
-                                    'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
+                                    'assets/images/characters/0$currentIndex.svg'),
                               ),
                             ),
                           ),
@@ -338,7 +343,10 @@ class _SettingScreenState extends State<SettingScreen> {
                             right: 0,
                             child: InkWell(
                               onTap: () {
-                                _displayProfileSheet(context);
+                                _displayProfileSheet(context)
+                                    .then((value) => setState(() {
+                                          currentIndex = selectedIndex;
+                                        }));
                               },
                               child: Container(
                                 height: 24,
@@ -381,7 +389,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                 ).then((value) {
-                  setState(() {});
+                  setState(() {
+                    nickname = widget.loginInfo.user.nickname;
+                    college = widget.loginInfo.user.college;
+                    department = widget.loginInfo.user.department;
+                    studentNumber = widget.loginInfo.user.studentNumber;
+                  });
                 });
               },
             ),
