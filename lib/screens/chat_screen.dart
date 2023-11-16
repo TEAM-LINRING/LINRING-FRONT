@@ -385,6 +385,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // 매칭 정보(태그 정보, 약속 시간 표시)
   Widget _matchInfo() {
+    int? birth = opponentUser.birth;
+    int? year = 2024 - birth!;
     return Row(
       children: [
         Expanded(
@@ -418,9 +420,20 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}",
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}하기",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "${opponentUser.nickname}님  ${opponentUser.department}  ${opponentUser.studentNumber}학번 $year살 ${opponentUser.gender}자",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
                   ),
                 ),
                 const VerticalDivider(
