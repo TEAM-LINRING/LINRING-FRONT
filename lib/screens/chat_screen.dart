@@ -869,21 +869,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color(0xffc8c8c8),
-                            width: 0.7,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Image(
-                            image: AssetImage('assets/images/avartar_1.png'),
-                            width: 100,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: const Color(0xffc8c8c8), width: 0.7)),
+                          child: Center(
+                            child: SvgPicture.asset(
+                                'assets/images/characters/0${opponentUser.profile}.svg'),
                           ),
                         ),
                       ),
