@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
@@ -30,11 +31,13 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> _messages = [];
   String _enteredMessage = "";
   String ratingScore = "0";
+  DateTime promiseDate = DateTime.now();
 
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
   bool afterMeeting = false;
+  bool afterPromise = false;
   bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
@@ -99,6 +102,22 @@ class _ChatScreenState extends State<ChatScreen> {
       afterMeeting = false;
       Navigator.pop(context);
     }
+  }
+
+  void _patchReservationTime() async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}');
+    final token = widget.loginInfo.access;
+    print(promiseDate);
+    final body = jsonEncode({"reservation_time": promiseDate.toString()});
+    await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
   }
 
   @override
@@ -380,6 +399,24 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Row(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            color: const Color(0xffc8c8c8), width: 0.7)),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/images/characters/0${opponentUser.profile}.svg',
+                        width: 40,
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Text(
                     "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}",
@@ -660,11 +697,20 @@ class _ChatScreenState extends State<ChatScreen> {
                             Radius.circular(10),
                           ),
                         );
+                        promiseDate = selectedDate!;
+                        afterPromise = true;
+                        updateMatchInfo();
+                        _patchReservationTime();
                       }
                     },
                     child: Text(
-                      afterMeeting ? "매너평가하기" : "약속 시간\n 정하기",
+                      afterMeeting
+                          ? "매너평가하기"
+                          : afterPromise
+                              ? "${promiseDate.year}-${promiseDate.month}-${promiseDate.day}\n${promiseDate.hour} : ${promiseDate.minute}"
+                              : "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 13),
                     ),
                   ),
                 )
@@ -674,6 +720,12 @@ class _ChatScreenState extends State<ChatScreen> {
         )
       ],
     );
+  }
+
+  void updateMatchInfo() {
+    setState(() {
+      //_matchInfo 함수를 다시 호출해서 화면 갱신
+    });
   }
 
   // bool _buttonIsActive() {
