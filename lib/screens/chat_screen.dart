@@ -773,6 +773,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _controller,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15),
                     ),
                     onChanged: (value) {
                       setState(() {
