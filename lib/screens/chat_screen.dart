@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   String _enteredMessage = "";
   String ratingScore = "0";
   DateTime promiseDate = DateTime.now();
-
+  // late DateTime twoHoursLater;
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -110,12 +110,15 @@ class _ChatScreenState extends State<ChatScreen> {
     final token = widget.loginInfo.access;
     print(promiseDate);
     String isoFormattedString = formatISOTime(promiseDate);
+    print(DateTime.parse(isoFormattedString));
     final body = jsonEncode({
       "tagset": widget.room.tag.id,
       "tagset2": widget.room.tag2.id,
-      "reservation_time": isoFormattedString
+      "reservation_time": isoFormattedString,
     });
     print(body);
+    // twoHoursLater = promiseDate.add(const Duration(hours: 2));
+    // afterMeeting = (DateTime.now()).isAfter(twoHoursLater);
     await http.patch(
       url,
       headers: {
@@ -127,8 +130,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String formatISOTime(DateTime date) {
-    //converts date into the following format:
-// or 2019-06-04T12:08:56.235-0700
     var duration = date.timeZoneOffset;
     if (duration.isNegative) {
       return ("${DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date)}-${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
@@ -149,6 +150,9 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2,
           };
+    if (widget.room.reservationTime != null) {
+      afterPromise = true;
+    }
     _loadMessages().then((value) => setState(() {}));
   }
 
