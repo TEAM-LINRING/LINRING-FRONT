@@ -54,7 +54,7 @@ class _SettingScreenState extends State<SettingScreen> {
         profileImagePaths[index],
         width: 100,
         height: 100,
-        fit: BoxFit.contain,
+        fit: BoxFit.scaleDown,
       ),
     );
   }
