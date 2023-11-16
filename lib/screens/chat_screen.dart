@@ -429,9 +429,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         style: const TextStyle(fontSize: 16),
                       ),
                       Text(
-                        "${opponentUser.nickname}님  ${opponentUser.department}  ${opponentUser.studentNumber}학번 $year살 ${opponentUser.gender}자",
+                        "${opponentUser.department}  ${opponentUser.studentNumber}학번 $year살 ${opponentUser.gender}자",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ],
                   ),
