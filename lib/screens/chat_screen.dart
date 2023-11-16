@@ -106,10 +106,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _patchReservationTime() async {
     String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}');
+    final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}/');
     final token = widget.loginInfo.access;
     print(promiseDate);
-    final body = jsonEncode({"reservation_time": promiseDate.toString()});
+    String isoFormattedString = formatISOTime(promiseDate);
+    final body = jsonEncode({
+      "tagset": widget.room.tag.id,
+      "tagset2": widget.room.tag2.id,
+      "reservation_time": isoFormattedString
+    });
+    print(body);
     await http.patch(
       url,
       headers: {
@@ -118,6 +124,17 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       body: body,
     );
+  }
+
+  String formatISOTime(DateTime date) {
+    //converts date into the following format:
+// or 2019-06-04T12:08:56.235-0700
+    var duration = date.timeZoneOffset;
+    if (duration.isNegative) {
+      return ("${DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date)}-${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+    } else {
+      return ("${DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date)}+${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+    }
   }
 
   @override

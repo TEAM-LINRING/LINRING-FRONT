@@ -195,6 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {
             if (checkFormValidity()) {
               _profileChange(context);
+              Navigator.of(context).pop();
             }
           },
           child: const Text(
