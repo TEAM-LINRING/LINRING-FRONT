@@ -44,7 +44,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '탈퇴하기',
       ),
       body: Container(

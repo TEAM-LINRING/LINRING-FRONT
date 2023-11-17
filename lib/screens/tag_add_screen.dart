@@ -26,7 +26,7 @@ class TagAddScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: const CustomAppBar(title: "태그 추가하기"),
+      appBar: CustomAppBar(title: "태그 추가하기"),
       backgroundColor: const Color(0xfffff6f4),
       body: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

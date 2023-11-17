@@ -19,7 +19,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '비밀번호 찾기',
       ),
       body: Padding(

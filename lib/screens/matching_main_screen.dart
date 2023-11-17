@@ -96,7 +96,7 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '',
       ),
       body: Container(
