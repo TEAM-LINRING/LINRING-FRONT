@@ -296,12 +296,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
 
   List<Widget> getRandomPositions(int count) {
     final List<Offset> positions = [
-      const Offset(100, 600), // right, bottom
-      const Offset(30, 400),
-      const Offset(300, 700),
-      const Offset(150, 250),
-      const Offset(220, 150),
-      const Offset(300, 300),
+      const Offset(0.7, 0.6), // right ratio, bottom ratio
+      const Offset(0.03, 0.4),
+      const Offset(0.4, 0.7),
+      const Offset(0.55, 0.25),
+      const Offset(0.22, 0.15),
+      const Offset(0.2, 0.3),
     ];
     int max = positions.length;
     if (count == 0) {
@@ -313,13 +313,11 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
 
       while (selectedPositions.length < count) {
         int position = getRandomInt(max);
-
         // Ensure the position is not selected before
         if (!selectedPositions.contains(position)) {
           selectedPositions.add(position);
         }
       }
-
       return List.generate(count, (index) {
         print(selectedPositions);
         return getImageWidget(index, positions[selectedPositions[index]]);
@@ -328,9 +326,12 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
   }
 
   Widget getImageWidget(int index, Offset offset) {
+    final screenSize = MediaQuery.of(context).size;
+    final right = screenSize.width * offset.dx;
+    final bottom = screenSize.height * offset.dy;
     return Positioned(
-      bottom: offset.dy,
-      right: offset.dx,
+      bottom: bottom,
+      right: right,
       child: GestureDetector(
         onTap: () {
           debugPrint('온탭 !!!');
