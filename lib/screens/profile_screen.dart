@@ -139,8 +139,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "refresh": widget.loginInfo.refresh,
         "user": jsonDecode(response.body),
       });
-      storage.write(key: 'user', value: jsonString);
-      
+      await storage.write(key: 'user', value: jsonString);
+      String? res = await storage.read(key: 'user');
+      final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+      final loginInfo = LoginInfo.fromJson(parsed);
+      Navigator.of(context).pop();
       if (!mounted) return;
     }
   }
@@ -194,7 +197,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () {
             if (checkFormValidity()) {
               _profileChange(context);
-              Navigator.of(context).pop();
             }
           },
           child: const Text(

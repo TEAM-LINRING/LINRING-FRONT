@@ -395,10 +395,10 @@ class _SettingScreenState extends State<SettingScreen> {
                   setState(() {
                     widget.loginInfo = loginInfo;
 
-                    nickname = widget.loginInfo.user.nickname;
-                    college = widget.loginInfo.user.college;
-                    department = widget.loginInfo.user.department;
-                    studentNumber = widget.loginInfo.user.studentNumber;
+                    nickname = loginInfo.user.nickname;
+                    college = loginInfo.user.college;
+                    department = loginInfo.user.department;
+                    studentNumber = loginInfo.user.studentNumber;
                   });
                 });
               },
