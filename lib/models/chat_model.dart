@@ -32,7 +32,9 @@ class ChatRoom {
       tag: Tagset.fromJson(json["tagset"]),
       tag2: Tagset.fromJson(json["tagset2"]),
       notice: json["notice"],
-      reservationTime: DateTime.parse(json["reservation_time"]),
+      reservationTime: (json["reservation_time"] != null)
+          ? DateTime.parse(json["reservation_time"])
+          : null,
       created: DateTime.parse(json["created"]),
       modified: DateTime.parse(json["modified"]),
     );
