@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/models/chat_model.dart';
@@ -11,14 +12,15 @@ import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/chat_screen.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  final LoginInfo loginInfo;
-  const ChatRoomScreen({required this.loginInfo, super.key});
+  LoginInfo loginInfo;
+  ChatRoomScreen({required this.loginInfo, super.key});
 
   @override
   State createState() => _ChatRoomScreenState();
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
+  static const storage = FlutterSecureStorage();
   late Future<List<ChatRoom>> _futureRooms;
 
   @override
@@ -128,7 +130,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               room: room,
             ),
           ),
-        ),
+        ).then((value) async {
+          String? res = await storage.read(key: 'user');
+          final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+          final loginInfo = LoginInfo.fromJson(parsed);
+          setState(() {
+            widget.loginInfo = loginInfo;
+          });
+        }),
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
