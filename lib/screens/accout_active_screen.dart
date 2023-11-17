@@ -17,7 +17,7 @@ class _AccoutActiveScreenState extends State<AccoutActiveScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '계정 활성화',
       ),
       body: Container(

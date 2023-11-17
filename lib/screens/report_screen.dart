@@ -80,7 +80,7 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '신고하기',
       ),
       body: SingleChildScrollView(

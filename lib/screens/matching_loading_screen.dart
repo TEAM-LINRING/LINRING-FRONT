@@ -94,7 +94,7 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: const CustomAppBar(title: ''),
+      appBar: CustomAppBar(title: ''),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(

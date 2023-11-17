@@ -11,13 +11,13 @@ class SelectMajor extends StatelessWidget {
     return items;
   }).toList();
 
-  SelectMajor({Key? key}) : super(key: key);
+  SelectMajor({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F4),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: '학과 선택',
       ),
       body: ListView.builder(
