@@ -15,7 +15,7 @@ class EntryScreen extends StatelessWidget {
           decoration: const BoxDecoration(
               image: DecorationImage(
             image: AssetImage('assets/images/blur1.png'),
-            fit: BoxFit.none,
+            fit: BoxFit.cover,
           )),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

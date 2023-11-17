@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: const BoxDecoration(
               image: DecorationImage(
             image: AssetImage('assets/images/blur2.png'),
-            fit: BoxFit.none,
+            fit: BoxFit.cover,
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             const SizedBox(height: 250), // LINRING text
