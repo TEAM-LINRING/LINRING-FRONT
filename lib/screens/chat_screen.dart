@@ -54,8 +54,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
+
       // 기존 채팅 불러오기
-      _messages = (body['results'] as List<dynamic>)
+      _messages = (body as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
 
@@ -178,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
       "receiver": opponentUser.id,
     });
 
-    final response = await http.post(
+    await http.post(
       url,
       headers: {
         'Content-Type': 'application/json',
