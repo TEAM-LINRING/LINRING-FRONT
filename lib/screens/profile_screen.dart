@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
@@ -131,17 +132,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     debugPrint((response.statusCode).toString());
     debugPrint(body);
     if (response.statusCode == 200) {
-      setState(() {
-        widget.loginInfo.user.nickname = nickNameController.text;
-        widget.loginInfo.user.college = selectedData!['college'];
-        widget.loginInfo.user.department = selectedData!['major'];
-        widget.loginInfo.user.studentNumber =
-            int.parse(studentNumberController.text);
-        widget.loginInfo.user.grade = selectedGrade;
-        widget.loginInfo.user.gender = selectedGender;
-        widget.loginInfo.user.birth = int.parse(birthController.text);
-        widget.loginInfo.user.significant = significantRemarks;
+      const storage = FlutterSecureStorage();
+
+      String jsonString = jsonEncode({
+        "access": widget.loginInfo.access,
+        "refresh": widget.loginInfo.refresh,
+        "user": jsonDecode(response.body),
       });
+      storage.write(key: 'user', value: jsonString);
+      
       if (!mounted) return;
     }
   }

@@ -11,8 +11,8 @@ import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:http/http.dart' as http;
 
 class SettingScreen extends StatefulWidget {
-  final LoginInfo loginInfo;
-  const SettingScreen({required this.loginInfo, super.key});
+  LoginInfo loginInfo;
+  SettingScreen({required this.loginInfo, super.key});
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -388,8 +388,13 @@ class _SettingScreenState extends State<SettingScreen> {
                       loginInfo: widget.loginInfo,
                     ),
                   ),
-                ).then((value) {
+                ).then((value) async {
+                  String? res = await storage.read(key: 'user');
+                  final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+                  final loginInfo = LoginInfo.fromJson(parsed);
                   setState(() {
+                    widget.loginInfo = loginInfo;
+
                     nickname = widget.loginInfo.user.nickname;
                     college = widget.loginInfo.user.college;
                     department = widget.loginInfo.user.department;
