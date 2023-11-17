@@ -99,7 +99,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 23,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       height: 0,
                     ),
                   ),
@@ -112,11 +112,11 @@ class _ReportScreenState extends State<ReportScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "${opponentUser.nickname}님",
+                    "${opponentUser.nickname} 님",
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w500,
                       height: 0,
                     ),
                   ),
@@ -504,14 +504,17 @@ class _ReportScreenState extends State<ReportScreen> {
             const SizedBox(
               height: 20,
             ),
-            CustomOutlinedButton(
-              label: '제출하기',
-              onPressed: () {
-                _createReport(context);
-              },
-              backgroundColor: const Color(0xFFFEC2B5),
-              isActive:
-                  (_isChecked1 || _isChecked2 || _isChecked3 || _isChecked4),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: CustomOutlinedButton(
+                label: '제출하기',
+                onPressed: () {
+                  _createReport(context);
+                },
+                backgroundColor: const Color(0xFFFEC2B5),
+                isActive:
+                    (_isChecked1 || _isChecked2 || _isChecked3 || _isChecked4),
+              ),
             )
           ],
         ),

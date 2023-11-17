@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
@@ -81,7 +82,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 height: 0,
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
+            const Row(
+              children: [
+                Text(
+                  '국민대 웹메일',
+                  style: TextStyle(fontSize: 22),
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 15,
+            ),
             Padding(
               padding: const EdgeInsets.all(0),
               child: TextField(
@@ -107,7 +120,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       alignment: Alignment.center,
                       widthFactor: 1.0,
                       heightFactor: 1.0,
-                      child: Text('@kookmin.ac.kr'),
+                      child: Text(
+                        '@kookmin.ac.kr',
+                        style: TextStyle(fontSize: 17),
+                      ),
                     ),
                   ),
                 ),
@@ -118,6 +134,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               label: '인증 메일 받기',
               onPressed: () {
                 _sendEmail();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ChangePasswordScreen()));
               },
               isActive: emailNotNull,
               backgroundColor: const Color(0xFFFEC2B5),

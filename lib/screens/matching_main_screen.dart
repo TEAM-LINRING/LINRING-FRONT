@@ -304,8 +304,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 0, 10, 0),
                                 child: Text(
-                                  '${matchingUser.nickname}',
-                                  style: const TextStyle(fontSize: 18),
+                                  '${matchingUser.nickname} 님',
+                                  style: const TextStyle(fontSize: 19),
                                 ),
                               ),
                               const SizedBox(
@@ -342,7 +342,8 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                       padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                       child: Text(
                         '"${matchingTagset.introduction}"',
-                        style: const TextStyle(fontSize: 18),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
                       ),
                     ),
                     const SizedBox(

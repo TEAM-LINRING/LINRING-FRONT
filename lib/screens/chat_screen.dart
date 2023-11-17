@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
@@ -30,11 +31,13 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> _messages = [];
   String _enteredMessage = "";
   String ratingScore = "0";
-
+  DateTime? promiseDate;
+  late DateTime twoHoursLater;
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
 
   bool afterMeeting = false;
+  bool afterPromise = false;
   bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
@@ -102,6 +105,41 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  void _patchReservationTime() async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}/');
+    final token = widget.loginInfo.access;
+    String isoFormattedString = formatISOTime(promiseDate!);
+    final body = jsonEncode({
+      "tagset": widget.room.tag.id,
+      "tagset2": widget.room.tag2.id,
+      "reservation_time": isoFormattedString,
+    });
+    twoHoursLater = promiseDate!.add(const Duration(hours: 2));
+    afterMeeting = (DateTime.now()).isAfter(twoHoursLater);
+    await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    widget.room.reservationTime = promiseDate;
+
+    print(promiseDate);
+    print(widget.room.reservationTime);
+  }
+
+  String formatISOTime(DateTime date) {
+    var duration = date.timeZoneOffset;
+    if (duration.isNegative) {
+      return ("${DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date)}-${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+    } else {
+      return ("${DateFormat("yyyy-MM-ddTHH:mm:ss.mmm").format(date)}+${duration.inHours.toString().padLeft(2, '0')}${(duration.inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0')}");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -114,6 +152,13 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2,
           };
+    promiseDate = widget.room.reservationTime;
+    print(widget.room.reservationTime);
+    if (widget.room.reservationTime != null) {
+      afterPromise = true;
+    }
+    print('initState');
+    print(widget.room.reservationTime);
     _loadMessages().then((value) => setState(() {}));
   }
 
@@ -171,46 +216,49 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(
-        loginInfo: widget.loginInfo,
-        title: opponentUser.nickname ?? "LINRING",
-        suffix: PopupMenuButton<int>(
-          onSelected: (int result) {
-            if (result == 1) {
-              _showProfileModal(context);
-            } else if (result == 2) {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ReportScreen(
-                          loginInfo: widget.loginInfo, room: widget.room)));
-            }
-          },
-          itemBuilder: (BuildContext context) {
-            return <PopupMenuEntry<int>>[
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Row(
-                  children: [
-                    Icon(Icons.add),
-                    Text("프로필 확인하기"),
-                  ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: CustomAppBar(
+          loginInfo: widget.loginInfo,
+          title: opponentUser.nickname ?? "LINRING",
+          suffix: PopupMenuButton<int>(
+            onSelected: (int result) {
+              if (result == 1) {
+                _showProfileModal(context);
+              } else if (result == 2) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReportScreen(
+                            loginInfo: widget.loginInfo, room: widget.room)));
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry<int>>[
+                const PopupMenuItem<int>(
+                  value: 1,
+                  child: Row(
+                    children: [
+                      Icon(Icons.add),
+                      Text("프로필 확인하기"),
+                    ],
+                  ),
                 ),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Row(
-                  children: [
-                    Icon(Icons.edit),
-                    Text("신고하기"),
-                  ],
+                const PopupMenuItem<int>(
+                  value: 2,
+                  child: Row(
+                    children: [
+                      Icon(Icons.edit),
+                      Text("신고하기"),
+                    ],
+                  ),
                 ),
-              ),
-            ];
-          },
-          child: const Icon(
-            Icons.more_vert,
-            color: Colors.black,
+              ];
+            },
+            child: const Icon(
+              Icons.more_vert,
+              color: Colors.black,
+            ),
           ),
         ),
       ),
@@ -367,11 +415,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // 매칭 정보(태그 정보, 약속 시간 표시)
   Widget _matchInfo() {
+    int? birth = opponentUser.birth;
+    int? year = 2024 - birth!;
     return Row(
       children: [
         Expanded(
           child: Container(
-            height: 60,
+            height: 70,
             padding: const EdgeInsets.symmetric(horizontal: 14.0),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -381,10 +431,39 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Row(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            color: const Color(0xffc8c8c8), width: 0.7)),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/images/characters/0${opponentUser.profile}.svg',
+                        width: 40,
+                      ),
+                    ),
+                  ),
+                ),
                 Expanded(
-                  child: Text(
-                    "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}",
-                    textAlign: TextAlign.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}하기",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        "${opponentUser.department}  ${opponentUser.studentNumber}학번  $year살  ${opponentUser.gender}자",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                    ],
                   ),
                 ),
                 const VerticalDivider(
@@ -405,249 +484,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     onPressed: () async {
                       if (afterMeeting) {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => ReportScreen(
-                        //             loginInfo: widget.loginInfo,
-                        //             room: widget.room)));
-                        showModalBottomSheet<void>(
-                          context: context,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          builder: (BuildContext context) {
-                            return Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                height: 270,
-                                child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const SizedBox(
-                                              width: 48,
-                                              height: 20,
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.close_rounded,
-                                              ),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              10, 0, 10, 0),
-                                          child: Text(
-                                            '${opponentUser.nickname}님과 잘 만나고 오셨나요?',
-                                            style:
-                                                const TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                          child: Text(
-                                            '알고리즘 성능 향상을 위해',
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        const Padding(
-                                          padding:
-                                              EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                          child: Text(
-                                            '매너평가를 남겨주세요!',
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              10, 0, 10, 0),
-                                          child: CustomOutlinedButton(
-                                            label: '상대방 매너평가 남기기',
-                                            backgroundColor:
-                                                const Color(0xFFFEC2B5),
-                                            isActive: true,
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                10, 10, 10, 10),
-                                                        height: 330,
-                                                        child: Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            child: Column(
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            48,
-                                                                        height:
-                                                                            20,
-                                                                      ),
-                                                                      Text(
-                                                                        "${opponentUser.nickname}과의 만남 매너 평가",
-                                                                        style: const TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight:
-                                                                                FontWeight.w600),
-                                                                      ),
-                                                                      IconButton(
-                                                                        icon:
-                                                                            const Icon(
-                                                                          Icons
-                                                                              .close_rounded,
-                                                                        ),
-                                                                        onPressed:
-                                                                            () =>
-                                                                                Navigator.pop(context),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 20,
-                                                                  ),
-                                                                  RatingBar(
-                                                                    initialRating:
-                                                                        0,
-                                                                    direction: Axis
-                                                                        .horizontal,
-                                                                    allowHalfRating:
-                                                                        false,
-                                                                    itemCount:
-                                                                        5,
-                                                                    ratingWidget:
-                                                                        RatingWidget(
-                                                                      full: image(
-                                                                          'assets/images/fullStar.png'),
-                                                                      half: image(
-                                                                          'assets/images/fullStar.png'),
-                                                                      empty: image(
-                                                                          'assets/images/emptyStar.png'),
-                                                                    ),
-                                                                    itemPadding: const EdgeInsets
-                                                                        .symmetric(
-                                                                        horizontal:
-                                                                            4.0),
-                                                                    onRatingUpdate:
-                                                                        (rating) {
-                                                                      setState(
-                                                                          () {
-                                                                        ratingScore =
-                                                                            (rating.toInt()).toString();
-                                                                        print(
-                                                                            ratingScore);
-                                                                        // buttonIsActive =
-                                                                        //     _buttonIsActive();
-                                                                      });
-                                                                    },
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 25,
-                                                                  ),
-                                                                  const Text(
-                                                                    '별점을 남겨주세요.',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          17,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
-                                                                  const Text(
-                                                                    '상대방은 평가 결과를 알 수 없으니 안심하세요!',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          17,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 30,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .fromLTRB(
-                                                                            10,
-                                                                            0,
-                                                                            10,
-                                                                            0),
-                                                                    child:
-                                                                        CustomOutlinedButton(
-                                                                      isActive:
-                                                                          true,
-                                                                      //buttonIsActive,
-                                                                      backgroundColor:
-                                                                          const Color(
-                                                                              0xFFFEC2B5),
-                                                                      label:
-                                                                          '상대방 매너평가 남기기',
-                                                                      onPressed:
-                                                                          () {
-                                                                        _createRating();
-                                                                      },
-                                                                    ),
-                                                                  )
-                                                                ])));
-                                                  });
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    )));
-                          },
-                        );
+                        _showRatingModal(context);
                       } else {
                         final selectedDate = await showOmniDateTimePicker(
                           context: context,
-                          initialDate: DateTime.now(),
+                          initialDate: widget.room.reservationTime,
                           firstDate: DateTime.now(),
                           lastDate: DateTime.now().add(
                             const Duration(days: 365),
@@ -661,11 +502,22 @@ class _ChatScreenState extends State<ChatScreen> {
                             Radius.circular(10),
                           ),
                         );
+                        promiseDate = selectedDate!;
+                        afterPromise = true;
+                        updateMatchInfo();
+                        _patchReservationTime();
+                        print('patch 호출 후 print');
+                        print(widget.room.reservationTime);
                       }
                     },
                     child: Text(
-                      afterMeeting ? "매너평가하기" : "약속 시간\n 정하기",
+                      afterMeeting
+                          ? "매너평가하기"
+                          : afterPromise
+                              ? "${promiseDate!.year}-${promiseDate!.month}-${promiseDate!.day}\n${promiseDate!.hour} : ${promiseDate!.minute}"
+                              : "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 13, color: Colors.black),
                     ),
                   ),
                 )
@@ -675,6 +527,12 @@ class _ChatScreenState extends State<ChatScreen> {
         )
       ],
     );
+  }
+
+  void updateMatchInfo() {
+    setState(() {
+      //_matchInfo 함수를 다시 호출해서 화면 갱신
+    });
   }
 
   // bool _buttonIsActive() {
@@ -709,6 +567,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _controller,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15),
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -763,6 +622,191 @@ class _ChatScreenState extends State<ChatScreen> {
     return selectedStates.join(', ');
   }
 
+  void _showRatingModal(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            height: 270,
+            child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          width: 48,
+                          height: 20,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close_rounded,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '${opponentUser.nickname}님과 잘 만나고 오셨나요?',
+                        style: const TextStyle(fontSize: 19),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '알고리즘 성능 향상을 위해',
+                        style: TextStyle(fontSize: 19),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '매너평가를 남겨주세요!',
+                        style: TextStyle(fontSize: 19),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: CustomOutlinedButton(
+                        label: '매너평가 남기기',
+                        backgroundColor: const Color(0xFFFEC2B5),
+                        isActive: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                          showModalBottomSheet(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              builder: (BuildContext context) {
+                                return Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 10, 10, 10),
+                                    height: 330,
+                                    child: Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        child: Column(children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const SizedBox(
+                                                width: 48,
+                                                height: 20,
+                                              ),
+                                              Text(
+                                                "${opponentUser.nickname}님과의 만남 매너 평가",
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.close_rounded,
+                                                ),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          RatingBar(
+                                            initialRating: 0,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: false,
+                                            itemCount: 5,
+                                            ratingWidget: RatingWidget(
+                                              full: image(
+                                                  'assets/images/fullStar.png'),
+                                              half: image(
+                                                  'assets/images/fullStar.png'),
+                                              empty: image(
+                                                  'assets/images/empty_Star.png'),
+                                            ),
+                                            itemPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 4.0),
+                                            onRatingUpdate: (rating) {
+                                              setState(() {
+                                                ratingScore =
+                                                    (rating.toInt()).toString();
+                                                print(ratingScore);
+                                                // buttonIsActive =
+                                                //     _buttonIsActive();
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(
+                                            height: 25,
+                                          ),
+                                          const Text(
+                                            '매너평가 별점을 남겨주세요.',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          const Text(
+                                            '상대방은 점수를 알 수 없으니 안심하세요!',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 0, 10, 0),
+                                            child: CustomOutlinedButton(
+                                              isActive: true,
+                                              //buttonIsActive,
+                                              backgroundColor:
+                                                  const Color(0xFFFEC2B5),
+                                              label: '매너평가 남기기',
+                                              onPressed: () {
+                                                _createRating();
+                                              },
+                                            ),
+                                          )
+                                        ])));
+                              });
+                        },
+                      ),
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
   void _showProfileModal(BuildContext context) {
     debugPrint(opponentUser.profile.toString());
     int? birth = opponentUser.birth;
@@ -805,21 +849,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color(0xffc8c8c8),
-                            width: 0.7,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Image(
-                            image: AssetImage('assets/images/avartar_1.png'),
-                            width: 100,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: const Color(0xffc8c8c8), width: 0.7)),
+                          child: Center(
+                            child: SvgPicture.asset(
+                                'assets/images/characters/0${opponentUser.profile}.svg'),
                           ),
                         ),
                       ),

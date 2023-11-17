@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: const BoxDecoration(
               image: DecorationImage(
             image: AssetImage('assets/images/blur2.png'),
-            fit: BoxFit.cover,
+            fit: BoxFit.none,
           )),
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             const SizedBox(height: 250), // LINRING text
@@ -111,12 +111,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-            //너와 나를 잇는 울림 text
             const Text(
-              '너와 나를 잇는 울림',
+              '너와 나를 잇는 울림, 링링',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 26,
                 fontWeight: FontWeight.w400,
                 height: 0,
               ),
@@ -142,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   fillColor: Colors.white,
+                  hintText: '아이디',
                   filled: true,
                   suffixIcon: const Padding(
                     padding: EdgeInsets.only(right: 20.0),
@@ -149,7 +149,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.center,
                       widthFactor: 1.0,
                       heightFactor: 1.0,
-                      child: Text('@kookmin.ac.kr'),
+                      child: Text(
+                        '@kookmin.ac.kr',
+                        style: TextStyle(fontSize: 17),
+                      ),
                     ),
                   ),
                 ),
@@ -231,38 +234,44 @@ class _LoginScreenState extends State<LoginScreen> {
                 isActive: true,
               ),
             ),
-            const SizedBox(
-              height: 10,
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/signup');
+                          },
+                          child: const Text(
+                            "회원가입",
+                            style: TextStyle(
+                              color: Color(0xFF1B1B1B),
+                            ),
+                          )),
+                    ),
+                    const Text(
+                      " | ",
+                      style: TextStyle(color: Color(0xFFC8AAAA)),
+                    ),
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/forgotPassword');
+                          },
+                          child: const Text(
+                            "비밀번호 찾기",
+                            style: TextStyle(
+                              color: Color(0xFF1B1B1B),
+                            ),
+                          )),
+                    ),
+                  ]),
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  const Spacer(flex: 2),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/signup');
-                      },
-                      child: const Text(
-                        "회원가입",
-                        style: TextStyle(
-                          color: Color(0xFF1B1B1B),
-                        ),
-                      )),
-                  const Spacer(flex: 1),
-                  const Text(" | "),
-                  const Spacer(flex: 1),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/forgotPassword');
-                      },
-                      child: const Text(
-                        "비밀번호 찾기",
-                        style: TextStyle(
-                          color: Color(0xFF1B1B1B),
-                        ),
-                      )),
-                  const Spacer(flex: 2)
-                ]),
             const SizedBox(
               height: 100,
             )
