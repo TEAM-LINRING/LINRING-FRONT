@@ -31,6 +31,12 @@ class MatchingMainScreen extends StatefulWidget {
 }
 
 class _MatchingMainScreenState extends State<MatchingMainScreen> {
+  final Random random = Random();
+
+  int getRandomInt(int max) {
+    return random.nextInt(max);
+  }
+
   Future<ChatRoom> _readChatRoom(int matchingRoomId) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/chat/room/$matchingRoomId');
@@ -107,115 +113,20 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
             ),
           ),
           child: Center(
-              child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset(
-                  'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
-              const SizedBox(
-                height: 5,
-              ),
-              Transform(
-                transform: Matrix4.identity()
-                  ..translate(150 * cos(radians(30)), 150 * sin(radians(120))),
-                child: GestureDetector(
-                  onTap: () {
-                    debugPrint('0번 온탭 !!!');
-                    _showSearchDetailModal(
-                        widget.searchUser[0], widget.searchTagset[0]);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(100.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/characters/0${widget.searchUser[0].profile}.svg'),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text('${widget.searchUser[0].nickname}')
-                      ],
-                    ),
-                  ),
+              child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                    'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
+                const SizedBox(
+                  height: 5,
                 ),
-              ),
-              Transform(
-                transform: Matrix4.identity()
-                  ..translate(200 * cos(radians(220)), 200 * sin(radians(0))),
-                child: GestureDetector(
-                  onTap: () {
-                    debugPrint('1번 온탭 !!!');
-                    _showSearchDetailModal(
-                        widget.searchUser[1], widget.searchTagset[1]);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(130.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/characters/0${widget.searchUser[1].profile}.svg'),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text('${widget.searchUser[1].nickname}')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Transform(
-                transform: Matrix4.identity()
-                  ..translate(300 * cos(radians(90)), 300 * sin(radians(55))),
-                child: GestureDetector(
-                  onTap: () {
-                    debugPrint('2번 온탭 !!!');
-                    _showSearchDetailModal(
-                        widget.searchUser[2], widget.searchTagset[2]);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(180.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/characters/0${widget.searchUser[2].profile}.svg'),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text('${widget.searchUser[2].nickname}')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Transform(
-                transform: Matrix4.identity()
-                  ..translate(200 * cos(radians(250)), 200 * sin(radians(270))),
-                child: GestureDetector(
-                  onTap: () {
-                    debugPrint('3번 온탭 !!!');
-                    _showSearchDetailModal(
-                        widget.searchUser[3], widget.searchTagset[3]);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(100.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                            'assets/images/characters/0${widget.searchUser[3].profile}.svg'),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text('${widget.searchUser[3].nickname}')
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                ...getRandomPositions(4),
+              ],
+            ),
           ))),
     );
   }
@@ -255,7 +166,7 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
             height: 300,
             child: Container(
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: Column(
                   children: [
@@ -380,6 +291,65 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
       asset,
       height: 25,
       width: 25,
+    );
+  }
+
+  List<Widget> getRandomPositions(int count) {
+    final List<Offset> positions = [
+      const Offset(0.7, 0.6), // right ratio, bottom ratio
+      const Offset(0.03, 0.4),
+      const Offset(0.4, 0.7),
+      const Offset(0.55, 0.25),
+      const Offset(0.22, 0.15),
+      const Offset(0.2, 0.3),
+    ];
+    int max = positions.length;
+    if (count == 0) {
+      // Condition 0: Do not show anything
+      return <Widget>[];
+    } else {
+      // Show images in random positions
+      List<int> selectedPositions = [];
+
+      while (selectedPositions.length < count) {
+        int position = getRandomInt(max);
+        // Ensure the position is not selected before
+        if (!selectedPositions.contains(position)) {
+          selectedPositions.add(position);
+        }
+      }
+      return List.generate(count, (index) {
+        print(selectedPositions);
+        return getImageWidget(index, positions[selectedPositions[index]]);
+      });
+    }
+  }
+
+  Widget getImageWidget(int index, Offset offset) {
+    final screenSize = MediaQuery.of(context).size;
+    final right = screenSize.width * offset.dx;
+    final bottom = screenSize.height * offset.dy;
+    return Positioned(
+      bottom: bottom,
+      right: right,
+      child: GestureDetector(
+        onTap: () {
+          debugPrint('온탭 !!!');
+          _showSearchDetailModal(
+              widget.searchUser[index], widget.searchTagset[index]);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            SvgPicture.asset(
+                'assets/images/characters/0${widget.searchUser[index].profile}.svg'),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('${widget.searchUser[index].nickname}')
+          ],
+        ),
+      ),
     );
   }
 }

@@ -22,6 +22,7 @@ class _SettingScreenState extends State<SettingScreen> {
   static const storage = FlutterSecureStorage();
   late List<SvgPicture> profileItem;
   late int? selectedIndex = widget.loginInfo.user.profile;
+  late int? ChangedIndex = widget.loginInfo.user.profile;
   late int? currentIndex = widget.loginInfo.user.profile;
   late String? nickname = widget.loginInfo.user.nickname;
   late String? college = widget.loginInfo.user.college;
@@ -60,11 +61,10 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   void _updateProfile() async {
-    print(selectedIndex);
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
-    final body = jsonEncode({"profile": selectedIndex});
+    final body = jsonEncode({"profile": ChangedIndex});
     await http.patch(
       url,
       headers: {
@@ -155,9 +155,10 @@ class _SettingScreenState extends State<SettingScreen> {
                     label: '저장하기',
                     onPressed: () {
                       Navigator.pop(context);
-
+                      ChangedIndex = selectedIndex;
                       setState(
                         () {
+                          print('updateProfile');
                           _updateProfile();
                         },
                       );
@@ -334,7 +335,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                       width: 0.7)),
                               child: Center(
                                 child: SvgPicture.asset(
-                                    'assets/images/characters/0$currentIndex.svg'),
+                                    'assets/images/characters/0$ChangedIndex.svg'),
                               ),
                             ),
                           ),
@@ -345,7 +346,8 @@ class _SettingScreenState extends State<SettingScreen> {
                               onTap: () {
                                 _displayProfileSheet(context)
                                     .then((value) => setState(() {
-                                          currentIndex = selectedIndex;
+                                          currentIndex = ChangedIndex;
+                                          selectedIndex = ChangedIndex;
                                         }));
                               },
                               child: Container(

@@ -408,7 +408,7 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
             height: 40,
           ),
           CustomOutlinedButton(
-            label: '저장',
+            label: '저장하기',
             onPressed: () {
               _createTagset(context);
             },
