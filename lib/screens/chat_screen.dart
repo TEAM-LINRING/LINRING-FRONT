@@ -214,11 +214,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void scrollAnimate() {
     print("탭 클릭됨");
     // 6초 후에 실행
+
     Future.delayed(const Duration(milliseconds: 600), () {
       // MediaQuery.of(context).viewInsets.bottom 하단 inset(사용못하는영역)크기 리턴
       // 사용못하는 영역만큼 1초 동안 easeIn으로 이동
-      _scrollController.animateTo(MediaQuery.of(context).viewInsets.bottom,
-          duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+      // _scrollController.animateTo(MediaQuery.of(context).viewInsets.bottom,
+      //     duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
 
@@ -579,6 +581,11 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    onTap: () {
+                      _scrollController
+                          .jumpTo(_scrollController.position.maxScrollExtent);
+                      //scrollAnimate();
+                    },
                     controller: _controller,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -594,8 +601,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 IconButton(
                   highlightColor: Colors.transparent, // 물결 효과 제거
                   splashColor: Colors.transparent, // 물결 효과 제거
+
                   onPressed: () {
                     _enteredMessage.trim().isEmpty ? null : _sendMessage();
+                    _scrollController
+                        .jumpTo(_scrollController.position.maxScrollExtent);
                   },
                   icon: Image.asset(
                     "assets/icons/send_button.png",
