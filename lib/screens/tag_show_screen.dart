@@ -237,6 +237,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                                 fontSize: 24,
                                                 fontWeight: FontWeight.w300,
                                                 color: Color(0xff898989),
+                                                height: 1.5,
                                               ),
                                             ),
                                             SizedBox(height: 10),
@@ -342,30 +343,37 @@ class _TagCardState extends State<TagCard> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.tag.introduction != null
-                    ? "\"${widget.tag.introduction}\""
-                    : "",
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xff999999),
-                ),
-              ),
-              const SizedBox(
-                height: 64,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w300,
+                      fontSize: 24,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.tag.introduction != null
+                        ? "\"${widget.tag.introduction}\""
+                        : "",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff999999),
+                    ),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Column(
                     children: [
@@ -374,7 +382,11 @@ class _TagCardState extends State<TagCard> {
                         style: TextStyle(
                           fontSize: 11,
                           color: Color(0xff999999),
+                          height: 1.5,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
                         width: 80,
