@@ -580,11 +580,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               )),
           const SizedBox(height: 10),
-          Wrap(
-              alignment: WrapAlignment.start,
-              children: List.generate(remark.length, (index) {
-                return buildRemark(index);
-              })),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Wrap(
+                alignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: List.generate(remark.length, (index) {
+                  return buildRemark(index);
+                })),
+          ),
 
           const SizedBox(height: 10),
           const Row(

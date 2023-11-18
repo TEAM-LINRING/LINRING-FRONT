@@ -493,7 +493,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       Text(
                         "# ${opponentTagset.place}  # ${opponentTagset.person}  # ${opponentTagset.method}${opponentTagset.method == "카페" ? "가기" : "하기"}",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 15),
                       ),
                       Text(
                         "${opponentUser.department}  ${opponentUser.studentNumber}학번  $year살  ${opponentUser.gender}자",
