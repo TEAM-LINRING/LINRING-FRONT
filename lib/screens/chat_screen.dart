@@ -488,7 +488,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "#${opponentTagset.place}  #${opponentTagset.person}  #${opponentTagset.method}${opponentTagset.method == "카페" ? "가기" : "하기"}",
+                        "# ${opponentTagset.place}  # ${opponentTagset.person}  # ${opponentTagset.method}${opponentTagset.method == "카페" ? "가기" : "하기"}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontSize: 16),
                       ),
