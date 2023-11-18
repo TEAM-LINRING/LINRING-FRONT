@@ -392,11 +392,19 @@ class _TagCardState extends State<TagCard> {
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      _deleteTag(widget.tag.id);
+                  PopupMenuButton<int>(
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 1,
+                        child: Text('삭제하기'),
+                      ),
+                    ],
+                    onSelected: (value) {
+                      if (value == 1) {
+                        _deleteTag(widget.tag.id);
+                      }
                     },
-                    child: const Icon(Icons.more_vert),
+                    icon: const Icon(Icons.more_vert),
                   )
                 ],
               ),
