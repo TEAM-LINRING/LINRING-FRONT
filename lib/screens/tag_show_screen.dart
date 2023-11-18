@@ -54,9 +54,16 @@ class _TagShowScreenState extends State<TagShowScreen> {
   }
 
   final List<String> greetings = [
-    "안녕~ 오늘은 어떤 친구를 만날까?",
-    "태그를 추가해서 새로운 친구를 만날 수 있어!",
-    "개발자와 매칭이 되면 선물을 준다는데?",
+    "안녕~ 나는 푸링이야\n태그를 추가해서 친구를 찾아볼까?",
+    "좋은 하루~\n오늘은 어떤 친구를 만나게 될까?",
+    "옆으로 넘기면\n새로운 태그를 추가할 수 있어",
+    "태그는 3개까지 추가할 수 있어",
+    "검색 토글을 꺼두면\n상대가 나를 검색 할 수 없어",
+    "오늘은 누굴 만나게 될까?\n넘 기대돼!",
+    "점 세 개를 누르면\n태그를 삭제할 수 있어",
+    "날 보니까 푸딩이 먹고 싶다고?\n이런...",
+    "무례한 친구를 만나면\n꼭 신고하도록 해",
+    "다른 친구에게 채팅이 오면\n반갑게 맞이 해줘",
   ];
 
   String randomGreeting = "안녕~ 오늘은 어떤 친구를 만날까?";
@@ -102,50 +109,52 @@ class _TagShowScreenState extends State<TagShowScreen> {
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                width: double.maxFinite,
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
+                height: 100,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: SvgPicture.asset(
                           'assets/images/characters/char_puring.svg'),
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromRGBO(108, 89, 22, 0.10),
-                              offset: Offset(0, 0),
-                              blurRadius: 20,
-                              spreadRadius: 1,
-                            ),
-                          ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
                         ),
-                        child: GestureDetector(
-                          onTap: () {
-                            updateRandomGreeting();
-                          },
-                          child: Text(
-                            randomGreeting,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 16,
-                            ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(108, 89, 22, 0.10),
+                            offset: Offset(0, 0),
+                            blurRadius: 20,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          updateRandomGreeting();
+                        },
+                        child: Text(
+                          randomGreeting,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 16,
+                            height: 1.5,
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 36),
+              const SizedBox(height: 5),
               Container(
                 width: double.infinity,
                 padding:
