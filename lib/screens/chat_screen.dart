@@ -223,6 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
       //     duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
+    _enteredMessage = '';
   }
 
   @override
