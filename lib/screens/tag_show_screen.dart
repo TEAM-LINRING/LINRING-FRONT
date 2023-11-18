@@ -30,6 +30,12 @@ class _TagShowScreenState extends State<TagShowScreen> {
     _futureTagsets = _callAPI();
   }
 
+  void refreshTagsets() {
+    setState(() {
+      _futureTagsets = _callAPI();
+    });
+  }
+
   Future<List<Tagset>> _callAPI() async {
     String apiAddress = dotenv.get("API_ADDRESS");
     final url = Uri.parse('$apiAddress/accounts/v2/tagset/');
@@ -181,6 +187,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
                             TagCard(
                               tag: tag,
                               loginInfo: widget.loginInfo,
+                              onTagDeleted: refreshTagsets,
                             ),
                           );
                         }
@@ -278,8 +285,13 @@ class _TagShowScreenState extends State<TagShowScreen> {
 class TagCard extends StatefulWidget {
   final Tagset tag;
   final LoginInfo loginInfo;
+  final Function onTagDeleted;
 
-  const TagCard({super.key, required this.tag, required this.loginInfo});
+  const TagCard(
+      {super.key,
+      required this.tag,
+      required this.loginInfo,
+      required this.onTagDeleted});
 
   @override
   _TagCardState createState() => _TagCardState();
@@ -321,6 +333,22 @@ class _TagCardState extends State<TagCard> {
     return false;
   }
 
+  void _deleteTag(int id) async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/v2/tagset/$id/');
+    final token = widget.loginInfo.access;
+
+    await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    widget.onTagDeleted();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -336,24 +364,41 @@ class _TagCardState extends State<TagCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
-                style: const TextStyle(fontSize: 24),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                widget.tag.introduction != null
-                    ? "\"${widget.tag.introduction}\""
-                    : "",
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xff999999),
-                ),
-              ),
-              const SizedBox(
-                height: 64,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
+                        style: const TextStyle(fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        widget.tag.introduction != null
+                            ? "\"${widget.tag.introduction}\""
+                            : "",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff999999),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 64,
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _deleteTag(widget.tag.id);
+                    },
+                    child: const Icon(Icons.more_vert),
+                  )
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
