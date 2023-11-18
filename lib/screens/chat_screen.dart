@@ -76,6 +76,8 @@ class _ChatScreenState extends State<ChatScreen> {
             args: null,
             room: widget.room.id,
           ));
+      // 역순으로 재배치
+      _messages = _messages.reversed.toList();
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -190,39 +192,29 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       // 로컬 리스트에 임시 저장
-      _messages.add(Message(
-        id: 0,
-        sender: widget.loginInfo.user,
-        receiver: opponentUser,
-        created: "",
-        modified: "",
-        message: _enteredMessage,
-        isRead: true,
-        type: 1,
-        args: null,
-        room: widget.room.id,
-      ));
+      _messages.insert(
+          0,
+          Message(
+            id: 0,
+            sender: widget.loginInfo.user,
+            receiver: opponentUser,
+            created: "",
+            modified: "",
+            message: _enteredMessage,
+            isRead: true,
+            type: 1,
+            args: null,
+            room: widget.room.id,
+          ));
     });
 
     _controller.clear();
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
+      0,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-  }
 
-  void scrollAnimate() {
-    print("탭 클릭됨");
-    // 6초 후에 실행
-
-    Future.delayed(const Duration(milliseconds: 600), () {
-      // MediaQuery.of(context).viewInsets.bottom 하단 inset(사용못하는영역)크기 리턴
-      // 사용못하는 영역만큼 1초 동안 easeIn으로 이동
-      // _scrollController.animateTo(MediaQuery.of(context).viewInsets.bottom,
-      //     duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    });
     _enteredMessage = '';
   }
 
@@ -388,6 +380,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    reverse: true,
                     shrinkWrap: true,
                     controller: _scrollController,
                     itemCount: _messages.length,
@@ -584,8 +577,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     onTap: () {
-                      _scrollController
-                          .jumpTo(_scrollController.position.maxScrollExtent);
                       //scrollAnimate();
                     },
                     controller: _controller,
@@ -606,8 +597,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   onPressed: () {
                     _enteredMessage.trim().isEmpty ? null : _sendMessage();
-                    _scrollController
-                        .jumpTo(_scrollController.position.maxScrollExtent);
                   },
                   icon: Image.asset(
                     "assets/icons/send_button.png",
