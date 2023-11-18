@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
+import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -163,7 +164,16 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 ),
               )
             ])),
-            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: CustomTextField(
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {});
+                },
+                errorText: '비밀번호가 일치하지 않습니다.',
+              ),
+            ),
             OutlinedButton(
               onPressed: () {
                 _deleteAccount(context);
