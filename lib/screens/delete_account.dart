@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,6 +16,8 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  static const storage = FlutterSecureStorage();
+
   void _deleteAccount(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url =
@@ -31,6 +34,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     debugPrint((response.statusCode).toString());
     if (response.statusCode == 204) {
       if (!mounted) return;
+      storage.delete(key: 'user');
       Navigator.push(
         context,
         MaterialPageRoute(
