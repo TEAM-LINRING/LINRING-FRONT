@@ -202,7 +202,7 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
           Row(
             children: [
               Container(
-                width: 156,
+                width: 100,
                 decoration: const BoxDecoration(
                   border: BorderDirectional(
                     bottom: BorderSide(
@@ -214,7 +214,31 @@ class _ChoiceLocationState extends State<ChoiceLocation> {
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
-                    "${department ?? ""} ${person ?? ""}",
+                    department ?? "",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 6,
+              ),
+              Container(
+                width: 70,
+                decoration: const BoxDecoration(
+                  border: BorderDirectional(
+                    bottom: BorderSide(
+                      color: Color(0xffc8aaaa),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    person ?? "",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 18,
