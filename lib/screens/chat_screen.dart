@@ -131,6 +131,24 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print(promiseDate);
     print(widget.room.reservationTime);
+
+    setState(() {
+      // 로컬 리스트에 임시 저장
+      _messages.insert(
+          0,
+          Message(
+            id: 0,
+            sender: widget.loginInfo.user,
+            receiver: opponentUser,
+            created: "",
+            modified: "",
+            message: "",
+            isRead: true,
+            type: 2,
+            args: isoFormattedString,
+            room: widget.room.id,
+          ));
+    });
   }
 
   String formatISOTime(DateTime date) {
@@ -336,16 +354,18 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _timeChat() {
-    DateTime datetime = DateTime.parse("2023-11-20 18:26:00.000");
+  // chat type 2
+  Widget _timeChat(Message message) {
+    DateTime datetime = DateTime.parse(message.args!);
     final promise = DateFormat('M월 d일 (E) H시 m분', 'ko_KR').format(datetime);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20.0),
-      margin: const EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: const Color(0xffc8aaaa)),
+        border: Border.all(color: const Color(0xfffec2b5)),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Text.rich(
@@ -395,6 +415,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         chatWidget = Expanded(child: _chatEntry(message));
                       } else if (message.type == 1) {
                         chatWidget = _chatBubble(message, isMine);
+                      } else if (message.type == 2) {
+                        chatWidget = Expanded(child: _timeChat(message));
                       } else {
                         chatWidget = Container();
                       }
