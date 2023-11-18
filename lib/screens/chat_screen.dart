@@ -399,39 +399,42 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    reverse: true,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemCount: _messages.length,
-                    itemBuilder: (context, int index) {
-                      final message = _messages[index];
-                      bool isMine =
-                          message.sender.id == widget.loginInfo.user.id;
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: ListView.builder(
+                      reverse: true,
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      itemCount: _messages.length,
+                      itemBuilder: (context, int index) {
+                        final message = _messages[index];
+                        bool isMine =
+                            message.sender.id == widget.loginInfo.user.id;
 
-                      Widget chatWidget;
+                        Widget chatWidget;
 
-                      if (message.type == 0) {
-                        chatWidget = Expanded(child: _chatEntry(message));
-                      } else if (message.type == 1) {
-                        chatWidget = _chatBubble(message, isMine);
-                      } else if (message.type == 2) {
-                        chatWidget = Expanded(child: _timeChat(message));
-                      } else {
-                        chatWidget = Container();
-                      }
+                        if (message.type == 0) {
+                          chatWidget = Expanded(child: _chatEntry(message));
+                        } else if (message.type == 1) {
+                          chatWidget = _chatBubble(message, isMine);
+                        } else if (message.type == 2) {
+                          chatWidget = Expanded(child: _timeChat(message));
+                        } else {
+                          chatWidget = Container();
+                        }
 
-                      return Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          mainAxisAlignment: isMine
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [chatWidget],
-                        ),
-                      );
-                    },
+                        return Container(
+                          margin: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            mainAxisAlignment: isMine
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [chatWidget],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],
