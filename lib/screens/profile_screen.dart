@@ -580,15 +580,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               )),
           const SizedBox(height: 10),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Wrap(
-                alignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: List.generate(remark.length, (index) {
-                  return buildRemark(index);
-                })),
-          ),
+          // SizedBox(
+          //   width: MediaQuery.of(context).size.width,
+          //   child: Wrap(
+          //       alignment: WrapAlignment.start,
+          //       crossAxisAlignment: WrapCrossAlignment.center,
+          //       children: List.generate(remark.length, (index) {
+          //         return buildRemark(index);
+          //       })),
+          // ),
+          Wrap(
+              alignment: WrapAlignment.start,
+              children: List.generate(remark.length, (index) {
+                return buildRemark(index);
+              })),
 
           const SizedBox(height: 10),
           const Row(
@@ -633,12 +638,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget buildRemark(index) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 6, 7),
+      padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
       child: ChoiceChip(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
             side: const BorderSide(width: 2, color: Color(0xFFFEC2B5))),
-        labelPadding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+        labelPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
         label: Text(
           remark[index]['state'],
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
