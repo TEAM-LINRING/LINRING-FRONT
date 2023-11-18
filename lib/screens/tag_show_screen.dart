@@ -337,7 +337,7 @@ class _TagCardState extends State<TagCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}하기",
+                "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
                 style: const TextStyle(fontSize: 24),
               ),
               const SizedBox(
