@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
             created: "",
             modified: "",
             message:
-                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag2.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
             isRead: true,
             type: 0,
             args: null,
