@@ -37,7 +37,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   bool afterMeeting = false;
   bool afterPromise = false;
-  bool endMeeting = false;
   bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
@@ -180,14 +179,16 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentTagset = widget.room.tag2,
           };
     if (widget.room.reservationTime != null) {
-      print('initState 중 if문 in');
       afterPromise = true;
-      promiseDate = widget.room.reservationTime;
-      print('print PromiseDate: $promiseDate');
-      twoHoursLater = promiseDate!.add(const Duration(hours: 2));
-      print('print twoHoursLater: $twoHoursLater');
-
-      if (twoHoursLater.isAfter(promiseDate!)) {
+      promiseDate = widget.room.reservationTime!.add(const Duration(hours: 9));
+      print('약속 시간: $promiseDate');
+      final twoHoursLater = promiseDate!.add(const Duration(hours: 2));
+      print('약속 후 30초 뒤 시간: $twoHoursLater');
+      print('현재 시간: ${DateTime.now().toUtc()}');
+      var now = DateTime.now().toUtc().add(const Duration(hours: 9));
+      //twoHoursLater가 현재 시간보다 이전이면 true를 반환해야함
+      if (((twoHoursLater).toLocal()).isBefore(now)) {
+        print('afterMeeting : true');
         afterMeeting = true;
       }
     } else {
@@ -432,7 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatWidget = Expanded(child: _chatEntry(message));
                         } else if (message.type == 1) {
                           chatWidget = _chatBubble(message, isMine);
-                        } else if (message.type == 2) {
+                        } else if (message.type == 2 && message.args != null) {
                           chatWidget = Expanded(child: _timeChat(message));
                         } else {
                           chatWidget = Container();
@@ -535,8 +536,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      if (endMeeting) {
-                      } else if (afterMeeting) {
+                      if (afterMeeting) {
                         _showRatingModal(context);
                       } else {
                         final selectedDate = await showOmniDateTimePicker(
@@ -566,13 +566,11 @@ class _ChatScreenState extends State<ChatScreen> {
                       }
                     },
                     child: Text(
-                      endMeeting
-                          ? "만남 완료"
-                          : afterMeeting
-                              ? "매너평가하기"
-                              : afterPromise
-                                  ? "${promiseDate!.year}-${promiseDate!.month}-${promiseDate!.day}\n${promiseDate!.hour} : ${promiseDate!.minute}"
-                                  : "약속 시간\n 정하기",
+                      afterMeeting
+                          ? "매너평가하기"
+                          : afterPromise
+                              ? "${promiseDate!.year}-${promiseDate!.month}-${promiseDate!.day}\n${promiseDate!.hour} : ${promiseDate!.minute}"
+                              : "약속 시간\n 정하기",
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 13, color: Colors.black),
                     ),
@@ -856,7 +854,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 _createRating();
                                                 afterPromise = false;
                                                 afterMeeting = false;
-                                                endMeeting = true;
                                                 widget.room.reservationTime =
                                                     null;
                                                 promiseDate = null;
