@@ -1,4 +1,4 @@
-package com.example.linring_front_flutter
+package com.linring
 
 import io.flutter.embedding.android.FlutterActivity
 
