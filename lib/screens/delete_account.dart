@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
+import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -15,28 +17,40 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+  static const storage = FlutterSecureStorage();
+  String password = '';
+  bool isIncorrect = false;
+
   void _deleteAccount(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url =
         Uri.parse('$apiAddress/accounts/v2/user/${widget.loginInfo.user.id}/');
     final token = widget.loginInfo.access;
 
-    final response = await http.delete(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await http.delete(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "password": password,
+        }));
     debugPrint((response.statusCode).toString());
     if (response.statusCode == 204) {
+      password = '';
+
       if (!mounted) return;
+      storage.delete(key: 'user');
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const EntryScreen(),
         ),
       );
+    } else if (response.statusCode == 400) {
+      setState(() {
+        isIncorrect = true;
+      });
     }
   }
 
@@ -52,7 +66,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         height: double.infinity,
         padding: const EdgeInsets.only(left: 20, top: 15, bottom: 0, right: 20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               '계정을 삭제하기 전에 필독해주세요.',
@@ -61,7 +75,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 color: Colors.black,
                 fontSize: 22,
                 fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
                 height: 0,
               ),
             ),
@@ -69,7 +83,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               height: 20,
             ),
             Container(
-              // padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               alignment: Alignment.center,
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -96,7 +109,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w300,
                     ),
-                    // textAlign: TextAlign.left,
                   ),
                   SizedBox(
                     height: 10,
@@ -109,7 +121,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w300,
                     ),
-                    // textAlign: TextAlign.start,
                   ),
                   SizedBox(
                     height: 10,
@@ -122,7 +133,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w300,
                     ),
-                    // textAlign: TextAlign.start,
                   ),
                   SizedBox(
                     height: 10,
@@ -135,7 +145,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w300,
                     ),
-                    // textAlign: TextAlign.start,
                   ),
                 ],
               ),
@@ -149,24 +158,33 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 text: '비밀번호 입력 후, 아래의 탈퇴하기 버튼을 누르면 본 계정이 ',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 22,
+                  fontSize: 20,
                   fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               TextSpan(
                 text: '영구히 삭제됩니다.',
                 style: TextStyle(
                   color: Color(0xFFFF0000),
-                  fontSize: 22,
+                  fontSize: 20,
                   fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w500,
-                  height: 0,
+                  fontWeight: FontWeight.w700,
                 ),
               )
             ])),
-            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: CustomTextField(
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    password = value;
+                  });
+                },
+                errorText: isIncorrect ? '비밀번호가 일치하지 않습니다.' : null,
+              ),
+            ),
             OutlinedButton(
               onPressed: () {
                 _deleteAccount(context);

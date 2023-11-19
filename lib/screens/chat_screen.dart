@@ -69,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
             created: "",
             modified: "",
             message:
-                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
+                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag2.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
             isRead: true,
             type: 0,
             args: null,
@@ -510,7 +510,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       Text(
                         "# ${opponentTagset.place}  # ${opponentTagset.person}  # ${opponentTagset.method}${opponentTagset.method == "카페" ? "가기" : "하기"}",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 15),
                       ),
                       Text(
                         "${opponentUser.department}  ${opponentUser.studentNumber}학번  $year살  ${opponentUser.gender}자",

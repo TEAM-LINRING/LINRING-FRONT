@@ -60,9 +60,16 @@ class _TagShowScreenState extends State<TagShowScreen> {
   }
 
   final List<String> greetings = [
-    "안녕~ 오늘은 어떤 친구를 만날까?",
-    "태그를 추가해서 새로운 친구를 만날 수 있어!",
-    "개발자와 매칭이 되면 선물을 준다는데?",
+    "안녕~ 나는 푸링이야\n태그를 추가해서 친구를 찾아볼까?",
+    "좋은 하루~\n오늘은 어떤 친구를 만나게 될까?",
+    "옆으로 넘기면\n새로운 태그를 추가할 수 있어",
+    "태그는 3개까지 추가할 수 있어",
+    "검색 토글을 꺼두면\n상대가 나를 검색 할 수 없어",
+    "오늘은 누굴 만나게 될까?\n넘 기대돼!",
+    "점 세 개를 누르면\n태그를 삭제할 수 있어",
+    "날 보니까 푸딩이 먹고 싶다고?\n이런...",
+    "무례한 친구를 만나면\n꼭 신고하도록 해",
+    "다른 친구에게 채팅이 오면\n반갑게 맞이 해줘",
   ];
 
   String randomGreeting = "안녕~ 오늘은 어떤 친구를 만날까?";
@@ -108,50 +115,52 @@ class _TagShowScreenState extends State<TagShowScreen> {
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(20),
+                width: double.maxFinite,
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
+                height: 100,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: SvgPicture.asset(
                           'assets/images/characters/char_puring.svg'),
                     ),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromRGBO(108, 89, 22, 0.10),
-                              offset: Offset(0, 0),
-                              blurRadius: 20,
-                              spreadRadius: 1,
-                            ),
-                          ],
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
                         ),
-                        child: GestureDetector(
-                          onTap: () {
-                            updateRandomGreeting();
-                          },
-                          child: Text(
-                            randomGreeting,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w300,
-                              fontSize: 16,
-                            ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(108, 89, 22, 0.10),
+                            offset: Offset(0, 0),
+                            blurRadius: 20,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          updateRandomGreeting();
+                        },
+                        child: Text(
+                          randomGreeting,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 16,
+                            height: 1.5,
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 36),
+              const SizedBox(height: 5),
               Container(
                 width: double.infinity,
                 padding:
@@ -235,6 +244,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
                                                 fontSize: 24,
                                                 fontWeight: FontWeight.w300,
                                                 color: Color(0xff898989),
+                                                height: 1.5,
                                               ),
                                             ),
                                             SizedBox(height: 10),
@@ -361,55 +371,57 @@ class _TagCardState extends State<TagCard> {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "${widget.tag.place}에서\n${(widget.tag.isSameDepartment) ? "같은 과" : "다른 과"} ${widget.tag.person}랑\n${widget.tag.method}${widget.tag.method == "카페" ? "가기" : "하기"}",
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        widget.tag.introduction != null
-                            ? "\"${widget.tag.introduction}\""
-                            : "",
                         style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff999999),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 24,
+                          height: 1.5,
                         ),
                       ),
-                      const SizedBox(
-                        height: 64,
-                      ),
+                      PopupMenuButton<int>(
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 1,
+                            child: Text('삭제하기'),
+                          ),
+                        ],
+                        onSelected: (value) {
+                          if (value == 1) {
+                            _deleteTag(widget.tag.id);
+                          }
+                        },
+                        icon: const Icon(Icons.more_vert),
+                      )
                     ],
                   ),
-                  PopupMenuButton<int>(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 1,
-                        child: Text('삭제하기'),
-                      ),
-                    ],
-                    onSelected: (value) {
-                      if (value == 1) {
-                        _deleteTag(widget.tag.id);
-                      }
-                    },
-                    icon: const Icon(Icons.more_vert),
-                  )
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    widget.tag.introduction != null
+                        ? "\"${widget.tag.introduction}\""
+                        : "",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff999999),
+                    ),
+                  ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Column(
                     children: [
@@ -418,7 +430,11 @@ class _TagCardState extends State<TagCard> {
                         style: TextStyle(
                           fontSize: 11,
                           color: Color(0xff999999),
+                          height: 1.5,
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
                         width: 80,
