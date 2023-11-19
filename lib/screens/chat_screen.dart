@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -108,17 +107,25 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _patchReservationTime() async {
+    print('_patchReservationTime이 실행됨');
     String apiAddress = dotenv.get("API_ADDRESS");
+    String? isoFormattedString;
     final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}/');
     final token = widget.loginInfo.access;
-    String isoFormattedString = formatISOTime(promiseDate!);
+    if (promiseDate == null) {
+      print('promiseDate가 null임 !!!');
+      isoFormattedString = null;
+    } else {
+      print('null이 아님 ..');
+      twoHoursLater = promiseDate!.add(const Duration(hours: 2));
+      isoFormattedString = formatISOTime(promiseDate!);
+    }
     final body = jsonEncode({
       "tagset": widget.room.tag.id,
       "tagset2": widget.room.tag2.id,
       "reservation_time": isoFormattedString,
     });
-    twoHoursLater = promiseDate!.add(const Duration(hours: 2));
-    afterMeeting = (DateTime.now()).isAfter(twoHoursLater);
+    print(body);
     await http.patch(
       url,
       headers: {
@@ -127,11 +134,9 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       body: body,
     );
-    widget.room.reservationTime = promiseDate;
 
+    print('아직 patch안에 있음');
     print(promiseDate);
-    print(widget.room.reservationTime);
-
     setState(() {
       // 로컬 리스트에 임시 저장
       _messages.insert(
@@ -162,6 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    print('initState');
     super.initState();
     (widget.loginInfo.user.id == widget.room.relation2.id)
         ? {
@@ -172,13 +178,23 @@ class _ChatScreenState extends State<ChatScreen> {
             opponentUser = widget.room.relation2,
             opponentTagset = widget.room.tag2,
           };
-    promiseDate = widget.room.reservationTime;
-    print(widget.room.reservationTime);
     if (widget.room.reservationTime != null) {
       afterPromise = true;
+      promiseDate = widget.room.reservationTime!.add(const Duration(hours: 9));
+      print('약속 시간: $promiseDate');
+      final twoHoursLater = promiseDate!.add(const Duration(hours: 2));
+      print('약속 후 30초 뒤 시간: $twoHoursLater');
+      print('현재 시간: ${DateTime.now().toUtc()}');
+      var now = DateTime.now().toUtc().add(const Duration(hours: 9));
+      //twoHoursLater가 현재 시간보다 이전이면 true를 반환해야함
+      if (((twoHoursLater).toLocal()).isBefore(now)) {
+        print('afterMeeting : true');
+        afterMeeting = true;
+      }
+    } else {
+      afterMeeting = false;
+      afterPromise = false;
     }
-    print('initState');
-    print(widget.room.reservationTime);
     _loadMessages().then((value) => setState(() {}));
   }
 
@@ -417,7 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           chatWidget = Expanded(child: _chatEntry(message));
                         } else if (message.type == 1) {
                           chatWidget = _chatBubble(message, isMine);
-                        } else if (message.type == 2) {
+                        } else if (message.type == 2 && message.args != null) {
                           chatWidget = Expanded(child: _timeChat(message));
                         } else {
                           chatWidget = Container();
@@ -540,11 +556,13 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                         );
                         promiseDate = selectedDate!;
+                        print('primiseDate를 selectedDate에 넣었음');
                         afterPromise = true;
+                        widget.room.reservationTime = promiseDate!;
                         updateMatchInfo();
                         _patchReservationTime();
                         print('patch 호출 후 print');
-                        print(widget.room.reservationTime);
+                        print(promiseDate);
                       }
                     },
                     child: Text(
@@ -834,6 +852,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                               label: '매너평가 남기기',
                                               onPressed: () {
                                                 _createRating();
+                                                afterPromise = false;
+                                                afterMeeting = false;
+                                                widget.room.reservationTime =
+                                                    null;
+                                                promiseDate = null;
+                                                _patchReservationTime();
+                                                print('null로 패치된거야??');
                                               },
                                             ),
                                           )
