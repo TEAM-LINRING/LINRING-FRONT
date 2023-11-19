@@ -373,7 +373,8 @@ class _ChatScreenState extends State<ChatScreen> {
   // chat type 2
   Widget _timeChat(Message message) {
     DateTime datetime = DateTime.parse(message.args!);
-    final promise = DateFormat('M월 d일 (E) H시 m분', 'ko_KR').format(datetime);
+    final promise = DateFormat('M월 d일 (E) H시 m분', 'ko_KR')
+        .format(datetime.add(const Duration(hours: 9)));
 
     return Container(
       width: double.infinity,
