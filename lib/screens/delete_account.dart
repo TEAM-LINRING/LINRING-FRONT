@@ -18,6 +18,8 @@ class DeleteAccountScreen extends StatefulWidget {
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   static const storage = FlutterSecureStorage();
+  String password = '';
+  bool isIncorrect = false;
 
   void _deleteAccount(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
@@ -25,15 +27,18 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         Uri.parse('$apiAddress/accounts/v2/user/${widget.loginInfo.user.id}/');
     final token = widget.loginInfo.access;
 
-    final response = await http.delete(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
+    final response = await http.delete(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "password": password,
+        }));
     debugPrint((response.statusCode).toString());
     if (response.statusCode == 204) {
+      password = '';
+
       if (!mounted) return;
       storage.delete(key: 'user');
       Navigator.push(
@@ -42,6 +47,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
           builder: (context) => const EntryScreen(),
         ),
       );
+    } else if (response.statusCode == 400) {
+      setState(() {
+        isIncorrect = true;
+      });
     }
   }
 
@@ -169,9 +178,11 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               child: CustomTextField(
                 obscureText: true,
                 onChanged: (value) {
-                  setState(() {});
+                  setState(() {
+                    password = value;
+                  });
                 },
-                errorText: '비밀번호가 일치하지 않습니다.',
+                errorText: isIncorrect ? '비밀번호가 일치하지 않습니다.' : null,
               ),
             ),
             OutlinedButton(
