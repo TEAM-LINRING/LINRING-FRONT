@@ -124,7 +124,7 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                ...getRandomPositions(4),
+                ...getRandomPositions(widget.searchUser.length),
               ],
             ),
           ))),
