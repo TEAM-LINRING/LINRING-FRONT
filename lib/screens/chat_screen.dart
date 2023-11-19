@@ -539,7 +539,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (afterMeeting) {
                         _showRatingModal(context);
                       } else {
-                        final selectedDate = await showOmniDateTimePicker(
+                        await showOmniDateTimePicker(
                           context: context,
                           initialDate: widget.room.reservationTime,
                           firstDate: DateTime.now(),
@@ -554,15 +554,56 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderRadius: const BorderRadius.all(
                             Radius.circular(10),
                           ),
-                        );
-                        promiseDate = selectedDate!;
-                        print('primiseDate를 selectedDate에 넣었음');
-                        afterPromise = true;
-                        widget.room.reservationTime = promiseDate!;
-                        updateMatchInfo();
-                        _patchReservationTime();
-                        print('patch 호출 후 print');
-                        print(promiseDate);
+                        ).then((selectedDate) {
+                          if (selectedDate!
+                              .difference(DateTime.now())
+                              .isNegative) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                    title: const Text(
+                                      '약속 시간 정하기 실패',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    content: const Text(
+                                      '이미 지난 시간은 약속 시간으로 정할 수 없어요!',
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: const Text(
+                                          '확인',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        20,
+                                      ),
+                                    ));
+                              },
+                            );
+                          } else {
+                            promiseDate = selectedDate;
+                            print('primiseDate를 selectedDate에 넣었음');
+                            afterPromise = true;
+                            widget.room.reservationTime = promiseDate!;
+                            updateMatchInfo();
+
+                            _patchReservationTime();
+
+                            print('patch 호출 후 print');
+                            print(promiseDate);
+                          }
+                        });
                       }
                     },
                     child: Text(
