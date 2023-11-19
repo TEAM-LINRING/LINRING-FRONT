@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 
 //search detail modal ui 입니다.

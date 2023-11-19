@@ -11,7 +11,6 @@ import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/screens/matching_loading_screen.dart';
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 class TagShowScreen extends StatefulWidget {
   final LoginInfo loginInfo;

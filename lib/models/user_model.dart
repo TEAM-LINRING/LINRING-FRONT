@@ -1,4 +1,3 @@
-import 'package:linring_front_flutter/major_data.dart';
 
 class User {
   final int? id;
