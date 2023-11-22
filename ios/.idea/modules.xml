@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/flutter_secure_storage/android/android.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/flutter_secure_storage/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/uni_links/android/android1.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/uni_links/android/android1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/uni_links/example/example.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/uni_links/example/example.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/flutter_secure_storage/example/example1.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/flutter_secure_storage/example/example1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/firebase_analytics/firebase_analytics.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/firebase_analytics/firebase_analytics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/firebase_core/firebase_core.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/firebase_core/firebase_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/firebase_dynamic_links/firebase_dynamic_links.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/firebase_dynamic_links/firebase_dynamic_links.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/firebase_messaging/firebase_messaging.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/firebase_messaging/firebase_messaging.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ios.iml" filepath="$PROJECT_DIR$/.idea/ios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.symlinks/plugins/share_plus/share_plus.iml" filepath="$PROJECT_DIR$/.symlinks/plugins/share_plus/share_plus.iml" />
+    </modules>
+  </component>
+</project>
