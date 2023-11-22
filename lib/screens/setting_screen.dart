@@ -376,9 +376,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            _settingItems("공지사항 및 이벤트", false, () {
-              _displayPreparingService(context);
-            }),
+            // _settingItems("공지사항 및 이벤트", false, () {
+            //   _displayPreparingService(context);
+            // }),
             _settingItems(
               "프로필 관리",
               false,
@@ -405,9 +405,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 });
               },
             ),
-            _settingItems("친구 초대", false, () {
-              _displayPreparingService(context);
-            }),
+            // _settingItems("친구 초대", false, () {
+            //   _displayPreparingService(context);
+            // }),
             _settingItems("비밀번호 변경", false, () {
               Navigator.pushNamed(context, '/forgotPassword');
             }),
