@@ -111,179 +111,185 @@ class _TagShowScreenState extends State<TagShowScreen> {
               },
             ).toList(),
           ),
-          Column(
-            children: [
-              Container(
-                width: double.maxFinite,
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
-                height: 100,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      child: SvgPicture.asset(
-                          'assets/images/characters/char_puring.svg'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: double.maxFinite,
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
+                    height: 100,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          child: SvgPicture.asset(
+                              'assets/images/characters/char_puring.svg'),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(108, 89, 22, 0.10),
-                            offset: Offset(0, 0),
-                            blurRadius: 20,
-                            spreadRadius: 1,
-                          ),
-                        ],
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          updateRandomGreeting();
-                        },
-                        child: Text(
-                          randomGreeting,
-                          textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w300,
-                            fontSize: 16,
-                            height: 1.5,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 5),
-              Container(
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                child: const Text(
-                  "나의 태그",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w300,
-                    fontSize: 28,
-                  ),
-                ),
-              ),
-              FutureBuilder(
-                future: _futureTagsets,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text("에러 ${snapshot.error}");
-                  } else if (!snapshot.hasData) {
-                    return const Text("데이터 없음.");
-                  } else {
-                    return CarouselSlider(
-                      options: CarouselOptions(
-                        height: 320.0,
-                        enableInfiniteScroll: false,
-                      ),
-                      items: () {
-                        List<Widget> carouselItems = [];
-                        for (var tag in snapshot.data!) {
-                          carouselItems.add(
-                            TagCard(
-                              tag: tag,
-                              loginInfo: widget.loginInfo,
-                              onTagDeleted: refreshTagsets,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
                             ),
-                          );
-                        }
-                        if (snapshot.data!.length <= 2) {
-                          carouselItems.add(
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TagAddScreen(
-                                      loginInfo: widget.loginInfo,
-                                    ),
-                                  ),
-                                ).then(
-                                  (value) => setState(
-                                    () {
-                                      _futureTagsets = _callAPI();
-                                    },
-                                  ),
-                                );
-                              },
-                              child: SizedBox(
-                                width: 400,
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  color: Colors.white,
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(20.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromRGBO(108, 89, 22, 0.10),
+                                offset: Offset(0, 0),
+                                blurRadius: 20,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              updateRandomGreeting();
+                            },
+                            child: Text(
+                              randomGreeting,
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 16,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 10),
+                    child: const Text(
+                      "나의 태그",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        fontSize: 28,
+                      ),
+                    ),
+                  ),
+                  FutureBuilder(
+                    future: _futureTagsets,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text("에러 ${snapshot.error}");
+                      } else if (!snapshot.hasData) {
+                        return const Text("데이터 없음.");
+                      } else {
+                        return CarouselSlider(
+                          options: CarouselOptions(
+                            height: 320.0,
+                            enableInfiniteScroll: false,
+                          ),
+                          items: () {
+                            List<Widget> carouselItems = [];
+                            for (var tag in snapshot.data!) {
+                              carouselItems.add(
+                                TagCard(
+                                  tag: tag,
+                                  loginInfo: widget.loginInfo,
+                                  onTagDeleted: refreshTagsets,
+                                ),
+                              );
+                            }
+                            if (snapshot.data!.length <= 2) {
+                              carouselItems.add(
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TagAddScreen(
+                                          loginInfo: widget.loginInfo,
+                                        ),
+                                      ),
+                                    ).then(
+                                      (value) => setState(
+                                        () {
+                                          _futureTagsets = _callAPI();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    width: 400,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                      ),
+                                      color: Colors.white,
+                                      child: const Padding(
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              "클릭해서\n태그 추가하기",
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w300,
-                                                color: Color(0xff898989),
-                                                height: 1.5,
-                                              ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "클릭해서\n태그 추가하기",
+                                                  style: TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.w300,
+                                                    color: Color(0xff898989),
+                                                    height: 1.5,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 10),
+                                                Text(
+                                                  "태그는 3개까지 추가할 수 있어요.",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w300,
+                                                    color: Color(0xff898989),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(height: 10),
-                                            Text(
-                                              "태그는 3개까지 추가할 수 있어요.",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w300,
-                                                color: Color(0xff898989),
+                                            SizedBox(
+                                              width: double.infinity,
+                                              height: 36,
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Image(
+                                                  image: AssetImage(
+                                                    'assets/icons/add_circle.png',
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
-                                        SizedBox(
-                                          width: double.infinity,
-                                          height: 36,
-                                          child: Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Image(
-                                              image: AssetImage(
-                                                'assets/icons/add_circle.png',
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }
-                        return carouselItems;
-                      }(),
-                    );
-                  }
-                },
-              )
-            ],
+                              );
+                            }
+                            return carouselItems;
+                          }(),
+                        );
+                      }
+                    },
+                  )
+                ],
+              ),
+            ),
           )
         ],
       ),
