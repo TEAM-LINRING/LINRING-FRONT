@@ -41,7 +41,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _loadMessages() async {
     String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/chat/message/');
+    final url =
+        Uri.parse('$apiAddress/chat/message?room__id=${widget.room.id}');
     final token = widget.loginInfo.access;
     final response = await http.get(
       url,
@@ -50,7 +51,8 @@ class _ChatScreenState extends State<ChatScreen> {
         'Authorization': 'Bearer $token',
       },
     );
-
+    print(utf8.decode(response.bodyBytes));
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
