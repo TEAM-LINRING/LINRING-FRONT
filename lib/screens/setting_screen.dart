@@ -9,6 +9,7 @@ import 'package:linring_front_flutter/screens/delete_account.dart';
 import 'package:linring_front_flutter/screens/profile_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingScreen extends StatefulWidget {
   LoginInfo loginInfo;
@@ -376,9 +377,14 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
             ),
-            // _settingItems("공지사항 및 이벤트", false, () {
-            //   _displayPreparingService(context);
-            // }),
+            _settingItems(
+              "공식 Notion 페이지로 이동",
+              false,
+              () {
+                launchUrl(Uri.parse(
+                    'https://possible-rowboat-b63.notion.site/444456a5fef44d23bdd3b2181bacfb15?pvs=4'));
+              },
+            ),
             _settingItems(
               "프로필 관리",
               false,
