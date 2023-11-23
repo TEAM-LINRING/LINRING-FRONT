@@ -115,7 +115,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: body,
     );
     debugPrint((response.statusCode).toString());
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       if (!mounted) return;
       Navigator.push(
         context,
