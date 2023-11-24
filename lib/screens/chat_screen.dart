@@ -237,8 +237,17 @@ class _ChatScreenState extends State<ChatScreen> {
     final url = Uri.parse('$apiAddress/chat/message/');
     final token = widget.loginInfo.access;
 
+    /*
+    (23.11.25)
+    _enteredMessage를 그대로 사용할 시,
+    globals.messages.value를 업데이트 하는 것보다
+    _controller.clear가 먼저 발생하여
+    enteredMsg라는 변수에 value copy를 진행하는 것으로 문제 해결
+    */
+    final enteredMsg = _enteredMessage;
+
     String body = jsonEncode({
-      "message": _enteredMessage,
+      "message": enteredMsg,
       "is_read": false,
       "type": 1,
       "args": null,
@@ -265,7 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
           receiver: opponentUser,
           created: "",
           modified: "",
-          message: _enteredMessage,
+          message: enteredMsg,
           isRead: true,
           type: 1,
           args: null,
