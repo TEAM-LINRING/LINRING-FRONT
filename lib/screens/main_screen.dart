@@ -10,6 +10,7 @@ import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' as foundation;
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -42,10 +43,15 @@ class _MainScreenState extends State<MainScreen> {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/fcm/devices/');
     final token = widget.loginInfo.access;
+    final platform =
+        (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS)
+            ? 'ios'
+            : 'android';
+
     final body = jsonEncode({
-      "registration_id": token,
+      "registration_id": fcmToken,
       "active": true,
-      "type": "android",
+      "type": platform, // iOS, Android 구분
     });
 
     final result = await http.post(
