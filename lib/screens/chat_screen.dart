@@ -182,7 +182,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
       // ValueNotifier의 value 재할당
-      globals.messages.value = globals.messages.value;
+      globals.messages.value = List.from(globals.messages.value);
     });
   }
 
@@ -256,24 +256,6 @@ class _ChatScreenState extends State<ChatScreen> {
       body: body,
     );
 
-    // setState(() {
-    //   // 로컬 리스트에 임시 저장
-    //   globals.messages.value.insert(
-    //     0,
-    //     Message(
-    //       id: 0,
-    //       sender: widget.loginInfo.user,
-    //       receiver: opponentUser,
-    //       created: "",
-    //       modified: "",
-    //       message: _enteredMessage,
-    //       isRead: true,
-    //       type: 1,
-    //       args: null,
-    //       room: widget.room.id,
-    //     ),
-    //   );
-    // });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globals.messages.value.insert(
         0,
@@ -290,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
           room: widget.room.id!,
         ),
       );
-      globals.messages.value = globals.messages.value;
+      globals.messages.value = List.from(globals.messages.value);
     });
 
     _controller.clear();

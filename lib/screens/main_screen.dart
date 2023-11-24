@@ -28,6 +28,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
+  @pragma('vm:entry-point')
   void _initFCM() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -87,10 +88,14 @@ class _MainScreenState extends State<MainScreen> {
           args: message.data['args'],
           room: int.parse(message.data['room']),
         );
+
+        print(message.data['room']);
+        print(globals.currentRoom.id);
+
         if (int.parse(message.data['room']) == globals.currentRoom.id) {
           print('IN THE SAME CHATROOM');
           globals.messages.value.insert(0, tempMessage);
-          globals.messages.value = globals.messages.value;
+          globals.messages.value = List.from(globals.messages.value);
         }
       },
     );
