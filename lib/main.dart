@@ -12,13 +12,16 @@ import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:linring_front_flutter/utils/dynamic_links.dart';
 
+@pragma('vm:entry-point')
 void main() async {
   await initializeDateFormatting("ko_KR", null);
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  DynamicLinkService.instance.createDynamicLink('findpassword'); // 비밀번호 찾기 -> 인증 메일 수신 및 클릭 -> 비밀번호 변경 페이지로 이동
-  DynamicLinkService.instance.createDynamicLink('successregister'); // 회원 가입 -> 인증 메일 수신 및 클릭 -> 로그인 페이지로 이동
+  DynamicLinkService.instance.createDynamicLink(
+      'findpassword'); // 비밀번호 찾기 -> 인증 메일 수신 및 클릭 -> 비밀번호 변경 페이지로 이동
+  DynamicLinkService.instance.createDynamicLink(
+      'successregister'); // 회원 가입 -> 인증 메일 수신 및 클릭 -> 로그인 페이지로 이동
   runApp(const MyApp());
 }
 

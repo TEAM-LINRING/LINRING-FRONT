@@ -4,12 +4,16 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' as foundation;
+import 'globals.dart' as globals;
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -24,6 +28,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
+  @pragma('vm:entry-point')
   void _initFCM() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -42,10 +47,15 @@ class _MainScreenState extends State<MainScreen> {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/fcm/devices/');
     final token = widget.loginInfo.access;
+    final platform =
+        (foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS)
+            ? 'ios'
+            : 'android';
+
     final body = jsonEncode({
-      "registration_id": token,
+      "registration_id": fcmToken,
       "active": true,
-      "type": "android",
+      "type": platform, // iOS, Android 구분
     });
 
     final result = await http.post(
@@ -59,6 +69,31 @@ class _MainScreenState extends State<MainScreen> {
     print(result.body);
     print(fcmToken);
     messaging.onTokenRefresh.listen((fcmToken) {}).onError((err) {});
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        final messageKorean =
+            jsonDecode(message.data['message']); // Unicode -> 한국어
+
+        final tempMessage = Message(
+          id: int.parse(message.data['id']),
+          sender: globals.opponentUser,
+          receiver: widget.loginInfo.user,
+          created: message.data['created'],
+          modified: message.data['modified'],
+          message: messageKorean,
+          isRead: bool.parse(message.data['is_read']),
+          type: int.parse(message.data['type']),
+          args: message.data['args'],
+          room: int.parse(message.data['room']),
+        );
+
+        if (int.parse(message.data['room']) == globals.currentRoom.id) {
+          globals.messages.value.insert(0, tempMessage);
+          globals.messages.value = List.from(globals.messages.value);
+        }
+      },
+    );
   }
 
   void _initDynamicLinks() async {

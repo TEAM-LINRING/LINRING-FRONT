@@ -117,9 +117,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     User opponentUser;
     Tagset opponentTagset;
 
-    (widget.loginInfo.user.id == room.relation2.id)
-        ? {opponentUser = room.relation, opponentTagset = room.tag}
-        : {opponentUser = room.relation2, opponentTagset = room.tag2};
+    (widget.loginInfo.user.id == room.relation2!.id)
+        ? {opponentUser = room.relation!, opponentTagset = room.tag!}
+        : {opponentUser = room.relation2!, opponentTagset = room.tag2!};
 
     return InkWell(
       onTap: () => {

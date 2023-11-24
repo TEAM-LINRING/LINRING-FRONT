@@ -67,12 +67,12 @@ class _ReportScreenState extends State<ReportScreen> {
   void initState() {
     super.initState();
 
-    (widget.loginInfo.user.id == widget.room.relation2.id)
+    (widget.loginInfo.user.id == widget.room.relation2!.id)
         ? {
-            opponentUser = widget.room.relation,
+            opponentUser = widget.room.relation!,
           }
         : {
-            opponentUser = widget.room.relation2,
+            opponentUser = widget.room.relation2!,
           };
   }
 
