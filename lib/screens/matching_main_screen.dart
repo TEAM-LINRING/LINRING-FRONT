@@ -318,7 +318,6 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
         }
       }
       return List.generate(count, (index) {
-        print(selectedPositions);
         return getImageWidget(index, positions[selectedPositions[index]]);
       });
     }
@@ -333,7 +332,6 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
       right: right,
       child: GestureDetector(
         onTap: () {
-          debugPrint('온탭 !!!');
           _showSearchDetailModal(
               widget.searchUser[index], widget.searchTagset[index]);
         },
