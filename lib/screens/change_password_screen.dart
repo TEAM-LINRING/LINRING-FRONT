@@ -1,7 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/login_screen.dart';
+import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:linring_front_flutter/widgets/custom_textfield.dart';
+import 'package:http/http.dart' as http;
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -15,6 +21,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final passwordConfirmController = TextEditingController();
   bool isPasswordValid = true;
   bool isPasswordConfirmValid = true;
+
+  void _changePassword(BuildContext context) async {
+    String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
+    final url = Uri.parse('$apiAddress/accounts/password/change');
+
+    final response = await http.delete(url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "new_password1": passwordController.text,
+          "new_password2": passwordConfirmController.text
+        }));
+
+    debugPrint((response.statusCode).toString());
+    if (response.statusCode == 201) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +128,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             const SizedBox(height: 40),
             CustomOutlinedButton(
               label: '비밀번호 변경하기',
-              onPressed: () {},
+              onPressed: () {
+                _changePassword(context);
+              },
               backgroundColor: const Color(0xFFFEC2B5),
               isActive: isPasswordValid && isPasswordConfirmValid,
             ),
