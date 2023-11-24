@@ -11,8 +11,7 @@ class DynamicLinkService {
     final dynamicLinkParams = DynamicLinkParameters(
       link: Uri.parse("https://linring.page.link/$path"),
       uriPrefix: "https://linring.page.link",
-      androidParameters: const AndroidParameters(
-          packageName: "com.example.linring_front_flutter"),
+      androidParameters: const AndroidParameters(packageName: "com.linring"),
       iosParameters:
           const IOSParameters(bundleId: "com.example.linringFrontFlutter"),
     );
