@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
@@ -70,20 +71,26 @@ class _MainScreenState extends State<MainScreen> {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
+        print(message.data);
+        // final tempMessage = Message.fromJson(message.data);
+
+        // print(tempMessage.id);
         final tempMessage = Message(
-          id: message.data['id'],
-          sender: message.data['sender'],
-          receiver: message.data['receiver'],
+          id: int.parse(message.data['id']),
+          sender: globals.opponentUser,
+          receiver: widget.loginInfo.user,
           created: message.data['created'],
           modified: message.data['modified'],
           message: message.data['message'],
-          isRead: message.data['isRead'],
-          type: message.data['type'],
+          isRead: bool.parse(message.data['is_read']),
+          type: int.parse(message.data['type']),
           args: message.data['args'],
-          room: message.data['room'],
+          room: int.parse(message.data['room']),
         );
-        if (message.data['room'] == globals.currentRoomIndex) {
-          globals.messages.insert(0, tempMessage);
+        if (int.parse(message.data['room']) == globals.currentRoom.id) {
+          print('IN THE SAME CHATROOM');
+          globals.messages.value.insert(0, tempMessage);
+          globals.messages.value = globals.messages.value;
         }
       },
     );

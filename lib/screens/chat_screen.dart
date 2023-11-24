@@ -41,8 +41,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _loadMessages() async {
     // Global Variable 초기화
-    globals.messages = [];
-    globals.currentRoomIndex = widget.room.id;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value = [];
+    });
+
+    globals.currentRoom = widget.room;
 
     String apiAddress = dotenv.get("API_ADDRESS");
     final url =
@@ -61,28 +64,30 @@ class _ChatScreenState extends State<ChatScreen> {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       // 기존 채팅 불러오기
-      globals.messages = (body as List<dynamic>)
+      globals.messages.value = (body as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
 
-      // 입장 알림 메세지 리스트 맨 앞에 추가
-      globals.messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message:
-                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag2.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
-            isRead: true,
-            type: 0,
-            args: null,
-            room: widget.room.id,
-          ));
-      // 역순으로 재배치
-      globals.messages = globals.messages.reversed.toList();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 입장 알림 메세지 리스트 맨 앞에 추가
+        globals.messages.value.insert(
+            0,
+            Message(
+              id: 0,
+              sender: widget.loginInfo.user,
+              receiver: opponentUser,
+              created: "",
+              modified: "",
+              message:
+                  ' ${widget.room.tag!.place}에서 ${widget.room.tag!.person}랑 ${widget.room.tag!.method}${widget.room.tag!.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation!.nickname}님이 ${widget.room.tag2!.place}에서 ${widget.room.tag2!.person}랑 ${widget.room.tag2!.method}${widget.room.tag2!.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2!.nickname}님에게 채팅을 걸었습니다.',
+              isRead: true,
+              type: 0,
+              args: null,
+              room: widget.room.id!,
+            ));
+        // 역순으로 재배치 + ValueNotifier에 새로운 값 할당(값 변경 인식)
+        globals.messages.value = globals.messages.value.reversed.toList();
+      });
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -127,8 +132,8 @@ class _ChatScreenState extends State<ChatScreen> {
       isoFormattedString = formatISOTime(promiseDate!);
     }
     final body = jsonEncode({
-      "tagset": widget.room.tag.id,
-      "tagset2": widget.room.tag2.id,
+      "tagset": widget.room.tag!.id,
+      "tagset2": widget.room.tag2!.id,
       "reservation_time": isoFormattedString,
     });
     print(body);
@@ -143,22 +148,41 @@ class _ChatScreenState extends State<ChatScreen> {
 
     print('아직 patch안에 있음');
     print(promiseDate);
-    setState(() {
-      // 로컬 리스트에 임시 저장
-      globals.messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message: "",
-            isRead: true,
-            type: 2,
-            args: isoFormattedString,
-            room: widget.room.id,
-          ));
+    // setState(() {
+    //   // 로컬 리스트에 임시 저장
+    //   globals.messages.value.insert(
+    //       0,
+    //       Message(
+    //         id: 0,
+    //         sender: widget.loginInfo.user,
+    //         receiver: opponentUser,
+    //         created: "",
+    //         modified: "",
+    //         message: "",
+    //         isRead: true,
+    //         type: 2,
+    //         args: isoFormattedString,
+    //         room: widget.room.id,
+    //       ));
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value.insert(
+        0,
+        Message(
+          id: 0,
+          sender: widget.loginInfo.user,
+          receiver: opponentUser,
+          created: "",
+          modified: "",
+          message: "",
+          isRead: true,
+          type: 2,
+          args: isoFormattedString,
+          room: widget.room.id!,
+        ),
+      );
+      // ValueNotifier의 value 재할당
+      globals.messages.value = globals.messages.value;
     });
   }
 
@@ -175,15 +199,17 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     print('initState');
     super.initState();
-    (widget.loginInfo.user.id == widget.room.relation2.id)
+    (widget.loginInfo.user.id == widget.room.relation2!.id)
         ? {
-            opponentUser = widget.room.relation,
-            opponentTagset = widget.room.tag,
+            opponentUser = widget.room.relation!,
+            opponentTagset = widget.room.tag!,
           }
         : {
-            opponentUser = widget.room.relation2,
-            opponentTagset = widget.room.tag2,
+            opponentUser = widget.room.relation2!,
+            opponentTagset = widget.room.tag2!,
           };
+    globals.opponentUser = opponentUser;
+
     if (widget.room.reservationTime != null) {
       afterPromise = true;
       promiseDate = widget.room.reservationTime!.add(const Duration(hours: 9));
@@ -230,22 +256,41 @@ class _ChatScreenState extends State<ChatScreen> {
       body: body,
     );
 
-    setState(() {
-      // 로컬 리스트에 임시 저장
-      globals.messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message: _enteredMessage,
-            isRead: true,
-            type: 1,
-            args: null,
-            room: widget.room.id,
-          ));
+    // setState(() {
+    //   // 로컬 리스트에 임시 저장
+    //   globals.messages.value.insert(
+    //     0,
+    //     Message(
+    //       id: 0,
+    //       sender: widget.loginInfo.user,
+    //       receiver: opponentUser,
+    //       created: "",
+    //       modified: "",
+    //       message: _enteredMessage,
+    //       isRead: true,
+    //       type: 1,
+    //       args: null,
+    //       room: widget.room.id,
+    //     ),
+    //   );
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value.insert(
+        0,
+        Message(
+          id: 0,
+          sender: widget.loginInfo.user,
+          receiver: opponentUser,
+          created: "",
+          modified: "",
+          message: _enteredMessage,
+          isRead: true,
+          type: 1,
+          args: null,
+          room: widget.room.id!,
+        ),
+      );
+      globals.messages.value = globals.messages.value;
     });
 
     _controller.clear();
@@ -419,48 +464,54 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      itemCount: globals.messages.length,
-                      itemBuilder: (context, int index) {
-                        final message = globals.messages[index];
-                        bool isMine =
-                            message.sender.id == widget.loginInfo.user.id;
+            child: ValueListenableBuilder<List<Message>>(
+              valueListenable: globals.messages,
+              builder: (context, List<Message> messages, child) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: ListView.builder(
+                          reverse: true,
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemCount: messages.length,
+                          itemBuilder: (context, int index) {
+                            final message = messages[index];
+                            bool isMine =
+                                message.sender.id == widget.loginInfo.user.id;
 
-                        Widget chatWidget;
+                            Widget chatWidget;
 
-                        if (message.type == 0) {
-                          chatWidget = Expanded(child: _chatEntry(message));
-                        } else if (message.type == 1) {
-                          chatWidget = _chatBubble(message, isMine);
-                        } else if (message.type == 2 && message.args != null) {
-                          chatWidget = Expanded(child: _timeChat(message));
-                        } else {
-                          chatWidget = Container();
-                        }
+                            if (message.type == 0) {
+                              chatWidget = Expanded(child: _chatEntry(message));
+                            } else if (message.type == 1) {
+                              chatWidget = _chatBubble(message, isMine);
+                            } else if (message.type == 2 &&
+                                message.args != null) {
+                              chatWidget = Expanded(child: _timeChat(message));
+                            } else {
+                              chatWidget = Container();
+                            }
 
-                        return Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            mainAxisAlignment: isMine
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [chatWidget],
-                          ),
-                        );
-                      },
+                            return Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                mainAxisAlignment: isMine
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [chatWidget],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
         ),
