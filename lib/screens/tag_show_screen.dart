@@ -95,15 +95,15 @@ class _TagShowScreenState extends State<TagShowScreen> {
               autoPlayInterval: const Duration(seconds: 5),
               viewportFraction: 1.0,
             ),
-            items: [1, 2, 3, 4, 5].map(
+            items: [1, 2].map(
               (i) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return const SizedBox(
+                    return SizedBox(
                       width: double.infinity,
                       child: Image(
                         fit: BoxFit.fitWidth,
-                        image: AssetImage('assets/images/info_1.png'),
+                        image: AssetImage('assets/images/info_$i.png'),
                       ),
                     );
                   },
