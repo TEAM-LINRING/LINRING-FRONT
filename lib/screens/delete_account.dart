@@ -185,28 +185,31 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 errorText: isIncorrect ? '비밀번호가 일치하지 않습니다.' : null,
               ),
             ),
-            OutlinedButton(
-              onPressed: () {
-                _deleteAccount(context);
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: const Color(0xFFFF0000),
-                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                elevation: 5,
-                shadowColor: const Color(0x196C5916),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  _deleteAccount(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: const Color(0xFFFF0000),
+                  side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                  elevation: 5,
+                  shadowColor: const Color(0x196C5916),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  fixedSize: const Size(350, 70),
                 ),
-                fixedSize: const Size(350, 70),
-              ),
-              child: const Text(
-                '탈퇴하기',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  height: 0,
+                child: const Text(
+                  '탈퇴하기',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    height: 0,
+                  ),
                 ),
               ),
             ),
