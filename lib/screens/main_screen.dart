@@ -4,6 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
@@ -65,6 +66,25 @@ class _MainScreenState extends State<MainScreen> {
     print(result.body);
     print(fcmToken);
     messaging.onTokenRefresh.listen((fcmToken) {}).onError((err) {});
+
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        final tempMessage = Message(
+          id: message.data['id'],
+          sender: message.data['sender'],
+          receiver: message.data['receiver'],
+          created: message.data['created'],
+          modified: message.data['modified'],
+          message: message.data['message'],
+          isRead: message.data['isRead'],
+          type: message.data['type'],
+          args: message.data['args'],
+          room: message.data['room'],
+        );
+
+        // 현재 사용자가 위치한 채팅방에 추가한다.
+      },
+    );
   }
 
   void _initDynamicLinks() async {
