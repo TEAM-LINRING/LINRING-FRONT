@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'globals.dart' as globals;
 
 class ChatScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -27,7 +28,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
-  List<Message> _messages = [];
   String _enteredMessage = "";
   String ratingScore = "0";
   DateTime? promiseDate;
@@ -40,6 +40,10 @@ class _ChatScreenState extends State<ChatScreen> {
   bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
+    // Global Variable 초기화
+    globals.messages = [];
+    globals.currentRoomIndex = widget.room.id;
+
     String apiAddress = dotenv.get("API_ADDRESS");
     final url =
         Uri.parse('$apiAddress/chat/message?room__id=${widget.room.id}');
@@ -57,12 +61,12 @@ class _ChatScreenState extends State<ChatScreen> {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       // 기존 채팅 불러오기
-      _messages = (body as List<dynamic>)
+      globals.messages = (body as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
 
       // 입장 알림 메세지 리스트 맨 앞에 추가
-      _messages.insert(
+      globals.messages.insert(
           0,
           Message(
             id: 0,
@@ -78,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
             room: widget.room.id,
           ));
       // 역순으로 재배치
-      _messages = _messages.reversed.toList();
+      globals.messages = globals.messages.reversed.toList();
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -141,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
     print(promiseDate);
     setState(() {
       // 로컬 리스트에 임시 저장
-      _messages.insert(
+      globals.messages.insert(
           0,
           Message(
             id: 0,
@@ -228,7 +232,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       // 로컬 리스트에 임시 저장
-      _messages.insert(
+      globals.messages.insert(
           0,
           Message(
             id: 0,
@@ -424,9 +428,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       reverse: true,
                       shrinkWrap: true,
                       controller: _scrollController,
-                      itemCount: _messages.length,
+                      itemCount: globals.messages.length,
                       itemBuilder: (context, int index) {
-                        final message = _messages[index];
+                        final message = globals.messages[index];
                         bool isMine =
                             message.sender.id == widget.loginInfo.user.id;
 

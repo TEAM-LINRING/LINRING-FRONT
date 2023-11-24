@@ -12,6 +12,7 @@ import 'package:linring_front_flutter/screens/tag_show_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_bottom_navigation_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' as foundation;
+import 'globals.dart' as globals;
 
 class MainScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -81,8 +82,9 @@ class _MainScreenState extends State<MainScreen> {
           args: message.data['args'],
           room: message.data['room'],
         );
-
-        // 현재 사용자가 위치한 채팅방에 추가한다.
+        if (message.data['room'] == globals.currentRoomIndex) {
+          globals.messages.insert(0, tempMessage);
+        }
       },
     );
   }
