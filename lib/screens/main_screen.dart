@@ -72,28 +72,23 @@ class _MainScreenState extends State<MainScreen> {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
-        print(message.data);
-        // final tempMessage = Message.fromJson(message.data);
+        final messageKorean =
+            jsonDecode(message.data['message']); // Unicode -> 한국어
 
-        // print(tempMessage.id);
         final tempMessage = Message(
           id: int.parse(message.data['id']),
           sender: globals.opponentUser,
           receiver: widget.loginInfo.user,
           created: message.data['created'],
           modified: message.data['modified'],
-          message: message.data['message'],
+          message: messageKorean,
           isRead: bool.parse(message.data['is_read']),
           type: int.parse(message.data['type']),
           args: message.data['args'],
           room: int.parse(message.data['room']),
         );
 
-        print(message.data['room']);
-        print(globals.currentRoom.id);
-
         if (int.parse(message.data['room']) == globals.currentRoom.id) {
-          print('IN THE SAME CHATROOM');
           globals.messages.value.insert(0, tempMessage);
           globals.messages.value = List.from(globals.messages.value);
         }
