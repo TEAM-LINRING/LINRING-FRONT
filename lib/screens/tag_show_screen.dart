@@ -11,6 +11,7 @@ import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/screens/matching_loading_screen.dart';
 import 'package:linring_front_flutter/screens/tag_add_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TagShowScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -95,15 +96,30 @@ class _TagShowScreenState extends State<TagShowScreen> {
               autoPlayInterval: const Duration(seconds: 5),
               viewportFraction: 1.0,
             ),
-            items: [1, 2].map(
-              (i) {
+            items: [
+              {
+                'index': 1,
+                'url':
+                    'https://possible-rowboat-b63.notion.site/1-9b881e69b70041f3a83b5df842dccfa0'
+              },
+              {
+                'index': 2,
+                'url':
+                    'https://possible-rowboat-b63.notion.site/2-e0e5abaa8519470dbec0b1932455f5b6'
+              },
+            ].map(
+              (item) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: Image(
-                        fit: BoxFit.fitWidth,
-                        image: AssetImage('assets/images/info_$i.png'),
+                    return GestureDetector(
+                      onTap: () => launchUrl(Uri.parse(item['url'].toString())),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Image(
+                          fit: BoxFit.fitWidth,
+                          image: AssetImage(
+                              'assets/images/info_${item['index']}.png'),
+                        ),
                       ),
                     );
                   },
