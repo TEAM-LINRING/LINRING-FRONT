@@ -97,48 +97,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   final regex =
                       RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
 
-                setState(() {
-                  isPasswordValid = regex.hasMatch(value);
-                });
-              },
-              obscureText: true,
-              errorText:
-                  isPasswordValid ? null : '비밀번호는 영문자와 숫자를 조합해 8자리 이상이어야 합니다.',
-            ),
-            const SizedBox(height: 20),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '비밀번호 확인',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextField(
-              obscureText: true,
-              onChanged: (value) {
-                setState(() {
-                  isPasswordConfirmValid = passwordController.text == value;
-                });
-              },
-              errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
-            ),
-            const SizedBox(height: 40),
-            CustomOutlinedButton(
-              label: '비밀번호 변경하기',
-              onPressed: () {
-                _changePassword(context);
-              },
-              backgroundColor: const Color(0xFFFEC2B5),
-              isActive: isPasswordValid && isPasswordConfirmValid,
-            ),
-          ],
+                  setState(() {
+                    isPasswordValid = regex.hasMatch(value);
+                  });
+                },
+                obscureText: true,
+                errorText: isPasswordValid
+                    ? null
+                    : '비밀번호는 영문자와 숫자를 조합해 8자리 이상이어야 합니다.',
+              ),
+              const SizedBox(height: 20),
+              const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '비밀번호 확인',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                obscureText: true,
+                onChanged: (value) {
+                  setState(() {
+                    isPasswordConfirmValid = passwordController.text == value;
+                  });
+                },
+                errorText: isPasswordConfirmValid ? null : '비밀번호가 일치하지 않습니다.',
+              ),
+              const SizedBox(height: 40),
+              CustomOutlinedButton(
+                label: '비밀번호 변경하기',
+                onPressed: () {
+                  _changePassword(context);
+                },
+                backgroundColor: const Color(0xFFFEC2B5),
+                isActive: isPasswordValid && isPasswordConfirmValid,
+              ),
+            ],
+          ),
         ),
       ),
     );
