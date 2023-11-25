@@ -27,8 +27,18 @@ void main() async {
   await dotenv.load(fileName: '.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
-  await _initNotification();
+
+  /*
+  (23.11.25)
+  아래 두 가지 문제가 발생하여 임시로 주석 처리합니다.
+  
+  1. foreground message와 background message를 동시에 받게 되어 ChatScreen에서 message가 여러 개 생성됨
+  2. android에서 background message를 수신할 경우, notification을 show 하는 과정에서 NullPointer 에러 발생
+  */
+  
+  // FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
+  // await _initNotification();
+
   runApp(const MyApp());
 }
 
