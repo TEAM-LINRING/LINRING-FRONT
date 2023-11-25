@@ -157,7 +157,6 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               const SizedBox(
                 height: 20,
               ),
-
               RichText(
                   text: const TextSpan(children: [
                 TextSpan(
@@ -204,15 +203,19 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  fixedSize: const Size(350, 70),
                 ),
-                child: const Text(
-                  '탈퇴하기',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    height: 0,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: const Text(
+                    '탈퇴하기',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      height: 0,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
