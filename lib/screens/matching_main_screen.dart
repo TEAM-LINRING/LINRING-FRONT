@@ -99,34 +99,39 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: CustomAppBar(
-        title: '',
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: CustomAppBar(
+          title: '',
+        ),
+        body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/matching_main_bg.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+                child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SvgPicture.asset(
+                      'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  ...getRandomPositions(widget.searchUser.length),
+                ],
+              ),
+            ))),
       ),
-      body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/matching_main_bg.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Center(
-              child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SvgPicture.asset(
-                    'assets/images/characters/0${widget.loginInfo.user.profile}.svg'),
-                const SizedBox(
-                  height: 5,
-                ),
-                ...getRandomPositions(widget.searchUser.length),
-              ],
-            ),
-          ))),
     );
   }
 

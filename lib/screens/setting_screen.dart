@@ -259,180 +259,185 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfffff6f4),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          "설정",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 26,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xfffff6f4),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Text(
+            "설정",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 26,
+            ),
           ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    color: Color(0xffc8aaaa),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      color: Color(0xffc8aaaa),
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 0,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 18, 6, 6),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "$nickname님",
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 18, 6, 6),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "$nickname님",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18,
+                              ),
+                            ), // 이름
+                            const SizedBox(
+                              height: 10,
                             ),
-                          ), // 이름
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            "$college",
-                          ),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text("$department $studentNumber"),
-                        ],
-                      ),
-                      Stack(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 40),
-                            width: 100,
-                            height: 100,
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          Positioned(
-                            width: 90,
-                            height: 90,
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      color: const Color(0xffc8c8c8),
-                                      width: 0.7)),
-                              child: Center(
-                                child: SvgPicture.asset(
-                                    'assets/images/characters/0$ChangedIndex.svg'),
+                            Text(
+                              "$college",
+                            ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Text("$department $studentNumber"),
+                          ],
+                        ),
+                        Stack(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(top: 40),
+                              width: 100,
+                              height: 100,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            Positioned(
+                              width: 90,
+                              height: 90,
+                              child: Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        color: const Color(0xffc8c8c8),
+                                        width: 0.7)),
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                      'assets/images/characters/0$ChangedIndex.svg'),
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: InkWell(
-                              onTap: () {
-                                _displayProfileSheet(context)
-                                    .then((value) => setState(() {
-                                          currentIndex = ChangedIndex;
-                                          selectedIndex = ChangedIndex;
-                                        }));
-                              },
-                              child: Container(
-                                height: 24,
-                                width: 24,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: const Color(0xff999999),
-                                    width: 1,
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: () {
+                                  _displayProfileSheet(context)
+                                      .then((value) => setState(() {
+                                            currentIndex = ChangedIndex;
+                                            selectedIndex = ChangedIndex;
+                                          }));
+                                },
+                                child: Container(
+                                  height: 24,
+                                  width: 24,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xff999999),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.edit_outlined,
+                                    color: Color(0xff999999),
+                                    size: 18,
                                   ),
                                 ),
-                                child: const Icon(
-                                  Icons.edit_outlined,
-                                  color: Color(0xff999999),
-                                  size: 18,
-                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            _settingItems(
-              "공식 Notion 페이지로 이동",
-              false,
-              () {
-                launchUrl(Uri.parse(
-                    'https://possible-rowboat-b63.notion.site/444456a5fef44d23bdd3b2181bacfb15?pvs=4'));
-              },
-            ),
-            _settingItems(
-              "프로필 관리",
-              false,
-              () {
+              _settingItems(
+                "공식 Notion 페이지로 이동",
+                false,
+                () {
+                  launchUrl(Uri.parse(
+                      'https://possible-rowboat-b63.notion.site/444456a5fef44d23bdd3b2181bacfb15?pvs=4'));
+                },
+              ),
+              _settingItems(
+                "프로필 관리",
+                false,
+                () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                        loginInfo: widget.loginInfo,
+                      ),
+                    ),
+                  ).then((value) async {
+                    String? res = await storage.read(key: 'user');
+                    final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+                    final loginInfo = LoginInfo.fromJson(parsed);
+                    setState(() {
+                      widget.loginInfo = loginInfo;
+
+                      nickname = loginInfo.user.nickname;
+                      college = loginInfo.user.college;
+                      department = loginInfo.user.department;
+                      studentNumber = loginInfo.user.studentNumber;
+                    });
+                  });
+                },
+              ),
+              // _settingItems("친구 초대", false, () {
+              //   _displayPreparingService(context);
+              // }),
+              _settingItems("비밀번호 변경", false, () {
+                Navigator.pushNamed(context, '/forgotPassword');
+              }),
+              _settingItems("서비스 탈퇴하기", false, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(
+                    builder: (context) => DeleteAccountScreen(
                       loginInfo: widget.loginInfo,
                     ),
                   ),
-                ).then((value) async {
-                  String? res = await storage.read(key: 'user');
-                  final Map parsed = json.decode(utf8.decode(res!.codeUnits));
-                  final loginInfo = LoginInfo.fromJson(parsed);
-                  setState(() {
-                    widget.loginInfo = loginInfo;
-
-                    nickname = loginInfo.user.nickname;
-                    college = loginInfo.user.college;
-                    department = loginInfo.user.department;
-                    studentNumber = loginInfo.user.studentNumber;
-                  });
-                });
-              },
-            ),
-            // _settingItems("친구 초대", false, () {
-            //   _displayPreparingService(context);
-            // }),
-            _settingItems("비밀번호 변경", false, () {
-              Navigator.pushNamed(context, '/forgotPassword');
-            }),
-            _settingItems("서비스 탈퇴하기", false, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DeleteAccountScreen(
-                    loginInfo: widget.loginInfo,
-                  ),
-                ),
-              );
-            }),
-            _settingItems("로그아웃", true, () {
-              _logout(context);
-              Navigator.pushNamed(context, '/login');
-            }),
-          ],
+                );
+              }),
+              _settingItems("로그아웃", true, () {
+                _logout(context);
+                Navigator.pushNamed(context, '/login');
+              }),
+            ],
+          ),
         ),
       ),
     );

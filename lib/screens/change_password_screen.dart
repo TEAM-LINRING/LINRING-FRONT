@@ -48,50 +48,54 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFFF6F4),
-      appBar: CustomAppBar(
-        title: '비밀번호 찾기',
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              '다른 사이트에서 사용한 적 없는\n안전한 비밀번호로 변경해주세요.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontFamily: 'Pretendard',
-                fontWeight: FontWeight.w300,
-                height: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFFF6F4),
+        appBar: CustomAppBar(
+          title: '비밀번호 찾기',
+        ),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 30,
               ),
-            ),
-            const SizedBox(height: 30),
-            const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '새 비밀번호',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextField(
-              controller: passwordController,
-              onChanged: (value) {
-                final regex =
-                    RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
+              const Text(
+                '다른 사이트에서 사용한 적 없는\n안전한 비밀번호로 변경해주세요.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w300,
+                  height: 0,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '새 비밀번호',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w400,
+                      height: 0,
+                    ),
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              CustomTextField(
+                controller: passwordController,
+                onChanged: (value) {
+                  final regex =
+                      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$');
 
                 setState(() {
                   isPasswordValid = regex.hasMatch(value);

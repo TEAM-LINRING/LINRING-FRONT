@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'globals.dart' as globals;
 
 class ChatScreen extends StatefulWidget {
   final LoginInfo loginInfo;
@@ -27,7 +28,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late User opponentUser;
   late Tagset opponentTagset;
-  List<Message> _messages = [];
   String _enteredMessage = "";
   String ratingScore = "0";
   DateTime? promiseDate;
@@ -40,6 +40,13 @@ class _ChatScreenState extends State<ChatScreen> {
   bool buttonIsActive = false;
 
   Future<void> _loadMessages() async {
+    // Global Variable 초기화
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value = [];
+    });
+
+    globals.currentRoom = widget.room;
+
     String apiAddress = dotenv.get("API_ADDRESS");
     final url =
         Uri.parse('$apiAddress/chat/message?room__id=${widget.room.id}');
@@ -57,28 +64,30 @@ class _ChatScreenState extends State<ChatScreen> {
       final body = jsonDecode(utf8.decode(response.bodyBytes));
 
       // 기존 채팅 불러오기
-      _messages = (body as List<dynamic>)
+      globals.messages.value = (body as List<dynamic>)
           .map<Message>((e) => Message.fromJson(e))
           .toList();
 
-      // 입장 알림 메세지 리스트 맨 앞에 추가
-      _messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message:
-                ' ${widget.room.tag.place}에서 ${widget.room.tag.person}랑 ${widget.room.tag.method}${widget.room.tag.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation.nickname}님이 ${widget.room.tag2.place}에서 ${widget.room.tag2.person}랑 ${widget.room.tag2.method}${widget.room.tag2.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2.nickname}님에게 채팅을 걸었습니다.',
-            isRead: true,
-            type: 0,
-            args: null,
-            room: widget.room.id,
-          ));
-      // 역순으로 재배치
-      _messages = _messages.reversed.toList();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 입장 알림 메세지 리스트 맨 앞에 추가
+        globals.messages.value.insert(
+            0,
+            Message(
+              id: 0,
+              sender: widget.loginInfo.user,
+              receiver: opponentUser,
+              created: "",
+              modified: "",
+              message:
+                  ' ${widget.room.tag!.place}에서 ${widget.room.tag!.person}랑 ${widget.room.tag!.method}${widget.room.tag!.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation!.nickname}님이 ${widget.room.tag2!.place}에서 ${widget.room.tag2!.person}랑 ${widget.room.tag2!.method}${widget.room.tag2!.method == "카페" ? "가기" : "하기"}를 선택한 ${widget.room.relation2!.nickname}님에게 채팅을 걸었습니다.',
+              isRead: true,
+              type: 0,
+              args: null,
+              room: widget.room.id!,
+            ));
+        // 역순으로 재배치 + ValueNotifier에 새로운 값 할당(값 변경 인식)
+        globals.messages.value = globals.messages.value.reversed.toList();
+      });
     } else {
       throw Exception('Failed to load messages.');
     }
@@ -120,8 +129,8 @@ class _ChatScreenState extends State<ChatScreen> {
       isoFormattedString = formatISOTime(promiseDate!);
     }
     final body = jsonEncode({
-      "tagset": widget.room.tag.id,
-      "tagset2": widget.room.tag2.id,
+      "tagset": widget.room.tag!.id,
+      "tagset2": widget.room.tag2!.id,
       "reservation_time": isoFormattedString,
     });
     await http.patch(
@@ -133,22 +142,44 @@ class _ChatScreenState extends State<ChatScreen> {
       body: body,
     );
 
-    setState(() {
-      // 로컬 리스트에 임시 저장
-      _messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message: "",
-            isRead: true,
-            type: 2,
-            args: isoFormattedString,
-            room: widget.room.id,
-          ));
+
+    print('아직 patch안에 있음');
+    print(promiseDate);
+    // setState(() {
+    //   // 로컬 리스트에 임시 저장
+    //   globals.messages.value.insert(
+    //       0,
+    //       Message(
+    //         id: 0,
+    //         sender: widget.loginInfo.user,
+    //         receiver: opponentUser,
+    //         created: "",
+    //         modified: "",
+    //         message: "",
+    //         isRead: true,
+    //         type: 2,
+    //         args: isoFormattedString,
+    //         room: widget.room.id,
+    //       ));
+    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value.insert(
+        0,
+        Message(
+          id: 0,
+          sender: widget.loginInfo.user,
+          receiver: opponentUser,
+          created: "",
+          modified: "",
+          message: "",
+          isRead: true,
+          type: 2,
+          args: isoFormattedString,
+          room: widget.room.id!,
+        ),
+      );
+      // ValueNotifier의 value 재할당
+      globals.messages.value = List.from(globals.messages.value);
     });
   }
 
@@ -164,15 +195,17 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    (widget.loginInfo.user.id == widget.room.relation2.id)
+    (widget.loginInfo.user.id == widget.room.relation2!.id)
         ? {
-            opponentUser = widget.room.relation,
-            opponentTagset = widget.room.tag,
+            opponentUser = widget.room.relation!,
+            opponentTagset = widget.room.tag!,
           }
         : {
-            opponentUser = widget.room.relation2,
-            opponentTagset = widget.room.tag2,
+            opponentUser = widget.room.relation2!,
+            opponentTagset = widget.room.tag2!,
           };
+    globals.opponentUser = opponentUser;
+
     if (widget.room.reservationTime != null) {
       afterPromise = true;
       promiseDate = widget.room.reservationTime!.add(const Duration(hours: 9));
@@ -200,8 +233,17 @@ class _ChatScreenState extends State<ChatScreen> {
     final url = Uri.parse('$apiAddress/chat/message/');
     final token = widget.loginInfo.access;
 
+    /*
+    (23.11.25)
+    _enteredMessage를 그대로 사용할 시,
+    globals.messages.value를 업데이트 하는 것보다
+    _controller.clear가 먼저 발생하여
+    enteredMsg라는 변수에 value copy를 진행하는 것으로 문제 해결
+    */
+    final enteredMsg = _enteredMessage;
+
     String body = jsonEncode({
-      "message": _enteredMessage,
+      "message": enteredMsg,
       "is_read": false,
       "type": 1,
       "args": null,
@@ -219,22 +261,23 @@ class _ChatScreenState extends State<ChatScreen> {
       body: body,
     );
 
-    setState(() {
-      // 로컬 리스트에 임시 저장
-      _messages.insert(
-          0,
-          Message(
-            id: 0,
-            sender: widget.loginInfo.user,
-            receiver: opponentUser,
-            created: "",
-            modified: "",
-            message: _enteredMessage,
-            isRead: true,
-            type: 1,
-            args: null,
-            room: widget.room.id,
-          ));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      globals.messages.value.insert(
+        0,
+        Message(
+          id: 0,
+          sender: widget.loginInfo.user,
+          receiver: opponentUser,
+          created: "",
+          modified: "",
+          message: enteredMsg,
+          isRead: true,
+          type: 1,
+          args: null,
+          room: widget.room.id!,
+        ),
+      );
+      globals.messages.value = List.from(globals.messages.value);
     });
 
     _controller.clear();
@@ -249,61 +292,66 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: CustomAppBar(
-          loginInfo: widget.loginInfo,
-          title: opponentUser.nickname ?? "LINRING",
-          suffix: PopupMenuButton<int>(
-            onSelected: (int result) {
-              if (result == 1) {
-                _showProfileModal(context);
-              } else if (result == 2) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReportScreen(
-                            loginInfo: widget.loginInfo, room: widget.room)));
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuEntry<int>>[
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text("프로필 확인하기"),
-                    ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: CustomAppBar(
+            loginInfo: widget.loginInfo,
+            title: opponentUser.nickname ?? "LINRING",
+            suffix: PopupMenuButton<int>(
+              onSelected: (int result) {
+                if (result == 1) {
+                  _showProfileModal(context);
+                } else if (result == 2) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ReportScreen(
+                              loginInfo: widget.loginInfo, room: widget.room)));
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry<int>>[
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: Row(
+                      children: [
+                        Icon(Icons.add),
+                        Text("프로필 확인하기"),
+                      ],
+                    ),
                   ),
-                ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit),
-                      Text("신고하기"),
-                    ],
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit),
+                        Text("신고하기"),
+                      ],
+                    ),
                   ),
-                ),
-              ];
-            },
-            child: const Icon(
-              Icons.more_vert,
-              color: Colors.black,
+                ];
+              },
+              child: const Icon(
+                Icons.more_vert,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
-      ),
-      backgroundColor: const Color(0xfffff6f4),
-      body: Column(
-        children: [
-          _matchInfo(),
-          _chatContainer(),
-          _chatInput(),
-        ],
+        backgroundColor: const Color(0xfffff6f4),
+        body: Column(
+          children: [
+            _matchInfo(),
+            _chatContainer(),
+            _chatInput(),
+          ],
+        ),
       ),
     );
   }
@@ -408,48 +456,54 @@ class _ChatScreenState extends State<ChatScreen> {
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      itemCount: _messages.length,
-                      itemBuilder: (context, int index) {
-                        final message = _messages[index];
-                        bool isMine =
-                            message.sender.id == widget.loginInfo.user.id;
+            child: ValueListenableBuilder<List<Message>>(
+              valueListenable: globals.messages,
+              builder: (context, List<Message> messages, child) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: ListView.builder(
+                          reverse: true,
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemCount: messages.length,
+                          itemBuilder: (context, int index) {
+                            final message = messages[index];
+                            bool isMine =
+                                message.sender.id == widget.loginInfo.user.id;
 
-                        Widget chatWidget;
+                            Widget chatWidget;
 
-                        if (message.type == 0) {
-                          chatWidget = Expanded(child: _chatEntry(message));
-                        } else if (message.type == 1) {
-                          chatWidget = _chatBubble(message, isMine);
-                        } else if (message.type == 2 && message.args != null) {
-                          chatWidget = Expanded(child: _timeChat(message));
-                        } else {
-                          chatWidget = Container();
-                        }
+                            if (message.type == 0) {
+                              chatWidget = Expanded(child: _chatEntry(message));
+                            } else if (message.type == 1) {
+                              chatWidget = _chatBubble(message, isMine);
+                            } else if (message.type == 2 &&
+                                message.args != null) {
+                              chatWidget = Expanded(child: _timeChat(message));
+                            } else {
+                              chatWidget = Container();
+                            }
 
-                        return Container(
-                          margin: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            mainAxisAlignment: isMine
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [chatWidget],
-                          ),
-                        );
-                      },
+                            return Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                mainAxisAlignment: isMine
+                                    ? MainAxisAlignment.end
+                                    : MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [chatWidget],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
           ),
         ),

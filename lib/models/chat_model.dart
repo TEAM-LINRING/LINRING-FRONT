@@ -2,26 +2,26 @@ import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
 
 class ChatRoom {
-  final int id;
-  final User relation;
-  final User relation2;
-  final Tagset tag;
-  final Tagset tag2;
+  final int? id;
+  final User? relation;
+  final User? relation2;
+  final Tagset? tag;
+  final Tagset? tag2;
   final int? notice;
   DateTime? reservationTime;
-  final DateTime created;
-  final DateTime modified;
+  final DateTime? created;
+  final DateTime? modified;
 
   ChatRoom({
-    required this.id,
-    required this.relation,
-    required this.relation2,
-    required this.tag,
-    required this.tag2,
-    required this.notice,
-    required this.reservationTime,
-    required this.created,
-    required this.modified,
+    this.id,
+    this.relation,
+    this.relation2,
+    this.tag,
+    this.tag2,
+    this.notice,
+    this.reservationTime,
+    this.created,
+    this.modified,
   });
 
   factory ChatRoom.fromJson(Map<String, dynamic> json) {

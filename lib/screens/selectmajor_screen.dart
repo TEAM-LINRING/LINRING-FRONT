@@ -15,54 +15,60 @@ class SelectMajor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFFF6F4),
-      appBar: CustomAppBar(
-        title: '학과 선택',
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(40, 10, 40, 70),
-        itemCount: majorListItems.length,
-        itemBuilder: (context, index) {
-          final item = majorListItems[index];
-          if (item == null) {
-            return const Divider(color: Color.fromARGB(255, 118, 99, 99));
-          }
-          return ListTile(
-            contentPadding: EdgeInsets.zero,
-            dense: true,
-            title: item.buildTitle(context),
-            onTap: item is MajorItem
-                ? () {
-                    // 현재 MajorItem의 값
-                    String currentMajor = item.major;
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFFF6F4),
+        appBar: CustomAppBar(
+          title: '학과 선택',
+        ),
+        body: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(40, 10, 40, 70),
+          itemCount: majorListItems.length,
+          itemBuilder: (context, index) {
+            final item = majorListItems[index];
+            if (item == null) {
+              return const Divider(color: Color.fromARGB(255, 118, 99, 99));
+            }
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              title: item.buildTitle(context),
+              onTap: item is MajorItem
+                  ? () {
+                      // 현재 MajorItem의 값
+                      String currentMajor = item.major;
 
-                    // 이전 CollegeItem을 찾는 과정
-                    int collegeIndex = index - 1;
-                    while (collegeIndex >= 0 &&
-                        majorListItems[collegeIndex] is! CollegeItem) {
-                      collegeIndex--;
+                      // 이전 CollegeItem을 찾는 과정
+                      int collegeIndex = index - 1;
+                      while (collegeIndex >= 0 &&
+                          majorListItems[collegeIndex] is! CollegeItem) {
+                        collegeIndex--;
+                      }
+
+                      String currentCollege = "";
+                      if (collegeIndex >= 0 &&
+                          majorListItems[collegeIndex] is CollegeItem) {
+                        currentCollege =
+                            (majorListItems[collegeIndex] as CollegeItem)
+                                .heading;
+                      }
+
+                      // 값을 딕셔너리에 저장
+                      Map<String, String> result = {
+                        'college': currentCollege,
+                        'major': currentMajor
+                      };
+
+                      // 이전 페이지로 값을 반환
+                      Navigator.pop(context, result);
                     }
-
-                    String currentCollege = "";
-                    if (collegeIndex >= 0 &&
-                        majorListItems[collegeIndex] is CollegeItem) {
-                      currentCollege =
-                          (majorListItems[collegeIndex] as CollegeItem).heading;
-                    }
-
-                    // 값을 딕셔너리에 저장
-                    Map<String, String> result = {
-                      'college': currentCollege,
-                      'major': currentMajor
-                    };
-
-                    // 이전 페이지로 값을 반환
-                    Navigator.pop(context, result);
-                  }
-                : null,
-          );
-        },
+                  : null,
+            );
+          },
+        ),
       ),
     );
   }
