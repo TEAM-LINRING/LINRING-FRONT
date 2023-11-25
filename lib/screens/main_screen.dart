@@ -133,21 +133,26 @@ class _MainScreenState extends State<MainScreen> {
       print('Message body: ${notification.body}');
     });
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          _buildScreen(0, TagShowScreen(loginInfo: widget.loginInfo)),
-          _buildScreen(1, ChatRoomScreen(loginInfo: widget.loginInfo)),
-          _buildScreen(2, SettingScreen(loginInfo: widget.loginInfo)),
-        ],
-      ),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onIndexChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            _buildScreen(0, TagShowScreen(loginInfo: widget.loginInfo)),
+            _buildScreen(1, ChatRoomScreen(loginInfo: widget.loginInfo)),
+            _buildScreen(2, SettingScreen(loginInfo: widget.loginInfo)),
+          ],
+        ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex: _selectedIndex,
+          onIndexChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ),
       ),
     );
   }

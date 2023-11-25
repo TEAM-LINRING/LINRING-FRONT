@@ -54,61 +54,66 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfffff6f4),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          "채팅 목록",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 26,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xfffff6f4),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Text(
+            "채팅 목록",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 26,
+            ),
           ),
         ),
-      ),
-      body: FutureBuilder(
-        future: _futureRooms,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text("에러 ${snapshot.error}");
-          } else if (!snapshot.hasData) {
-            return const Text("데이터 없음.");
-          } else {
-            List<ChatRoom>? rooms = snapshot.data;
-            print(rooms?.length);
-            if (rooms!.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/images/characters/char_404.svg',
-                      width: 130,
-                    ),
-                    const SizedBox(height: 20), // 이미지와 텍스트 간격 조절
-                    const Text(
-                      '아직 채팅방이 없어요. \n 친구를 검색해서 말을 걸어 볼까요?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                  ],
-                ),
-              );
+        body: FutureBuilder(
+          future: _futureRooms,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text("에러 ${snapshot.error}");
+            } else if (!snapshot.hasData) {
+              return const Text("데이터 없음.");
             } else {
-              return ListView.builder(
-                itemCount: rooms.length,
-                itemBuilder: (context, int index) {
-                  ChatRoom room = rooms[index];
-                  return _chatRoom(room, context);
-                },
-              );
+              List<ChatRoom>? rooms = snapshot.data;
+              print(rooms?.length);
+              if (rooms!.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/characters/char_404.svg',
+                        width: 130,
+                      ),
+                      const SizedBox(height: 20), // 이미지와 텍스트 간격 조절
+                      const Text(
+                        '아직 채팅방이 없어요. \n 친구를 검색해서 말을 걸어 볼까요?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 17),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: rooms.length,
+                  itemBuilder: (context, int index) {
+                    ChatRoom room = rooms[index];
+                    return _chatRoom(room, context);
+                  },
+                );
+              }
             }
-          }
-        },
+          },
+        ),
       ),
     );
   }
