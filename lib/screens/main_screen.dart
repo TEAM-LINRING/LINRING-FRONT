@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
-import 'package:linring_front_flutter/models/user_model.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
