@@ -61,6 +61,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         return false;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: const Color(0xFFFFF6F4),
         appBar: CustomAppBar(
           title: '탈퇴하기',
