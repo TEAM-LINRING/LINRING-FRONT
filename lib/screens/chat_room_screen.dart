@@ -126,6 +126,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         ? {opponentUser = room.relation!, opponentTagset = room.tag!}
         : {opponentUser = room.relation2!, opponentTagset = room.tag2!};
 
+    String latestMsg;
+
+    (room.latestMessage != null)
+        ? latestMsg = room.latestMessage!.message
+        : latestMsg = '';
+
     return InkWell(
       onTap: () => {
         Navigator.push(
@@ -185,9 +191,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   ),
                 ),
                 const SizedBox(height: 3),
-                const Text(
-                  "최근 대화 내용",
-                  style: TextStyle(
+                Text(
+                  latestMsg,
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xff191919),
                   ),
