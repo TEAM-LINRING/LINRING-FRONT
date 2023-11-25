@@ -35,7 +35,7 @@ void main() async {
 Future<void> _initNotification() async {
   // 안드로이드 초기 설정
   const AndroidInitializationSettings initSettingAndroid =
-      AndroidInitializationSettings("mipmap/ic_launcher");
+      AndroidInitializationSettings("@mipmap/launcher_icon");
 
   // iOS 초기 설정
   const DarwinInitializationSettings initSettingIOS =
