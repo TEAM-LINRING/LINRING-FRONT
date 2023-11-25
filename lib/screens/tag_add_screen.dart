@@ -24,17 +24,22 @@ class TagAddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: CustomAppBar(title: "태그 추가하기"),
-      backgroundColor: const Color(0xfffff6f4),
-      body: ListView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          children: [
-            Column(children: [
-              ChoiceLocation(info: loginInfo),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: CustomAppBar(title: "태그 추가하기"),
+        backgroundColor: const Color(0xfffff6f4),
+        body: ListView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            children: [
+              Column(children: [
+                ChoiceLocation(info: loginInfo),
+              ]),
             ]),
-          ]),
+      ),
     );
   }
 }

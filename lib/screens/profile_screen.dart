@@ -189,433 +189,451 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFFF6F4),
-      appBar: CustomAppBar(
-        title: '프로필 관리',
-        suffix: TextButton(
-          onPressed: () {
-            if (checkFormValidity()) {
-              _profileChange(context);
-            }
-          },
-          child: const Text(
-            '완료',
-            style: TextStyle(fontSize: 19, color: Colors.black),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFFF6F4),
+        appBar: CustomAppBar(
+          title: '프로필 관리',
+          suffix: TextButton(
+            onPressed: () {
+              if (checkFormValidity()) {
+                _profileChange(context);
+              }
+            },
+            child: const Text(
+              '완료',
+              style: TextStyle(fontSize: 19, color: Colors.black),
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          const SizedBox(
-            height: 20,
-          ),
-
-          //닉네임
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '닉네임',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 0,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              )),
-          const SizedBox(height: 10),
-          IntrinsicHeight(
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: CustomTextField(
-                      controller: nickNameController,
-                      onChanged: (value) {
-                        setState(() {
-                          errorNickName = null;
-                          helperNickName = null;
-                          if (!RegExp(r'^[a-zA-Z0-9가-힣]*$').hasMatch(value)) {
-                            isNickNameValid = false;
-                            errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
-                          } else if (value.length > 6) {
-                            isNickNameValid = false;
-                            errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
-                          } else {
-                            errorNickName = null;
-                            isNickNameValid = true;
-                          }
-                        });
-                      },
-                      errorText: errorNickName,
-                      hintText: '6글자 이내의 닉네임',
-                      obscureText: false,
-                      helperText: helperNickName,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 1, 0, 0),
-                      child: OutlinedButton(
-                          onPressed: () async {
-                            if (isNickNameValid == true) {
-                              bool? result = await _validationNickName(context);
-                              setState(() {
-                                if (result != null) {
-                                  if (result) {
-                                    isNickNameUnique = true;
-                                    errorNickName = null;
-                                    helperNickName = '사용 가능한 닉네임입니다.';
-                                  } else {
-                                    isNickNameUnique = false;
-                                    helperNickName = null;
-                                    errorNickName =
-                                        '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
-                                  }
-                                }
-                                isSignUpButtonEnabled = checkFormValidity();
-                              });
-                            }
-                          },
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            backgroundColor: const Color(0xFFFEC2B5),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(
-                                    width: 1, color: Color(0xFFC8AAAA))),
-                          ),
-                          child: const Text(
-                            '중복 확인',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                height: 0),
-                          )),
-                    ),
-                  )
-                ]),
-          ),
 
-          const SizedBox(height: 20),
-
-          //학과(제1전공)
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '학과 (제1전공)',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              )),
-          const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: OutlinedButton(
-              onPressed: () async {
-                final result =
-                    await Navigator.pushNamed(context, '/selectmajor');
-                if (result is Map<String, String>) {
-                  setState(() {
-                    selectedData = result;
-                    isSignUpButtonEnabled = checkFormValidity();
-                  });
-                }
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.white,
-                side: const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
-                elevation: 5,
-                shadowColor: const Color(0x196C5916),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                fixedSize: const Size(350, 60),
-              ),
-              child: selectedData == null
-                  ? const Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        Icons.search,
-                        size: 24.0,
+                //닉네임
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '닉네임',
+                      style: TextStyle(
                         color: Colors.black,
-                      ))
-                  : Text(
-                      "${selectedData!['college']}  -  ${selectedData!['major']}",
-                      style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w400),
-                    ),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-          //학번 및 학년
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '학번 및 학년',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              )),
-          const SizedBox(height: 10),
-          Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            right: BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)))),
-                    child: TextField(
-                      textAlign: TextAlign.end,
-                      controller: studentNumberController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
-                        LengthLimitingTextInputFormatter(2) // 최대 4자리 제한
-                      ],
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        hintText: null,
-                        contentPadding: EdgeInsets.only(top: 19),
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.only(right: 50.0),
-                          child: Align(
-                            alignment: Alignment.center,
-                            widthFactor: 1.0,
-                            heightFactor: 4.0,
-                            child: Text(
-                              '학번',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          isSignUpButtonEnabled = checkFormValidity();
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: DropdownButton(
-                        value: selectedGrade,
-                        items: gradeList.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (dynamic value) {
-                          setState(() {
-                            selectedGrade = value!;
-                          });
-                        }),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          //성별 및 나이
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '성별 및 나이',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  height: 0,
-                ),
-              )),
-          const SizedBox(height: 10),
-          Container(
-            height: 60,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    height: double.infinity,
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            right: BorderSide(
-                                width: 1, color: Color(0xFFC8AAAA)))),
-                    child: ToggleButtons(
-                      isSelected: isSelected,
-                      onPressed: toggleSelect,
-                      fillColor: const Color(0xFFFEC2B5),
-                      selectedColor: Colors.black,
-                      borderWidth: 0,
-                      //borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      children: [
-                        SizedBox(
-                            width: (MediaQuery.of(context).size.width - 45) / 4,
-                            child: const Text(
-                              '남',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            )),
-                        SizedBox(
-                            width: (MediaQuery.of(context).size.width - 45) / 4,
-                            child: const Text(
-                              '여',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                    flex: 1,
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: TextField(
-                        textAlign: TextAlign.end,
-                        controller: birthController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
-                          LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
-                        ],
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          hintText: null,
-                          contentPadding: EdgeInsets.only(top: 19),
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 50.0),
-                            child: Align(
-                              alignment: Alignment.center,
-                              widthFactor: 1.0,
-                              heightFactor: 4.0,
-                              child: Text(
-                                '년생',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            isSignUpButtonEnabled = checkFormValidity();
-                          });
-                        },
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
                       ),
                     )),
-              ],
-            ),
-          ),
+                const SizedBox(height: 10),
+                IntrinsicHeight(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: CustomTextField(
+                            controller: nickNameController,
+                            onChanged: (value) {
+                              setState(() {
+                                errorNickName = null;
+                                helperNickName = null;
+                                if (!RegExp(r'^[a-zA-Z0-9가-힣]*$')
+                                    .hasMatch(value)) {
+                                  isNickNameValid = false;
+                                  errorNickName = '닉네임에 공백이나 특수문자를 사용할 수 없습니다.';
+                                } else if (value.length > 6) {
+                                  isNickNameValid = false;
+                                  errorNickName = '닉네임은 여섯글자 이내여야 합니다.';
+                                } else {
+                                  errorNickName = null;
+                                  isNickNameValid = true;
+                                }
+                              });
+                            },
+                            errorText: errorNickName,
+                            hintText: '6글자 이내의 닉네임',
+                            obscureText: false,
+                            helperText: helperNickName,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 1, 0, 0),
+                            child: OutlinedButton(
+                                onPressed: () async {
+                                  if (isNickNameValid == true) {
+                                    bool? result =
+                                        await _validationNickName(context);
+                                    setState(() {
+                                      if (result != null) {
+                                        if (result) {
+                                          isNickNameUnique = true;
+                                          errorNickName = null;
+                                          helperNickName = '사용 가능한 닉네임입니다.';
+                                        } else {
+                                          isNickNameUnique = false;
+                                          helperNickName = null;
+                                          errorNickName =
+                                              '중복된 닉네임입니다. 다른 닉네임을 사용해주세요.';
+                                        }
+                                      }
+                                      isSignUpButtonEnabled =
+                                          checkFormValidity();
+                                    });
+                                  }
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  backgroundColor: const Color(0xFFFEC2B5),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: const BorderSide(
+                                          width: 1, color: Color(0xFFC8AAAA))),
+                                ),
+                                child: const Text(
+                                  '중복 확인',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      height: 0),
+                                )),
+                          ),
+                        )
+                      ]),
+                ),
 
-          const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-          //특이사항
-          const Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Text(
-                    '특이사항',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
+                //학과(제1전공)
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '학과 (제1전공)',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    )),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  height: 60,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      final result =
+                          await Navigator.pushNamed(context, '/selectmajor');
+                      if (result is Map<String, String>) {
+                        setState(() {
+                          selectedData = result;
+                          isSignUpButtonEnabled = checkFormValidity();
+                        });
+                      }
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      backgroundColor: Colors.white,
+                      side:
+                          const BorderSide(width: 1, color: Color(0xFFC8AAAA)),
+                      elevation: 5,
+                      shadowColor: const Color(0x196C5916),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      fixedSize: const Size(350, 60),
                     ),
+                    child: selectedData == null
+                        ? const Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              Icons.search,
+                              size: 24.0,
+                              color: Colors.black,
+                            ))
+                        : Text(
+                            "${selectedData!['college']}  -  ${selectedData!['major']}",
+                            style: const TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w400),
+                          ),
                   ),
-                  SizedBox(width: 10),
-                  Text(
-                    '*선택사항',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      height: 0,
-                    ),
-                  ),
-                ],
-              )),
-          const SizedBox(height: 10),
-          // SizedBox(
-          //   width: MediaQuery.of(context).size.width,
-          //   child: Wrap(
-          //       alignment: WrapAlignment.start,
-          //       crossAxisAlignment: WrapCrossAlignment.center,
-          //       children: List.generate(remark.length, (index) {
-          //         return buildRemark(index);
-          //       })),
-          // ),
-          Wrap(
-              alignment: WrapAlignment.start,
-              children: List.generate(remark.length, (index) {
-                return buildRemark(index);
-              })),
+                ),
 
-          const SizedBox(height: 10),
-          const Row(
-            children: [
-              Icon(
-                Icons.report,
-                color: Colors.red,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                '허위 사실 기재시 서비스 이용이 제한됩니다.',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 10),
-            ],
-          ),
-        ]),
+                const SizedBox(height: 20),
+                //학번 및 학년
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '학번 및 학년',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    )),
+                const SizedBox(height: 10),
+                Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border:
+                        Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          height: double.infinity,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  right: BorderSide(
+                                      width: 1, color: Color(0xFFC8AAAA)))),
+                          child: TextField(
+                            textAlign: TextAlign.end,
+                            controller: studentNumberController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly, // 숫자만 허용
+                              LengthLimitingTextInputFormatter(2) // 최대 4자리 제한
+                            ],
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: null,
+                              contentPadding: EdgeInsets.only(top: 19),
+                              suffixIcon: Padding(
+                                padding: EdgeInsets.only(right: 50.0),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  widthFactor: 1.0,
+                                  heightFactor: 4.0,
+                                  child: Text(
+                                    '학번',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isSignUpButtonEnabled = checkFormValidity();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: DropdownButton(
+                              value: selectedGrade,
+                              items: gradeList.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(item),
+                                );
+                              }).toList(),
+                              onChanged: (dynamic value) {
+                                setState(() {
+                                  selectedGrade = value!;
+                                });
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                //성별 및 나이
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '성별 및 나이',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        height: 0,
+                      ),
+                    )),
+                const SizedBox(height: 10),
+                Container(
+                  height: 60,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border:
+                        Border.all(color: const Color(0xFFC8AAAA), width: 1.0),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          height: double.infinity,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  right: BorderSide(
+                                      width: 1, color: Color(0xFFC8AAAA)))),
+                          child: ToggleButtons(
+                            isSelected: isSelected,
+                            onPressed: toggleSelect,
+                            fillColor: const Color(0xFFFEC2B5),
+                            selectedColor: Colors.black,
+                            borderWidth: 0,
+                            //borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            children: [
+                              SizedBox(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 45) /
+                                          4,
+                                  child: const Text(
+                                    '남',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              SizedBox(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 45) /
+                                          4,
+                                  child: const Text(
+                                    '여',
+                                    style: TextStyle(fontSize: 16),
+                                    textAlign: TextAlign.center,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            height: double.infinity,
+                            child: TextField(
+                              textAlign: TextAlign.end,
+                              controller: birthController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter
+                                    .digitsOnly, // 숫자만 허용
+                                LengthLimitingTextInputFormatter(4) // 최대 4자리 제한
+                              ],
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                hintText: null,
+                                contentPadding: EdgeInsets.only(top: 19),
+                                suffixIcon: Padding(
+                                  padding: EdgeInsets.only(right: 50.0),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    widthFactor: 1.0,
+                                    heightFactor: 4.0,
+                                    child: Text(
+                                      '년생',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                setState(() {
+                                  isSignUpButtonEnabled = checkFormValidity();
+                                });
+                              },
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                //특이사항
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Text(
+                          '특이사항',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          '*선택사항',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                          ),
+                        ),
+                      ],
+                    )),
+                const SizedBox(height: 10),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width,
+                //   child: Wrap(
+                //       alignment: WrapAlignment.start,
+                //       crossAxisAlignment: WrapCrossAlignment.center,
+                //       children: List.generate(remark.length, (index) {
+                //         return buildRemark(index);
+                //       })),
+                // ),
+                Wrap(
+                    alignment: WrapAlignment.start,
+                    children: List.generate(remark.length, (index) {
+                      return buildRemark(index);
+                    })),
+
+                const SizedBox(height: 10),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.report,
+                      color: Colors.red,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      '허위 사실 기재시 서비스 이용이 제한됩니다.',
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ]),
+        ),
       ),
     );
   }

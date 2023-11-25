@@ -296,61 +296,66 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
-        child: CustomAppBar(
-          loginInfo: widget.loginInfo,
-          title: opponentUser.nickname ?? "LINRING",
-          suffix: PopupMenuButton<int>(
-            onSelected: (int result) {
-              if (result == 1) {
-                _showProfileModal(context);
-              } else if (result == 2) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReportScreen(
-                            loginInfo: widget.loginInfo, room: widget.room)));
-              }
-            },
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuEntry<int>>[
-                const PopupMenuItem<int>(
-                  value: 1,
-                  child: Row(
-                    children: [
-                      Icon(Icons.add),
-                      Text("프로필 확인하기"),
-                    ],
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60.0),
+          child: CustomAppBar(
+            loginInfo: widget.loginInfo,
+            title: opponentUser.nickname ?? "LINRING",
+            suffix: PopupMenuButton<int>(
+              onSelected: (int result) {
+                if (result == 1) {
+                  _showProfileModal(context);
+                } else if (result == 2) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ReportScreen(
+                              loginInfo: widget.loginInfo, room: widget.room)));
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry<int>>[
+                  const PopupMenuItem<int>(
+                    value: 1,
+                    child: Row(
+                      children: [
+                        Icon(Icons.add),
+                        Text("프로필 확인하기"),
+                      ],
+                    ),
                   ),
-                ),
-                const PopupMenuItem<int>(
-                  value: 2,
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit),
-                      Text("신고하기"),
-                    ],
+                  const PopupMenuItem<int>(
+                    value: 2,
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit),
+                        Text("신고하기"),
+                      ],
+                    ),
                   ),
-                ),
-              ];
-            },
-            child: const Icon(
-              Icons.more_vert,
-              color: Colors.black,
+                ];
+              },
+              child: const Icon(
+                Icons.more_vert,
+                color: Colors.black,
+              ),
             ),
           ),
         ),
-      ),
-      backgroundColor: const Color(0xfffff6f4),
-      body: Column(
-        children: [
-          _matchInfo(),
-          _chatContainer(),
-          _chatInput(),
-        ],
+        backgroundColor: const Color(0xfffff6f4),
+        body: Column(
+          children: [
+            _matchInfo(),
+            _chatContainer(),
+            _chatInput(),
+          ],
+        ),
       ),
     );
   }
