@@ -66,7 +66,7 @@ class _SettingScreenState extends State<SettingScreen> {
     final url = Uri.parse('$apiAddress/accounts/user/');
     final token = widget.loginInfo.access;
     final body = jsonEncode({"profile": ChangedIndex});
-    await http.patch(
+    final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -74,6 +74,8 @@ class _SettingScreenState extends State<SettingScreen> {
       },
       body: body,
     );
+    print(body);
+    print(response.statusCode);
   }
 
   void _updateUserInfo() async {
@@ -159,7 +161,6 @@ class _SettingScreenState extends State<SettingScreen> {
                       ChangedIndex = selectedIndex;
                       setState(
                         () {
-                          print('updateProfile');
                           _updateProfile();
                         },
                       );

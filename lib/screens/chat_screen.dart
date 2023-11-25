@@ -118,16 +118,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _patchReservationTime() async {
-    print('_patchReservationTime이 실행됨');
     String apiAddress = dotenv.get("API_ADDRESS");
     String? isoFormattedString;
     final url = Uri.parse('$apiAddress/chat/room/${widget.room.id}/');
     final token = widget.loginInfo.access;
     if (promiseDate == null) {
-      print('promiseDate가 null임 !!!');
       isoFormattedString = null;
     } else {
-      print('null이 아님 ..');
       twoHoursLater = promiseDate!.add(const Duration(hours: 2));
       isoFormattedString = formatISOTime(promiseDate!);
     }
@@ -136,7 +133,6 @@ class _ChatScreenState extends State<ChatScreen> {
       "tagset2": widget.room.tag2!.id,
       "reservation_time": isoFormattedString,
     });
-    print(body);
     await http.patch(
       url,
       headers: {
@@ -145,6 +141,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       body: body,
     );
+
 
     print('아직 patch안에 있음');
     print(promiseDate);
@@ -197,7 +194,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    print('initState');
     super.initState();
     (widget.loginInfo.user.id == widget.room.relation2!.id)
         ? {
@@ -907,7 +903,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                               setState(() {
                                                 ratingScore =
                                                     (rating.toInt()).toString();
-                                                print(ratingScore);
                                                 // buttonIsActive =
                                                 //     _buttonIsActive();
                                               });
@@ -953,7 +948,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     null;
                                                 promiseDate = null;
                                                 _patchReservationTime();
-                                                print('null로 패치된거야??');
                                               },
                                             ),
                                           )

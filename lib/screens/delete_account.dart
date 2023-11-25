@@ -36,7 +36,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
           "password": password,
         }));
     debugPrint((response.statusCode).toString());
-    if (response.statusCode == 204) {
+    if (response.statusCode == 204 || response.statusCode == 200) {
       password = '';
 
       if (!mounted) return;
@@ -157,6 +157,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               const SizedBox(
                 height: 20,
               ),
+
               RichText(
                   text: const TextSpan(children: [
                 TextSpan(
