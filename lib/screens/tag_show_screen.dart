@@ -134,7 +134,7 @@ class _TagShowScreenState extends State<TagShowScreen> {
                   Container(
                     width: double.maxFinite,
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
-                    height: 100,
+                    height: 110,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -144,7 +144,6 @@ class _TagShowScreenState extends State<TagShowScreen> {
                               'assets/images/characters/char_puring.svg'),
                         ),
                         Container(
-                          padding: const EdgeInsets.all(16),
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(
@@ -163,13 +162,16 @@ class _TagShowScreenState extends State<TagShowScreen> {
                             onTap: () {
                               updateRandomGreeting();
                             },
-                            child: Text(
-                              randomGreeting,
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 16,
-                                height: 1.5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Text(
+                                randomGreeting,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 16,
+                                  height: 1.5,
+                                ),
                               ),
                             ),
                           ),
