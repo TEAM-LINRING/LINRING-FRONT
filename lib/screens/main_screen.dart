@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
+import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/screens/chat_room_screen.dart';
 import 'package:linring_front_flutter/screens/setting_screen.dart';
 import 'package:linring_front_flutter/screens/tag_show_screen.dart';
@@ -101,7 +102,14 @@ class _MainScreenState extends State<MainScreen> {
       final Uri deepLink = PendingDynamicLinkData.link;
 
       if (deepLink.path == '/findpassword') {
-        Navigator.pushNamed(context, '/changePassword');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChangePasswordScreen(
+              loginInfo: widget.loginInfo,
+            ),
+          ),
+        );
       }
 
       if (deepLink.path == '/successregister') {

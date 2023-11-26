@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:linring_front_flutter/widgets/custom_outlined_button.dart';
@@ -8,13 +10,15 @@ import 'package:linring_front_flutter/widgets/custom_textfield.dart';
 import 'package:http/http.dart' as http;
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+  LoginInfo loginInfo;
+  ChangePasswordScreen({super.key, required this.loginInfo});
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  static const storage = FlutterSecureStorage();
   final passwordController = TextEditingController();
   final passwordConfirmController = TextEditingController();
   bool isPasswordValid = true;
@@ -22,19 +26,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   void _changePassword(BuildContext context) async {
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
-    final url = Uri.parse('$apiAddress/accounts/password/change');
+    final url = Uri.parse('$apiAddress/accounts/password/change/');
+    final token = widget.loginInfo.access;
 
-    final response = await http.delete(url,
+    final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
         },
         body: jsonEncode({
           "new_password1": passwordController.text,
-          "new_password2": passwordConfirmController.text
+          "new_password2": passwordConfirmController.text,
         }));
 
     debugPrint((response.statusCode).toString());
-    if (response.statusCode == 201) {
+    debugPrint(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      await storage.delete(key: 'user'); // 기존 로그인 정보 삭제 -> 로그인 페이지로 이동
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -120,6 +128,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 height: 10,
               ),
               CustomTextField(
+                controller: passwordConfirmController,
                 obscureText: true,
                 onChanged: (value) {
                   setState(() {
