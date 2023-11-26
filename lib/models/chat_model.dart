@@ -8,6 +8,7 @@ class ChatRoom {
   final Tagset? tag;
   final Tagset? tag2;
   final int? notice;
+  Message? latestMessage;
   DateTime? reservationTime;
   final DateTime? created;
   final DateTime? modified;
@@ -19,6 +20,7 @@ class ChatRoom {
     this.tag,
     this.tag2,
     this.notice,
+    this.latestMessage,
     this.reservationTime,
     this.created,
     this.modified,
@@ -32,6 +34,9 @@ class ChatRoom {
       tag: Tagset.fromJson(json["tagset"]),
       tag2: Tagset.fromJson(json["tagset2"]),
       notice: json["notice"],
+      latestMessage: (json["latest_message"] != null)
+          ? Message.fromJson(json["latest_message"])
+          : null,
       reservationTime: (json["reservation_time"] != null)
           ? DateTime.parse(json["reservation_time"])
           : null,

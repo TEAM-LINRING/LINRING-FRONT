@@ -420,7 +420,7 @@ class _SettingScreenState extends State<SettingScreen> {
               //   _displayPreparingService(context);
               // }),
               _settingItems("비밀번호 변경", false, () {
-                Navigator.pushNamed(context, '/forgotPassword');
+                Navigator.pushNamed(context, '/emailVerify');
               }),
               _settingItems("서비스 탈퇴하기", false, () {
                 Navigator.push(
