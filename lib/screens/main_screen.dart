@@ -26,6 +26,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  Key _chatKey = UniqueKey();
 
   @pragma('vm:entry-point')
   void _initFCM() async {
@@ -149,6 +150,9 @@ class _MainScreenState extends State<MainScreen> {
           onIndexChanged: (index) {
             setState(() {
               _selectedIndex = index;
+              if (index == 1) {
+                _chatKey = UniqueKey();
+              }
             });
           },
         ),
@@ -157,6 +161,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildScreen(int index, Widget screen) {
+    if (index == 1) {
+      // ChatScreen의 경우
+      screen = ChatRoomScreen(
+        key: _chatKey,
+        loginInfo: widget.loginInfo,
+      );
+    }
     return Visibility(
       visible: _selectedIndex == index,
       maintainState: true,
