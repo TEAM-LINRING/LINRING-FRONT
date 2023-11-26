@@ -76,7 +76,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           future: _futureRooms,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Color(0xfffec2b5),
+              ));
             } else if (snapshot.hasError) {
               return Text("에러 ${snapshot.error}");
             } else if (!snapshot.hasData) {
@@ -125,6 +128,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     (widget.loginInfo.user.id == room.relation2!.id)
         ? {opponentUser = room.relation!, opponentTagset = room.tag!}
         : {opponentUser = room.relation2!, opponentTagset = room.tag2!};
+
+    String latestMsg;
+
+    (room.latestMessage != null)
+        ? latestMsg = room.latestMessage!.message
+        : latestMsg = '';
 
     return InkWell(
       onTap: () => {
@@ -185,9 +194,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   ),
                 ),
                 const SizedBox(height: 3),
-                const Text(
-                  "최근 대화 내용",
-                  style: TextStyle(
+                Text(
+                  latestMsg,
+                  style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xff191919),
                   ),

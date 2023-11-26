@@ -9,6 +9,7 @@ import 'package:linring_front_flutter/screens/change_password_screen.dart';
 import 'package:linring_front_flutter/screens/entry_screen.dart';
 import 'package:linring_front_flutter/screens/forgot_password_screen.dart';
 import 'package:linring_front_flutter/screens/login_screen.dart';
+import 'package:linring_front_flutter/screens/password_email_verify_screen.dart';
 import 'package:linring_front_flutter/screens/selectmajor_screen.dart';
 import 'package:linring_front_flutter/screens/signup_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -35,7 +36,7 @@ void main() async {
   1. foreground message와 background message를 동시에 받게 되어 ChatScreen에서 message가 여러 개 생성됨
   2. android에서 background message를 수신할 경우, notification을 show 하는 과정에서 NullPointer 에러 발생
   */
-  
+
   // FirebaseMessaging.onBackgroundMessage(onBackgroundHandler);
   // await _initNotification();
 
@@ -111,7 +112,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpScreen(),
         '/selectmajor': (context) => SelectMajor(),
         '/forgotPassword': (context) => const ForgotPasswordScreen(),
-        '/changePassword': (context) => const ChangePasswordScreen(),
+        '/emailVerify': (context) => const PasswordEmailVerifyScreen(),
       },
       onGenerateRoute: (RouteSettings settings) {
         if (settings.name == '/accoutactive') {

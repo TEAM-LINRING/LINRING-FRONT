@@ -197,7 +197,10 @@ class _TagShowScreenState extends State<TagShowScreen> {
                     future: _futureTagsets,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Color(0xfffec2b5),
+                        ));
                       } else if (snapshot.hasError) {
                         return Text("에러 ${snapshot.error}");
                       } else if (!snapshot.hasData) {
