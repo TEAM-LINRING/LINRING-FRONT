@@ -46,32 +46,6 @@ class ChatRoom {
   }
 }
 
-class Pagination {
-  late int? count;
-  late int? next;
-  late int? previous;
-  late List<Message> results;
-
-  Pagination({
-    required this.count,
-    required this.next,
-    required this.previous,
-    required this.results,
-  });
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    count = json["count"];
-    next = json["next"];
-    previous = json["previous"];
-    results = <Message>[];
-    if (json[results] != null) {
-      for (var v in (json[results] as List)) {
-        results.add(Message.fromJson(v));
-      }
-    }
-  }
-}
-
 class Message {
   final int id;
   final User sender;

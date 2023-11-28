@@ -44,9 +44,15 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
       List<User> searchUsers = [];
 
       for (Tagset tagset in searchTagsets) {
-        User? user = await _GetUser(tagset.owner);
-        searchUsers.add(user!);
+        print("id: ${tagset.id}");
+        print("owner: ${tagset.owner}");
+        // User? user = await _GetUser(tagset.owner);
+        // searchUsers.add(user!);
+        await _GetUser(tagset.owner).then((user) => searchUsers.add(user!));
       }
+      print('----searchUsers in matching loading screen------');
+      print(searchUsers);
+      print('----searchUsers in matching loading screen------');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -62,9 +68,11 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
 
   Future<User?> _GetUser(int id) async {
     String apiAddress = dotenv.get("API_ADDRESS");
-    final url = Uri.parse('$apiAddress/accounts/v2/user/$id');
+    final url = Uri.parse('$apiAddress/accounts/v2/user/$id/');
 
     final token = widget.loginInfo.access;
+
+    // print(token);
 
     final response = await http.get(
       url,
@@ -73,10 +81,12 @@ class _MatchingLoadingScreenState extends State<MatchingLoadingScreen> {
         'Authorization': 'Bearer $token',
       },
     );
+    print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Map<String, dynamic> userData =
           json.decode(utf8.decode(response.bodyBytes));
+      print(userData);
       User user = User.fromJson(userData);
       return user;
     }

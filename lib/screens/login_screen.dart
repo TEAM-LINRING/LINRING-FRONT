@@ -26,7 +26,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (res != null) {
         final Map parsed = json.decode(utf8.decode(res.codeUnits));
+
+        print("======PARSED======");
+        print(parsed);
+        print("======PARSED======");
         final loginInfo = LoginInfo.fromJson(parsed);
+
+        print(loginInfo.user);
 
         Navigator.push(
           context,
@@ -66,6 +72,10 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         final String res = response.body;
+        print(res);
+
+        // print(utf8.decode(response.bodyBytes));
+
         await storage.write(key: 'user', value: res);
         return true;
       } else {

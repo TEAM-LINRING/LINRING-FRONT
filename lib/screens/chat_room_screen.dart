@@ -41,11 +41,23 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         'Authorization': 'Bearer $token'
       },
     );
-
     if (response.statusCode == 200) {
       final List parsedList = json.decode(utf8.decode(response.bodyBytes));
-      List<ChatRoom> rooms =
-          parsedList.map((val) => ChatRoom.fromJson(val)).toList();
+
+      List<ChatRoom> rooms = [];
+
+      print(parsedList.runtimeType);
+      for (var room in parsedList) {
+        print(room.runtimeType);
+
+        try {
+          rooms.add(ChatRoom.fromJson(room));
+        } catch (e) {
+          print('--------------');
+          print(e);
+          print('--------------');
+        }
+      }
       return rooms;
     } else {
       throw Exception('Failed to load chat rooms.');
@@ -86,12 +98,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               return const Text("데이터 없음.");
             } else {
               List<ChatRoom>? rooms = snapshot.data;
-              //
               // rooms filtering
-              final a = widget.loginInfo.user.block_user;
-              final b = jsonDecode(a!);
-              final blockList = (b['user'] as List<dynamic>).cast<int>();
+              // a = a?.replaceAll('{user', '{"user"');
+              final blockList = widget.loginInfo.user.block_user ?? [];
+
+              print("=====my block====");
+              print(blockList);
+              print("=====my block====");
+              // final blockList = (b['user'] as List<dynamic>).cast<int>();
               //
+              print(rooms);
               rooms?.removeWhere((room) {
                 return blockList.contains(room.relation!.id) ||
                     blockList.contains(room.relation2!.id);

@@ -159,6 +159,11 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
     int? age = 2024 - birth!;
     List<int>? selectedNumbers = matchingUser.significant;
     String selectedStatesString = getStatesByNumbers(selectedNumbers!);
+
+    print('=============');
+    print(matchingUser.block_user);
+    print('=============');
+
     showModalBottomSheet<void>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -329,6 +334,11 @@ class _MatchingMainScreenState extends State<MatchingMainScreen> {
   }
 
   Widget getImageWidget(int index, Offset offset) {
+    print('----widget.searchUser print in matcing main screen--');
+    print(widget.searchUser);
+    print("==========profile start=========");
+    print(widget.searchUser[index].profile);
+    print("==========profile end=========");
     final screenSize = MediaQuery.of(context).size;
     final right = screenSize.width * offset.dx;
     final bottom = screenSize.height * offset.dy;

@@ -45,6 +45,8 @@ class _MainScreenState extends State<MainScreen> {
 
     final fcmToken = await messaging.getToken();
 
+    print(widget.loginInfo.user.block_user);
+
     String apiAddress = dotenv.env['API_ADDRESS'] ?? '';
     final url = Uri.parse('$apiAddress/fcm/devices/');
     final token = widget.loginInfo.access;
@@ -67,8 +69,8 @@ class _MainScreenState extends State<MainScreen> {
       },
       body: body,
     );
-    print(result.body);
-    print(fcmToken);
+    // print(result.body);
+    // print(fcmToken);
     messaging.onTokenRefresh.listen((fcmToken) {}).onError((err) {});
 
     FirebaseMessaging.onMessage.listen(

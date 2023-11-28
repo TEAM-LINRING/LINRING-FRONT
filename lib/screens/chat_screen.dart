@@ -1121,7 +1121,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     // 사용자 차단 field 업데이트 이후에 User 정보 다시 불러오기
     final response = await http.get(
-      Uri.parse('$apiAddress/accounts/user/'),
+      Uri.parse('$apiAddress/accounts/v2/user/${widget.loginInfo.user.id}/'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -1139,6 +1139,11 @@ class _ChatScreenState extends State<ChatScreen> {
     await storage.write(key: 'user', value: jsonString);
     String? res = await storage.read(key: 'user');
     final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+
+    print("==========parsed=======");
+    print(parsed);
+    print("==========parsed=======");
+
     final loginInfo = LoginInfo.fromJson(parsed);
 
     widget.loginInfo = loginInfo;

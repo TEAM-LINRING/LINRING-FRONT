@@ -14,7 +14,7 @@ class User {
   int? birth;
   String? grade;
   final String? rating;
-  final String? block_user;
+  List<int>? block_user;
   final bool? isActive;
   final List<int>? groups;
   final List<int>? userPermissions;
@@ -60,7 +60,7 @@ class User {
       birth: json['birth'],
       grade: json['grade'],
       rating: json['rating'],
-      block_user: json['block_user'].toString(),
+      block_user: List<int>.from(json['block_user']),
       isActive: json['is_active'],
       groups: List<int>.from(json['groups']),
       userPermissions: List<int>.from(json['user_permissions']),
