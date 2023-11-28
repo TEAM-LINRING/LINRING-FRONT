@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linring_front_flutter/models/chat_model.dart';
 import 'package:linring_front_flutter/models/login_info.dart';
 import 'package:linring_front_flutter/models/tagset_model.dart';
 import 'package:linring_front_flutter/models/user_model.dart';
+import 'package:linring_front_flutter/screens/main_screen.dart';
 import 'package:linring_front_flutter/screens/report_screen.dart';
 import 'package:linring_front_flutter/widgets/custom_appbar.dart';
 import 'package:http/http.dart' as http;
@@ -17,9 +19,9 @@ import 'package:intl/intl.dart';
 import 'globals.dart' as globals;
 
 class ChatScreen extends StatefulWidget {
-  final LoginInfo loginInfo;
+  LoginInfo loginInfo;
   final ChatRoom room;
-  const ChatScreen({required this.loginInfo, required this.room, super.key});
+  ChatScreen({required this.loginInfo, required this.room, super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -142,26 +144,6 @@ class _ChatScreenState extends State<ChatScreen> {
       body: body,
     );
 
-
-    print('아직 patch안에 있음');
-    print(promiseDate);
-    // setState(() {
-    //   // 로컬 리스트에 임시 저장
-    //   globals.messages.value.insert(
-    //       0,
-    //       Message(
-    //         id: 0,
-    //         sender: widget.loginInfo.user,
-    //         receiver: opponentUser,
-    //         created: "",
-    //         modified: "",
-    //         message: "",
-    //         isRead: true,
-    //         type: 2,
-    //         args: isoFormattedString,
-    //         room: widget.room.id,
-    //       ));
-    // });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       globals.messages.value.insert(
         0,
@@ -313,6 +295,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       MaterialPageRoute(
                           builder: (context) => ReportScreen(
                               loginInfo: widget.loginInfo, room: widget.room)));
+                } else if (result == 3) {
+                  _showBlockModal(context);
                 }
               },
               itemBuilder: (BuildContext context) {
@@ -332,6 +316,15 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         Icon(Icons.edit),
                         Text("신고하기"),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem<int>(
+                    value: 3,
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit),
+                        Text("차단하기"),
                       ],
                     ),
                   ),
@@ -1107,6 +1100,129 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
         );
+      },
+    );
+  }
+
+  void _BlockUser() async {
+    String apiAddress = dotenv.get("API_ADDRESS");
+    final url = Uri.parse('$apiAddress/accounts/blockuser/update/');
+    final token = widget.loginInfo.access;
+    final body = jsonEncode(
+        {"user": widget.loginInfo.user.id, "block_user": opponentUser.id});
+    await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+
+    // 사용자 차단 field 업데이트 이후에 User 정보 다시 불러오기
+    final response = await http.get(
+      Uri.parse('$apiAddress/accounts/user/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    // 불러온 사용자 정보 FlutterSecureStorage에 재할당
+    const storage = FlutterSecureStorage();
+
+    String jsonString = jsonEncode({
+      "access": widget.loginInfo.access,
+      "refresh": widget.loginInfo.refresh,
+      "user": jsonDecode(response.body),
+    });
+    await storage.write(key: 'user', value: jsonString);
+    String? res = await storage.read(key: 'user');
+    final Map parsed = json.decode(utf8.decode(res!.codeUnits));
+    final loginInfo = LoginInfo.fromJson(parsed);
+
+    widget.loginInfo = loginInfo;
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MainScreen(widget.loginInfo, 1)));
+  }
+
+  void _showBlockModal(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            height: 270,
+            child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(
+                          width: 48,
+                          height: 20,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close_rounded,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '${opponentUser.nickname}님을 차단하시겠어요?',
+                        style: const TextStyle(fontSize: 22),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '${opponentUser.nickname}님과의 채팅방과 채팅내역은 삭제되고,',
+                        style: const TextStyle(fontSize: 19),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: Text(
+                        '더 이상 ${opponentUser.nickname}님과 매칭되지 않습니다.',
+                        style: const TextStyle(fontSize: 19),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: CustomOutlinedButton(
+                        label: '차단하기',
+                        backgroundColor: const Color.fromARGB(255, 239, 97, 87),
+                        isActive: true,
+                        onPressed: () {
+                          _BlockUser();
+                        },
+                      ),
+                    )
+                  ],
+                )));
       },
     );
   }

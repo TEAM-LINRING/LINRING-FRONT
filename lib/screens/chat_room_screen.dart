@@ -86,7 +86,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               return const Text("데이터 없음.");
             } else {
               List<ChatRoom>? rooms = snapshot.data;
-              print(rooms?.length);
+              //
+              // rooms filtering
+              final a = widget.loginInfo.user.block_user;
+              final b = jsonDecode(a!);
+              final blockList = (b['user'] as List<dynamic>).cast<int>();
+              //
+              rooms?.removeWhere((room) {
+                return blockList.contains(room.relation!.id) ||
+                    blockList.contains(room.relation2!.id);
+              });
+
               if (rooms!.isEmpty) {
                 return Center(
                   child: Column(
