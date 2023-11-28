@@ -383,6 +383,14 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
               _settingItems(
+                "고객지원센터",
+                false,
+                () {
+                  launchUrl(Uri.parse(
+                      'https://possible-rowboat-b63.notion.site/Official-LINRING-SUPPOINT-4a0959244c964e8db28b6c148efcabb4?pvs=4'));
+                },
+              ),
+              _settingItems(
                 "공식 Notion 페이지로 이동",
                 false,
                 () {
