@@ -1,4 +1,3 @@
-
 class User {
   final int? id;
   final String? lastLogin;
@@ -15,6 +14,7 @@ class User {
   int? birth;
   String? grade;
   final String? rating;
+  final String? block_user;
   final bool? isActive;
   final List<int>? groups;
   final List<int>? userPermissions;
@@ -36,6 +36,7 @@ class User {
     this.birth,
     this.grade,
     this.rating,
+    this.block_user,
     this.isActive,
     this.groups,
     this.userPermissions,
@@ -59,6 +60,7 @@ class User {
       birth: json['birth'],
       grade: json['grade'],
       rating: json['rating'],
+      block_user: json['block_user'].toString(),
       isActive: json['is_active'],
       groups: List<int>.from(json['groups']),
       userPermissions: List<int>.from(json['user_permissions']),
@@ -83,6 +85,7 @@ class User {
       "birth": birth,
       "grade": grade,
       "rating": rating,
+      "block_user": block_user,
       "is_active": isActive,
       "groups": groups,
       "user_permissions": userPermissions,
